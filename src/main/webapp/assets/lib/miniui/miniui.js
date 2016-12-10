@@ -131,7 +131,7 @@ mini = {
                 controls = mini.findControls(function (control) {
                     if (!control.el || parent == control)
                         return false;
-                    if (Oolo(pel, control.el) && control.within)
+                    if (mini.isAncestor(pel, control.el) && control.within)
                         return true;
                     return false;
                 });
@@ -153,7 +153,7 @@ mini = {
         var controls = mini.findControls(function (control) {
             if (!control.el || !control.name)
                 return false;
-            if (Oolo(el, control.el))
+            if (mini.isAncestor(el, control.el))
                 return true;
             return false;
         });
@@ -182,7 +182,7 @@ mini = {
         var controls = mini.findControls(function (control) {
             if (!control.el)
                 return false;
-            if (control.name == name && Oolo(parentNode, control.el))
+            if (control.name == name && mini.isAncestor(parentNode, control.el))
                 return true;
             return false;
         }, this);
@@ -602,7 +602,7 @@ mini_Tree_l110O0ByEvent = function (A, _) {
     var $ = mini.Tree.superclass.l110O0ByEvent.call(this, A);
     if (_ === false)
         return $;
-    if ($ && oOlO(A.target, "mini-tree-nodeshow"))
+    if ($ && mini.findParent(A.target, "mini-tree-nodeshow"))
         return $;
     return null;
 };
@@ -696,13 +696,13 @@ mini_Tree_addRowCls = function ($, A) {
     var _ = this.OOl0($, 1),
             B = this.OOl0($, 2);
     if (_)
-        olO0(_, A);
+        mini.addClass(_, A);
     if (B)
-        olO0(B, A);
+        mini.addClass(B, A);
     if (_)
-        olO0(_.cells[1], A);
+        mini.addClass(_.cells[1], A);
     if (B)
-        olO0(B.cells[1], A);
+        mini.addClass(B.cells[1], A);
 };
 mini_Tree_removeRowCls = function ($, A) {
     var _ = this.OOl0($, 1),
@@ -1189,7 +1189,7 @@ mini_Tabs_loadTab = function (B, A, _, D) {
         return;
     var $ = this.getTabBodyEl(A);
     if ($)
-        olO0($, "mini-tabs-hideOverflow");
+        mini.addClass($, "mini-tabs-hideOverflow");
     A.url = B;
     delete A.loadedUrl;
     if (_)
@@ -1235,16 +1235,16 @@ mini_Tabs_doUpdate = function () {
     l0OO(this.el, "mini-tabs-position-right");
     l0OO(this.el, "mini-tabs-position-bottom");
     if (this.tabPosition == "bottom") {
-        olO0(this.el, "mini-tabs-position-bottom");
+        mini.addClass(this.el, "mini-tabs-position-bottom");
         this.oO00()
     } else if (this.tabPosition == "right") {
-        olO0(this.el, "mini-tabs-position-right");
+        mini.addClass(this.el, "mini-tabs-position-right");
         this.oO11OO()
     } else if (this.tabPosition == "left") {
-        olO0(this.el, "mini-tabs-position-left");
+        mini.addClass(this.el, "mini-tabs-position-left");
         this.O0ll00()
     } else {
-        olO0(this.el, "mini-tabs-position-top");
+        mini.addClass(this.el, "mini-tabs-position-top");
         this.OOO11l()
     }
     var $ = this.o1oO0,
@@ -1253,13 +1253,13 @@ mini_Tabs_doUpdate = function () {
     l0OO($, _ + "top");
     l0OO($, _ + "right");
     l0OO($, _ + "bottom");
-    olO0($, _ + this.tabPosition);
+    mini.addClass($, _ + this.tabPosition);
     $ = this.l10ll1, _ = "mini-tabs-body-";
     l0OO($, _ + "left");
     l0OO($, _ + "top");
     l0OO($, _ + "right");
     l0OO($, _ + "bottom");
-    olO0($, _ + this.tabPosition);
+    mini.addClass($, _ + this.tabPosition);
     if (this._buttons) {
         $ = mini.byClass("mini-tabs-buttons", this.el);
         if ($) {
@@ -1276,7 +1276,7 @@ mini_Tabs__handleIFrameOverflow = function () {
         l0OO(_, "mini-tabs-hideOverflow");
         var $ = mini.getChildNodes(_)[0];
         if ($ && $.tagName && $.tagName.toUpperCase() == "IFRAME")
-            olO0(_, "mini-tabs-hideOverflow")
+            mini.addClass(_, "mini-tabs-hideOverflow")
     }
 };
 mini_Tabs_doLayout = function () {
@@ -1300,7 +1300,7 @@ mini_Tabs_doLayout = function () {
         G.style.display = "none";
     var $ = this.el.firstChild;
     if (this.plain)
-        olO0($, "mini-tabs-plain");
+        mini.addClass($, "mini-tabs-plain");
     else
         l0OO($, "mini-tabs-plain");
     if (!l && this.showBody) {
@@ -1401,7 +1401,7 @@ mini_Tabs_doLayout = function () {
                 c = Q[O];
                 l0OO(c, "mini-tabs-header2");
                 if (g > 1 && O != 0)
-                    olO0(c, "mini-tabs-header2")
+                    mini.addClass(c, "mini-tabs-header2")
             }
             break;
         case "left":
@@ -1410,7 +1410,7 @@ mini_Tabs_doLayout = function () {
                 var L = D[O];
                 l0OO(L, "mini-tabs-header2");
                 if (g > 1 && O == 0)
-                    olO0(L, "mini-tabs-header2")
+                    mini.addClass(L, "mini-tabs-header2")
             }
             break;
         case "right":
@@ -1419,7 +1419,7 @@ mini_Tabs_doLayout = function () {
                 L = D[O];
                 l0OO(L, "mini-tabs-header2");
                 if (g > 1 && O != 0)
-                    olO0(L, "mini-tabs-header2")
+                    mini.addClass(L, "mini-tabs-header2")
             }
             break;
         default:
@@ -1428,7 +1428,7 @@ mini_Tabs_doLayout = function () {
                 c = Q[O];
                 l0OO(c, "mini-tabs-header2");
                 if (g > 1 && O == 0)
-                    olO0(c, "mini-tabs-header2")
+                    mini.addClass(c, "mini-tabs-header2")
             }
             break
     }
@@ -1604,13 +1604,13 @@ mini_Tabs_OO1o = function () {
         l0OO(this.OoOOO, "mini-disabled");
         l0OO(this.oOo1ll, "mini-disabled");
         if (this.o1oO0.scrollLeft == 0)
-            olO0(this.OoOOO, "mini-disabled");
+            mini.addClass(this.OoOOO, "mini-disabled");
         var _ = this.getTabEl(this.tabs.length - 1);
         if (_) {
             var $ = O1loO1(_),
                     A = O1loO1(this.o1oO0);
             if ($.right <= A.right)
-                olO0(this.oOo1ll, "mini-disabled")
+                mini.addClass(this.oOo1ll, "mini-disabled")
         }
     }
 };
@@ -1633,22 +1633,22 @@ mini_Tabs_setActiveIndex = function ($, I) {
         l0OO(J, this.l11l);
     J = this.getTabEl(K);
     if (J)
-        olO0(J, this.l11l);
+        mini.addClass(J, this.l11l);
     if (J && N) {
         if (this.tabPosition == "bottom") {
-            var A = oOlO(J, "mini-tabs-header");
+            var A = mini.findParent(J, "mini-tabs-header");
             if (A)
                 jQuery(this.o1oO0).prepend(A)
         } else if (this.tabPosition == "left") {
-            var G = oOlO(J, "mini-tabs-header").parentNode;
+            var G = mini.findParent(J, "mini-tabs-header").parentNode;
             if (G)
                 G.parentNode.appendChild(G)
         } else if (this.tabPosition == "right") {
-            G = oOlO(J, "mini-tabs-header").parentNode;
+            G = mini.findParent(J, "mini-tabs-header").parentNode;
             if (G)
                 jQuery(G.parentNode).prepend(G)
         } else {
-            A = oOlO(J, "mini-tabs-header");
+            A = mini.findParent(J, "mini-tabs-header");
             if (A && this.allowClickWrap)
                 this.o1oO0.appendChild(A)
         }
@@ -1826,7 +1826,7 @@ mini_Tabs_getTabByEvent = function ($) {
     return this.oO101O($)
 };
 mini_Tabs_oO101O = function (B) {
-    var A = oOlO(B.target, "mini-tab");
+    var A = mini.findParent(B.target, "mini-tab");
     if (!A)
         return null;
     var _ = A.id.split("$");
@@ -1849,7 +1849,7 @@ mini_Tabs_Ol1o1 = function (B) {
     var _ = this.oO101O(B);
     if (!_)
         return;
-    var $ = !!oOlO(B.target, "mini-tab-close");
+    var $ = !!mini.findParent(B.target, "mini-tab-close");
     if (!$ && _ == this.getActiveTab() && !_.refreshOnClick)
         return;
     if (_.enabled) {
@@ -1870,7 +1870,7 @@ mini_Tabs_O1l1lo = function (A) {
     var $ = this.oO101O(A);
     if ($ && $.enabled) {
         var _ = this.getTabEl($);
-        olO0(_, this.llolO1);
+        mini.addClass(_, this.llolO1);
         this.hoverTab = $
     }
 };
@@ -1951,7 +1951,7 @@ mini_Tabs_OOO11l = function () {
             if (N.showCloseButton) {
                 var _ = "";
                 if (N.enabled)
-                    _ = "onmouseover=\"olO0(this,'mini-tab-close-hover')\" onmouseout=\"l0OO(this,'mini-tab-close-hover')\"";
+                    _ = "onmouseover=\"mini.addClass(this,'mini-tab-close-hover')\" onmouseout=\"l0OO(this,'mini-tab-close-hover')\"";
                 O += "<span class=\"mini-tab-close\" " + _ + " ></span>"
             }
             O += "</td>";
@@ -2040,7 +2040,7 @@ mini_Tabs_O0ll00 = function () {
             if (I.showCloseButton) {
                 var _ = "";
                 if (I.enabled)
-                    _ = "onmouseover=\"olO0(this,'mini-tab-close-hover')\" onmouseout=\"l0OO(this,'mini-tab-close-hover')\"";
+                    _ = "onmouseover=\"mini.addClass(this,'mini-tab-close-hover')\" onmouseout=\"l0OO(this,'mini-tab-close-hover')\"";
                 J += "<span class=\"mini-tab-close\" " + _ + "></span>"
             }
             J += "</td></tr>";
@@ -2052,7 +2052,7 @@ mini_Tabs_O0ll00 = function () {
     }
     J += "</tr ></table>";
     this.l0OOl();
-    olO0(this.Oo01o, "mini-tabs-header");
+    mini.addClass(this.Oo01o, "mini-tabs-header");
     mini.append(this.Oo01o, J);
     this.o1oO0 = this.Oo01o
 };
@@ -2169,7 +2169,7 @@ mini_Menu__create = function () {
     this._contentEl = this._innerEl.firstChild;
     this.OO01O = this._innerEl.childNodes[1];
     if (this.isVertical() == false)
-        olO0(this.el, "mini-menu-horizontal")
+        mini.addClass(this.el, "mini-menu-horizontal")
 };
 mini_Menu_destroy = function (_) {
     if (this.items)
@@ -2199,7 +2199,7 @@ mini_Menu__initEvents = function () {
     }, this)
 };
 mini_Menu_within = function (B) {
-    if (Oolo(this.el, B.target))
+    if (mini.isAncestor(this.el, B.target))
         return true;
     for (var _ = 0, A = this.items.length; _ < A; _++) {
         var $ = this.items[_];
@@ -2211,7 +2211,7 @@ mini_Menu_within = function (B) {
 mini_Menu_setVertical = function ($) {
     this.vertical = $;
     if (!$)
-        olO0(this.el, "mini-menu-horizontal");
+        mini.addClass(this.el, "mini-menu-horizontal");
     else
         l0OO(this.el, "mini-menu-horizontal")
 };
@@ -2387,7 +2387,7 @@ mini_Menu_getIconClsField = function () {
 mini_Menu_setOverflow = function ($) {
     this.overflow = $;
     if ($)
-        olO0(this.el, "mini-menu-overflow");
+        mini.addClass(this.el, "mini-menu-overflow");
     else
         l0OO(this.el, "mini-menu-overflow")
 };
@@ -3497,8 +3497,8 @@ mini_Panel_getShowFooter = function () {
     return this.showFooter
 };
 mini_Panel_Ol1o1 = function (A) {
-    if (Oolo(this.o1oO0, A.target)) {
-        var $ = oOlO(A.target, "mini-tools");
+    if (mini.isAncestor(this.o1oO0, A.target)) {
+        var $ = mini.findParent(A.target, "mini-tools");
         if ($) {
             var _ = this.getButton(parseInt(A.target.id));
             if (_)
@@ -3826,7 +3826,7 @@ mini_Panel_collapse = function () {
         this._height = this.el.style.height;
     this.el.style.height = "auto";
     this.ololOO.style.display = "none";
-    olO0(this.el, "mini-panel-collapse");
+    mini.addClass(this.el, "mini-panel-collapse");
     this.doLayout()
 };
 mini_Panel_expand = function () {
@@ -3850,7 +3850,7 @@ mini_Panel_setCollapseOnTitleClick = function ($) {
     this.collapseOnTitleClick = $;
     l0OO(this.el, "mini-panel-titleclick");
     if ($)
-        olO0(this.el, "mini-panel-titleclick")
+        mini.addClass(this.el, "mini-panel-titleclick")
 };
 mini_Panel_getCollapseOnTitleClick = function () {
     return this.collapseOnTitleClick
@@ -4025,21 +4025,21 @@ mini_Layout_olOO = function ($) {
     $._header = $._el.firstChild;
     $._body = $._el.lastChild;
     if ($.cls)
-        olO0($._el, $.cls);
+        mini.addClass($._el, $.cls);
     if ($.style)
         l1O1l($._el, $.style);
     if ($.headerCls)
-        olO0($._el.firstChild, $.headerCls);
-    olO0($._el, "mini-layout-region-" + $.region);
+        mini.addClass($._el.firstChild, $.headerCls);
+    mini.addClass($._el, "mini-layout-region-" + $.region);
     if ($.region != "center") {
         mini.append(this._borderEl, "<div uid=\"" + this.uid + "\" id=\"" + $.region + "\" class=\"mini-layout-split\"><div class=\"mini-layout-spliticon\" title=\"" + $.splitToolTip + "\"></div></div>");
         $._split = this._borderEl.lastChild;
-        olO0($._split, "mini-layout-split-" + $.region)
+        mini.addClass($._split, "mini-layout-split-" + $.region)
     }
     if ($.region != "center") {
         mini.append(this._borderEl, "<div id=\"" + $.region + "\" class=\"mini-layout-proxy\"></div>");
         $._proxy = this._borderEl.lastChild;
-        olO0($._proxy, "mini-layout-proxy-" + $.region)
+        mini.addClass($._proxy, "mini-layout-proxy-" + $.region)
     }
 };
 mini_Layout_setRegionControls = function (A, $) {
@@ -4216,11 +4216,11 @@ mini_Layout_o0o0 = function ($) {
     }
 };
 mini_Layout_llooOl = function (_) {
-    var $ = oOlO(_.target, "mini-layout-proxy");
+    var $ = mini.findParent(_.target, "mini-layout-proxy");
     return $
 };
 mini_Layout_l0o1l = function (_) {
-    var $ = oOlO(_.target, "mini-layout-region");
+    var $ = mini.findParent(_.target, "mini-layout-region");
     return $
 };
 
@@ -4230,24 +4230,24 @@ mini_Layout_Ol1o1 = function (D) {
     var A = this.llooOl(D);
     if (A) {
         var _ = A.id,
-                C = oOlO(D.target, "mini-tools-collapse");
+                C = mini.findParent(D.target, "mini-tools-collapse");
         if (C)
             this.o0o0(_);
         else
             this.OO11ol(_)
     }
     var B = this.l0o1l(D);
-    if (B && oOlO(D.target, "mini-layout-region-header")) {
-        _ = B.id, C = oOlO(D.target, "mini-tools-collapse");
+    if (B && mini.findParent(D.target, "mini-layout-region-header")) {
+        _ = B.id, C = mini.findParent(D.target, "mini-tools-collapse");
         if (C)
             this.o0o0(_);
-        var $ = oOlO(D.target, "mini-tools-close");
+        var $ = mini.findParent(D.target, "mini-tools-close");
         if ($)
             this.updateRegion(_, {
                 visible: false
             })
     }
-    if (o00ol(D.target, "mini-layout-spliticon")) {
+    if (mini.hasClass(D.target, "mini-layout-spliticon")) {
         _ = D.target.parentNode.id;
         this.o0o0(_)
     }
@@ -4274,7 +4274,7 @@ mini_Layout_O1Oo1 = function (_, A, $) {
 mini_Layout_O1l1lo = function (_) {
     var $ = this.llooOl(_);
     if ($) {
-        olO0($, "mini-layout-proxy-hover");
+        mini.addClass($, "mini-layout-proxy-hover");
         this.hoverProxyEl = $
     }
 };
@@ -4559,7 +4559,7 @@ mini_Window_doLayout = function () {
     }
     mini.Window.superclass.doLayout.call(this);
     if (this.allowDrag)
-        olO0(this.el, this.OO00oO);
+        mini.addClass(this.el, this.OO00oO);
     if (this.state == "max") {
         this.Ooo0OO.style.display = "none";
         l0OO(this.el, this.OO00oO)
@@ -4638,7 +4638,7 @@ mini_Window_setAllowDrag = function ($) {
     this.allowDrag = $;
     l0OO(this.el, this.OO00oO);
     if ($)
-        olO0(this.el, this.OO00oO)
+        mini.addClass(this.el, this.OO00oO)
 };
 mini_Window_getAllowDrag = function () {
     return this.allowDrag
@@ -4845,7 +4845,7 @@ mini_Window_getAllowCrossBottom = function () {
 };
 mini_Window_l10l1 = function (B) {
     var _ = this;
-    if (this.state != "max" && this.allowDrag && Oolo(this.o1oO0, B.target) && !oOlO(B.target, "mini-tools")) {
+    if (this.state != "max" && this.allowDrag && mini.isAncestor(this.o1oO0, B.target) && !mini.findParent(B.target, "mini-tools")) {
         _ = this;
         if (this.el)
             this.el.style.zIndex = mini.getMaxZIndex();
@@ -5240,7 +5240,7 @@ mini_Control__create = function () {
 };
 mini_Control__initEvents = function () {};
 mini_Control_within = function ($) {
-    if (Oolo(this.el, $.target))
+    if (mini.isAncestor(this.el, $.target))
         return true;
     return false
 };
@@ -5383,7 +5383,7 @@ mini_Control_getCls = function () {
     return this.cls
 };
 mini_Control_addCls = function ($) {
-    olO0(this.el, $)
+    mini.addClass(this.el, $)
 };
 mini_Control_removeCls = function ($) {
     l0OO(this.el, $)
@@ -6062,7 +6062,7 @@ mini_TextBox_doUpdate = function () {
         this.addCls(this.o0010);
     if (this.isReadOnly() || this.allowInput == false) {
         this._textEl.readOnly = true;
-        olO0(this.el, "mini-textbox-readOnly")
+        mini.addClass(this.el, "mini-textbox-readOnly")
     } else {
         this._textEl.readOnly = false;
         l0OO(this.el, "mini-textbox-readOnly")
@@ -6144,7 +6144,7 @@ mini_TextBox_olol = function (_) {
     var $ = this;
     if (this.O000l == "textarea")
         return;
-    if (!Oolo(this._textEl, _.target))
+    if (!mini.isAncestor(this._textEl, _.target))
         setTimeout(function () {
             $.focus();
             mini.selectRange($._textEl, 10000, 10000)
@@ -6437,7 +6437,7 @@ mini_ListBox_doUpdate = function () {
         return;
     var S = this.columns && this.columns.length > 0;
     if (S)
-        olO0(this.el, "mini-listbox-showColumns");
+        mini.addClass(this.el, "mini-listbox-showColumns");
     else
         l0OO(this.el, "mini-listbox-showColumns");
     this.o1oO0.style.display = S ? "" : "none";
@@ -6563,13 +6563,13 @@ mini_ListBox_doLayout = function (I) {
     if (!this.canLayout())
         return;
     if (this.columns && this.columns.length > 0)
-        olO0(this.el, "mini-listbox-showcolumns");
+        mini.addClass(this.el, "mini-listbox-showcolumns");
     else
         l0OO(this.el, "mini-listbox-showcolumns");
     if (this.showCheckBox)
         l0OO(this.el, "mini-listbox-hideCheckBox");
     else
-        olO0(this.el, "mini-listbox-hideCheckBox");
+        mini.addClass(this.el, "mini-listbox-hideCheckBox");
     var A = this.uid + "$ck$all",
             E = document.getElementById(A);
     if (E)
@@ -6774,7 +6774,7 @@ mini_Spinner_set = function (_) {
     return this
 };
 mini_Spinner_loOOoOHtml = function () {
-    var $ = "onmouseover=\"olO0(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
     return "<span name=\"trigger\" class=\"mini-buttonedit-button mini-buttonedit-trigger\" " + $ + "><span class=\"mini-buttonedit-up\"><span></span></span><span class=\"mini-buttonedit-down\"><span></span></span></span>"
 };
 mini_Spinner__initEvents = function () {
@@ -7743,12 +7743,12 @@ mini_TreeGrid__doCheckNodeEl = function (B) {
         if (A == "cascade") {
             var $ = this.getCheckState(B);
             if ($ == "indeterminate")
-                olO0(_, "mini-tree-checkbox-indeterminate");
+                mini.addClass(_, "mini-tree-checkbox-indeterminate");
             else
                 l0OO(_, "mini-tree-checkbox-indeterminate")
         }
         if (B.checked)
-            olO0(_, "mini-tree-checkbox-checked");
+            mini.addClass(_, "mini-tree-checkbox-checked");
         else
             l0OO(_, "mini-tree-checkbox-checked")
     }
@@ -7810,18 +7810,18 @@ mini_TreeGrid__tryToggleNode = function (_) {
     }
 };
 mini_TreeGrid__OnCellMouseDown = function ($) {
-    if (oOlO($.htmlEvent.target, this.oO0o))
+    if (mini.findParent($.htmlEvent.target, this.oO0o))
         ;
-    else if (oOlO($.htmlEvent.target, "mini-tree-checkbox"))
+    else if (mini.findParent($.htmlEvent.target, "mini-tree-checkbox"))
         ;
     else
         this.fire("cellmousedown", $)
 };
 mini_TreeGrid__OnCellClick = function ($) {
 
-    if (oOlO($.htmlEvent.target, this.oO0o))
+    if (mini.findParent($.htmlEvent.target, this.oO0o))
         return;
-    if (oOlO($.htmlEvent.target, "mini-tree-checkbox") || this.checkOnTextClick)
+    if (mini.findParent($.htmlEvent.target, "mini-tree-checkbox") || this.checkOnTextClick)
         this._tryToggleCheckNode($.record);
     else
         this.fire("cellclick", $)
@@ -7868,7 +7868,7 @@ mini_TreeGrid_getShowExpandButtons = function () {
 mini_TreeGrid_setShowTreeLines = function ($) {
     this.showTreeLines = $;
     if ($ == true)
-        olO0(this.el, "mini-tree-treeLine");
+        mini.addClass(this.el, "mini-tree-treeLine");
     else
         l0OO(this.el, "mini-tree-treeLine")
 };
@@ -7878,7 +7878,7 @@ mini_TreeGrid_getShowTreeLines = function () {
 mini_TreeGrid_setShowArrow = function ($) {
     this.showArrow = $;
     if ($ == true)
-        olO0(this.el, "mini-tree-showArrows");
+        mini.addClass(this.el, "mini-tree-showArrows");
     else
         l0OO(this.el, "mini-tree-showArrows")
 };
@@ -7906,7 +7906,7 @@ mini_TreeGrid_getExpandOnDblClick = function () {
 mini_TreeGrid_setExpandOnNodeClick = function ($) {
     this.expandOnNodeClick = $;
     if ($)
-        olO0(this.el, "mini-tree-nodeclick");
+        mini.addClass(this.el, "mini-tree-nodeclick");
     else
         l0OO(this.el, "mini-tree-nodeclick")
 };
@@ -7963,9 +7963,9 @@ mini_TreeGrid_disableNode = function (B) {
     var A = this._getNodeEl(B, 1),
             $ = this._getNodeEl(B, 2);
     if (A)
-        olO0(A, "mini-disabled");
+        mini.addClass(A, "mini-disabled");
     if ($)
-        olO0($, "mini-disabled");
+        mini.addClass($, "mini-disabled");
     var _ = this.o1oo(B);
     if (_)
         _.disabled = true
@@ -8223,7 +8223,7 @@ mini_DataGrid__destroyEditors = function () {
             A = [];
     for (var _ = 0, B = $.length; _ < B; _++) {
         var C = $[_];
-        if (C.el && oOlO(C.el, this.llO1oo)) {
+        if (C.el && mini.findParent(C.el, this.llO1oo)) {
             A.push(C);
             C.destroy()
         }
@@ -8545,7 +8545,7 @@ mini_DataGrid_getRecordByEvent = function ($) {
     return this.l110O0ByEvent($)
 };
 mini_DataGrid_l110O0ByEvent = function (B) {
-    var A = oOlO(B.target, this.llO1oo);
+    var A = mini.findParent(B.target, this.llO1oo);
     if (!A)
         return null;
     var $ = A.id.split("$"),
@@ -8558,9 +8558,9 @@ mini_DataGrid_getColumnByEvent = function ($) {
     return this.O1loo($)
 };
 mini_DataGrid_O1loo = function (B) {
-    var _ = oOlO(B.target, this._cellCls);
+    var _ = mini.findParent(B.target, this._cellCls);
     if (!_)
-        _ = oOlO(B.target, this._headerCellCls);
+        _ = mini.findParent(B.target, this._headerCellCls);
     if (_) {
         var $ = _.id.split("$"),
                 A = $[$.length - 1];
@@ -8596,9 +8596,9 @@ mini_DataGrid_addRowCls = function ($, A) {
     var _ = this.OOl0($, 1),
             B = this.OOl0($, 2);
     if (_)
-        olO0(_, A);
+        mini.addClass(_, A);
     if (B)
-        olO0(B, A);
+        mini.addClass(B, A);
     if ($) {
         var C = this.llO1ooHash[$._id];
         if (!C)
@@ -8694,9 +8694,9 @@ mini_DataGrid__tryFocus = function (A) {
         var _ = A.target.tagName.toLowerCase();
         if (_ == "input" || _ == "textarea" || _ == "select")
             return;
-        if (o00ol(A.target, "mini-placeholder-label"))
+        if (mini.hasClass(A.target, "mini-placeholder-label"))
             return;
-        if (oOlO(A.target, "mini-grid-rows-content")) {
+        if (mini.findParent(A.target, "mini-grid-rows-content")) {
             mini.setXY(this._focusEl, A.pageX, A.pageY);
             this.focus(false)
         }
@@ -8837,7 +8837,7 @@ mini_DataGrid_setAllowResizeColumn = function ($) {
     this.allowResizeColumn = $;
     l0OO(this.el, "mini-grid-resizeColumns-no");
     if (!$)
-        olO0(this.el, "mini-grid-resizeColumns-no")
+        mini.addClass(this.el, "mini-grid-resizeColumns-no")
 };
 mini_DataGrid_getAllowResizeColumn = function () {
 
@@ -8897,7 +8897,7 @@ mini_DataGrid_Ooll0o = function (B) {
                 _ = this.oOOO1O($, A);
         if (_)
             if (B)
-                olO0(_, this.lo01O);
+                mini.addClass(_, this.lo01O);
             else
                 l0OO(_, this.lo01O)
     }
@@ -9227,10 +9227,10 @@ mini_DataGrid_lO00Oo = function (C) {
         if (this.OO00.within)
             _ = this.OO00.within(C);
         else
-            _ = Oolo(this.Oo00l, C.target);
+            _ = mini.isAncestor(this.Oo00l, C.target);
         if (_ == false) {
             var B = this;
-            if (Oolo(this.l10ll1, C.target) == false)
+            if (mini.isAncestor(this.l10ll1, C.target) == false)
                 setTimeout(function () {
                     B.commitEdit()
                 }, 1);
@@ -9506,7 +9506,7 @@ mini_DataGrid_beginEditRow = function (row) {
         row._editing = true;
         this.l1111OEl(row);
         rowEl = this.OOl0(row, 2);
-        olO0(rowEl, "mini-grid-rowEdit");
+        mini.addClass(rowEl, "mini-grid-rowEdit");
         var columns = this.getVisibleColumns();
         for (var i = 0, l = columns.length; i < l; i++) {
             var column = columns[i],
@@ -9521,10 +9521,10 @@ mini_DataGrid_beginEditRow = function (row) {
             var editor = mini.create(editorConfig);
             if (this.O1o000(row, column, editor))
                 if (editor) {
-                    olO0(cellEl, "mini-grid-cellEdit");
+                    mini.addClass(cellEl, "mini-grid-cellEdit");
                     cellEl.innerHTML = "";
                     cellEl.appendChild(editor.el);
-                    olO0(editor.el, "mini-grid-editor")
+                    mini.addClass(editor.el, "mini-grid-editor")
                 }
         }
         this.doLayout()
@@ -9702,9 +9702,9 @@ mini_DataGrid_collapseRowGroup = function ($) {
     if (A)
         A.style.display = "none";
     if (C)
-        olO0(C, "mini-grid-group-collapse");
+        mini.addClass(C, "mini-grid-group-collapse");
     if (B)
-        olO0(B, "mini-grid-group-collapse");
+        mini.addClass(B, "mini-grid-group-collapse");
     this.doLayout()
 };
 mini_DataGrid_expandRowGroup = function ($) {
@@ -9775,9 +9775,9 @@ mini_DataGrid_showRowDetail = function (_) {
     var $ = this.OOl0(_, 1),
             A = this.OOl0(_, 2);
     if ($)
-        olO0($, "mini-grid-expandRow");
+        mini.addClass($, "mini-grid-expandRow");
     if (A)
-        olO0(A, "mini-grid-expandRow");
+        mini.addClass(A, "mini-grid-expandRow");
     this.fire("showrowdetail", {
         record: _
     });
@@ -10392,7 +10392,7 @@ mini_DataGrid_setPagerStyle = function ($) {
 };
 mini_DataGrid_setPagerCls = function ($) {
     this.pagerCls = $;
-    olO0(this._bottomPager.el, $)
+    mini.addClass(this._bottomPager.el, $)
 };
 mini_DataGrid_setDropAction = function ($) {
 
@@ -10408,7 +10408,7 @@ mini_DataGrid_getGroupTitleCollapsible = function () {
     return this.groupTitleCollapsible
 };
 mini_DataGrid__beforeOpenContentMenu = function (_, A) {
-    var $ = Oolo(this.l10ll1, A.htmlEvent.target);
+    var $ = mini.isAncestor(this.l10ll1, A.htmlEvent.target);
     if ($)
         _.fire("BeforeOpen", A);
     else
@@ -10420,7 +10420,7 @@ mini_DataGrid_Ol0l10 = function (B) {
         htmlEvent: B,
         cancel: false
     };
-    if (Oolo(this._columnsEl, B.target)) {
+    if (mini.isAncestor(this._columnsEl, B.target)) {
         if (this.headerContextMenu) {
             this.headerContextMenu.fire("BeforeOpen", A);
             if (A.cancel == true)
@@ -10432,10 +10432,10 @@ mini_DataGrid_Ol0l10 = function (B) {
             this.headerContextMenu.fire("Open", A)
         }
     } else {
-        var $ = oOlO(B.target, "mini-grid-detailRow");
-        if ($ && Oolo(this.el, $))
+        var $ = mini.findParent(B.target, "mini-grid-detailRow");
+        if ($ && mini.isAncestor(this.el, $))
             return;
-        var _ = oOlO(B.target, "mini-tree-nodeshow");
+        var _ = mini.findParent(B.target, "mini-tree-nodeshow");
         if (!_ && this.type == "tree")
             return;
         if (this.contextMenu) {
@@ -10557,7 +10557,7 @@ mini_MenuItem_destroy = function ($) {
     mini.MenuItem.superclass.destroy.call(this, $)
 };
 mini_MenuItem_within = function ($) {
-    if (Oolo(this.el, $.target))
+    if (mini.isAncestor(this.el, $.target))
         return true;
     if (this.menu && this.menu.within($))
         return true;
@@ -10571,7 +10571,7 @@ mini_MenuItem__doUpdateIcon = function () {
             $ = !!(this.iconStyle || this.iconCls || this.checkOnClick || _);
     if (this.o01O0) {
         l1O1l(this.o01O0, this.iconStyle);
-        olO0(this.o01O0, this.iconCls);
+        mini.addClass(this.o01O0, this.iconCls);
         if (_ && !this.checked) {
             var A = "background-image:url(" + _ + ")";
             l1O1l(this.o01O0, A)
@@ -10583,7 +10583,7 @@ mini_MenuItem__doUpdateIcon = function () {
         this.o01O0.style.display = $ ? "block" : "none"
     }
     if (this.iconPosition == "top")
-        olO0(this.el, "mini-menuitem-icontop");
+        mini.addClass(this.el, "mini-menuitem-icontop");
     else
         l0OO(this.el, "mini-menuitem-icontop")
 };
@@ -10596,7 +10596,7 @@ mini_MenuItem_doUpdate = function () {
         this._textEl.innerHTML = this.text;
     this._doUpdateIcon();
     if (this.checked) {
-        olO0(this.el, this.ll0O1o);
+        mini.addClass(this.el, this.ll0O1o);
         jQuery(this.o01O0).css({
             "background-image": ""
         })
@@ -10651,7 +10651,7 @@ mini_MenuItem_getIconPosition = function () {
 mini_MenuItem_setCheckOnClick = function ($) {
     this.checkOnClick = $;
     if ($)
-        olO0(this.el, "mini-menuitem-showcheck");
+        mini.addClass(this.el, "mini-menuitem-showcheck");
     else
         l0OO(this.el, "mini-menuitem-showcheck");
     this.doUpdate()
@@ -10778,7 +10778,7 @@ mini_MenuItem_O1l1lo = function ($) {
     if (this.isReadOnly())
         return;
     this.o0oO();
-    olO0(this.el, this._hoverCls);
+    mini.addClass(this.el, this._hoverCls);
     this.el.title = this.text;
     if (this._textEl.scrollWidth > this._textEl.clientWidth)
         this.el.title = this.text;
@@ -10859,16 +10859,16 @@ mini_Splitter_doLayout = function () {
     this.o0l01l.style.cursor = this.allowResize ? "" : "default";
     l0OO(this.el, "mini-splitter-vertical");
     if (this.vertical)
-        olO0(this.el, "mini-splitter-vertical");
+        mini.addClass(this.el, "mini-splitter-vertical");
     l0OO(this.O0lO, "mini-splitter-pane1-vertical");
     l0OO(this.o11Oo1, "mini-splitter-pane2-vertical");
     if (this.vertical) {
-        olO0(this.O0lO, "mini-splitter-pane1-vertical");
-        olO0(this.o11Oo1, "mini-splitter-pane2-vertical")
+        mini.addClass(this.O0lO, "mini-splitter-pane1-vertical");
+        mini.addClass(this.o11Oo1, "mini-splitter-pane2-vertical")
     }
     l0OO(this.o0l01l, "mini-splitter-handler-vertical");
     if (this.vertical)
-        olO0(this.o0l01l, "mini-splitter-handler-vertical");
+        mini.addClass(this.o0l01l, "mini-splitter-handler-vertical");
     var B = this.getHeight(true),
             _ = this.getWidth(true);
     if (!jQuery.boxModel) {
@@ -11015,7 +11015,7 @@ mini_Splitter_doLayout = function () {
     else
         E.style.marginTop = -A.height / 2 + "px";
     if (!this.pane1.visible || !this.pane2.visible || !this.pane1.expanded || !this.pane2.expanded)
-        olO0(this.o0l01l, "mini-splitter-nodrag");
+        mini.addClass(this.o0l01l, "mini-splitter-nodrag");
     else
         l0OO(this.o0l01l, "mini-splitter-nodrag");
     mini.layout(this._borderEl);
@@ -11076,9 +11076,9 @@ mini_Splitter_updatePane = function (_, F) {
     delete $.bodyParent;
     B.id = $.id;
     l1O1l(B, $.style);
-    olO0(B, $["class"]);
+    mini.addClass(B, $["class"]);
     if ($.cls)
-        olO0(B, $.cls);
+        mini.addClass(B, $.cls);
     if ($.controls) {
         var _ = $ == this.pane1 ? 1 : 2;
         this.setPaneControls(_, $.controls);
@@ -11181,7 +11181,7 @@ mini_Splitter_getHandlerSize = function () {
 mini_Splitter_Ol1o1 = function (B) {
 
     var A = B.target;
-    if (!Oolo(this.o0l01l, A))
+    if (!mini.isAncestor(this.o0l01l, A))
         return;
     var _ = parseInt(A.id),
             $ = this.getPane(_),
@@ -11218,7 +11218,7 @@ mini_Splitter_olol = function (A) {
         return;
     if (!this.pane1.visible || !this.pane2.visible || !this.pane1.expanded || !this.pane2.expanded)
         return;
-    if (Oolo(this.o0l01l, _))
+    if (mini.isAncestor(this.o0l01l, _))
         if (_.className == "mini-splitter-pane1-button" || _.className == "mini-splitter-pane2-button")
             ;
         else {
@@ -11964,7 +11964,7 @@ mini_HtmlFile_destroy = function ($) {
     mini.HtmlFile.superclass.destroy.call(this, $)
 };
 mini_HtmlFile_loOOoOHtml = function () {
-    var $ = "onmouseover=\"olO0(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
     return "<span class=\"mini-buttonedit-button\" " + $ + ">" + this.buttonText + "</span>"
 };
 mini_HtmlFile_o11lO = function ($) {
@@ -12112,9 +12112,9 @@ mini_Calendar_getDateEl = function ($) {
     return document.getElementById(_)
 };
 mini_Calendar_within = function ($) {
-    if (Oolo(this.el, $.target))
+    if (mini.isAncestor(this.el, $.target))
         return true;
-    if (this.menuEl && Oolo(this.menuEl, $.target))
+    if (this.menuEl && mini.isAncestor(this.menuEl, $.target))
         return true;
     return false
 };
@@ -12220,7 +12220,7 @@ mini_Calendar_setSelectedDate = function ($) {
         this.Ol00O = mini.cloneDate(this.Ol00O);
     _ = this.getDateEl(this.Ol00O);
     if (_)
-        olO0(_, this.l0Oo);
+        mini.addClass(_, this.l0Oo);
     this.fire("datechanged")
 };
 mini_Calendar_setSelectedDates = function ($) {
@@ -12555,8 +12555,8 @@ mini_Calendar_l00oo0 = function (H) {
             D.updateMenu()
         }, 30)
     }
-    var E = oOlO(B, C),
-            A = oOlO(B, F);
+    var E = mini.findParent(B, C),
+            A = mini.findParent(B, F);
     if (E) {
         this.OollO1electMonth = parseInt(E.id);
         $("." + C, D.menuEl).removeClass(G);
@@ -12565,26 +12565,26 @@ mini_Calendar_l00oo0 = function (H) {
         this.OollO1electYear = parseInt(A.id);
         $("." + F, D.menuEl).removeClass(G);
         $(B).parent().find("#" + this.OollO1electYear).addClass(G)
-    } else if (oOlO(B, "mini-calendar-menu-prevYear")) {
+    } else if (mini.findParent(B, "mini-calendar-menu-prevYear")) {
         this.menuYear = this.menuYear - 1;
         this.menuYear = parseInt(this.menuYear / 10) * 10;
         _()
-    } else if (oOlO(B, "mini-calendar-menu-nextYear")) {
+    } else if (mini.findParent(B, "mini-calendar-menu-nextYear")) {
         this.menuYear = this.menuYear + 11;
         this.menuYear = parseInt(this.menuYear / 10) * 10;
         _()
-    } else if (oOlO(B, "mini-calendar-okButton"))
+    } else if (mini.findParent(B, "mini-calendar-okButton"))
         this.__getMonthYear();
-    else if (oOlO(B, "mini-calendar-cancelButton"))
+    else if (mini.findParent(B, "mini-calendar-cancelButton"))
         if (this.monthPicker)
             this.olOol0(null, "cancel");
         else
             this.hideMenu()
 };
 mini_Calendar___OnMenuDblClick = function (B) {
-    var $ = oOlO(B.target, "mini-calendar-menu-year"),
-            _ = oOlO(B.target, "mini-calendar-menu-month"),
-            A = oOlO(B.target, "mini-calendar-date ");
+    var $ = mini.findParent(B.target, "mini-calendar-menu-year"),
+            _ = mini.findParent(B.target, "mini-calendar-menu-month"),
+            A = mini.findParent(B.target, "mini-calendar-date ");
     if (!$ && !_ && !A)
         return;
     if (this.monthPicker)
@@ -12605,8 +12605,8 @@ mini_Calendar___getMonthYear = function () {
     }
 };
 mini_Calendar_Ooo0lO = function ($) {
-    if (!oOlO($.target, "mini-calendar-menu"))
-        if (!oOlO($.target, "mini-monthpicker"))
+    if (!mini.findParent($.target, "mini-calendar-menu"))
+        if (!mini.findParent($.target, "mini-monthpicker"))
             this.hideMenu()
 };
 mini_Calendar_Ol1o1 = function (I) {
@@ -12614,23 +12614,23 @@ mini_Calendar_Ol1o1 = function (I) {
     if (this.enabled == false)
         return;
     var C = I.target,
-            G = oOlO(I.target, "mini-calendar-title");
-    if (oOlO(C, "mini-calendar-monthNext")) {
+            G = mini.findParent(I.target, "mini-calendar-title");
+    if (mini.findParent(C, "mini-calendar-monthNext")) {
         H.setDate(1);
         H.setMonth(H.getMonth() + 1);
         this.setViewDate(H)
-    } else if (oOlO(C, "mini-calendar-yearNext")) {
+    } else if (mini.findParent(C, "mini-calendar-yearNext")) {
         H.setDate(1);
         H.setFullYear(H.getFullYear() + 1);
         this.setViewDate(H)
-    } else if (oOlO(C, "mini-calendar-monthPrev")) {
+    } else if (mini.findParent(C, "mini-calendar-monthPrev")) {
         H.setMonth(H.getMonth() - 1);
         this.setViewDate(H)
-    } else if (oOlO(C, "mini-calendar-yearPrev")) {
+    } else if (mini.findParent(C, "mini-calendar-yearPrev")) {
         H.setFullYear(H.getFullYear() - 1);
         this.setViewDate(H)
-    } else if (oOlO(C, "mini-calendar-tadayButton")) {
-        var F = !!oOlO(C, "yesterday"),
+    } else if (mini.findParent(C, "mini-calendar-tadayButton")) {
+        var F = !!mini.findParent(C, "yesterday"),
                 _ = new Date();
         if (F)
             _.setDate(_.getDate() - 1);
@@ -12641,16 +12641,16 @@ mini_Calendar_Ol1o1 = function (I) {
             this.setTime($)
         }
         this.olOol0(_, "today")
-    } else if (oOlO(C, "mini-calendar-clearButton")) {
+    } else if (mini.findParent(C, "mini-calendar-clearButton")) {
         this.setSelectedDate(null);
         this.setTime(null);
         this.olOol0(null, "clear")
-    } else if (oOlO(C, "mini-calendar-okButton"))
+    } else if (mini.findParent(C, "mini-calendar-okButton"))
         this.olOol0(null, "ok");
     else if (G)
         this.showMenu();
-    var E = oOlO(I.target, "mini-calendar-date");
-    if (E && !o00ol(E, "mini-calendar-disabled")) {
+    var E = mini.findParent(I.target, "mini-calendar-date");
+    if (E && !mini.hasClass(E, "mini-calendar-disabled")) {
         var A = E.id.split("$"),
                 B = parseInt(A[A.length - 1]);
         if (B == -1)
@@ -12662,8 +12662,8 @@ mini_Calendar_Ol1o1 = function (I) {
 mini_Calendar_olol = function (C) {
     if (this.enabled == false)
         return;
-    var B = oOlO(C.target, "mini-calendar-date");
-    if (B && !o00ol(B, "mini-calendar-disabled")) {
+    var B = mini.findParent(C.target, "mini-calendar-date");
+    if (B && !mini.hasClass(B, "mini-calendar-disabled")) {
         var $ = B.id.split("$"),
                 _ = parseInt($[$.length - 1]);
         if (_ == -1)
@@ -12712,7 +12712,7 @@ mini_Calendar_l001l = function (B) {
         $.focus()
     }
     var A = this.getDateEl(_);
-    if (A && o00ol(A, "mini-calendar-disabled"))
+    if (A && mini.hasClass(A, "mini-calendar-disabled"))
         return;
     $.setSelectedDate(_);
     if (B.keyCode == 37 || B.keyCode == 38 || B.keyCode == 39 || B.keyCode == 40)
@@ -12880,7 +12880,7 @@ mini_PopupEdit__initEvents = function () {
 };
 mini_PopupEdit_Ol0O1 = function ($) {
     this.OO0Ol = false;
-    if (this._clickTarget && Oolo(this.el, this._clickTarget))
+    if (this._clickTarget && mini.isAncestor(this.el, this._clickTarget))
         return;
     if (this.isShowPopup())
         return;
@@ -12889,8 +12889,8 @@ mini_PopupEdit_Ol0O1 = function ($) {
 mini_PopupEdit_O1l1lo = function (_) {
     if (this.isReadOnly() || this.allowInput)
         return;
-    if (oOlO(_.target, "mini-buttonedit-border")) {
-        var $ = oOlO(_.target, "mini-buttonedit-button");
+    if (mini.findParent(_.target, "mini-buttonedit-border")) {
+        var $ = mini.findParent(_.target, "mini-buttonedit-button");
         if ($ && $ != this._buttonEl)
             ;
         else
@@ -12906,8 +12906,8 @@ mini_PopupEdit_olol = function ($) {
     if (this.isReadOnly())
         return;
     mini.PopupEdit.superclass.olol.call(this, $);
-    if (this.allowInput == false && oOlO($.target, "mini-buttonedit-border")) {
-        olO0(this.el, this.oll001);
+    if (this.allowInput == false && mini.findParent($.target, "mini-buttonedit-border")) {
+        mini.addClass(this.el, this.oll001);
         O1Oo(document, "mouseup", this.lo010o, this)
     }
 };
@@ -12932,7 +12932,7 @@ mini_PopupEdit_O10l1 = function ($) {
             $.stopPropagation()
 };
 mini_PopupEdit_within = function ($) {
-    if (Oolo(this.el, $.target))
+    if (mini.isAncestor(this.el, $.target))
         return true;
     if (this.popup.within($))
         return true;
@@ -13127,9 +13127,9 @@ mini_PopupEdit_Ol1o1 = function (A) {
     });
     if (this.isReadOnly())
         return;
-    if (Oolo(this._buttonEl, A.target))
+    if (mini.isAncestor(this._buttonEl, A.target))
         this.lo101(A);
-    if (oOlO(A.target, this._closeCls)) {
+    if (mini.findParent(A.target, this._closeCls)) {
         if (this.isShowPopup())
             this.hidePopup();
         if (this.autoClear)
@@ -13143,8 +13143,8 @@ mini_PopupEdit_Ol1o1 = function (A) {
         });
         return
     }
-    if (this.allowInput == false || Oolo(this._buttonEl, A.target) || this.showPopupOnClick) {
-        var _ = oOlO(A.target, "mini-buttonedit-button");
+    if (this.allowInput == false || mini.isAncestor(this._buttonEl, A.target) || this.showPopupOnClick) {
+        var _ = mini.findParent(A.target, "mini-buttonedit-button");
         if (_ && _ != this._buttonEl)
             ;
         else if (this.isShowPopup())
@@ -13402,19 +13402,19 @@ mini_OutlookBar_doUpdate = function () {
         if (A.enabled)
             l0OO(B, "mini-disabled");
         else
-            olO0(B, "mini-disabled");
-        olO0(B, A.cls);
+            mini.addClass(B, "mini-disabled");
+        mini.addClass(B, A.cls);
         l1O1l(B, A.style);
-        olO0(C, A.bodyCls);
+        mini.addClass(C, A.bodyCls);
         l1O1l(C, A.bodyStyle);
-        olO0(G, A.headerCls);
+        mini.addClass(G, A.headerCls);
         l1O1l(G, A.headerStyle);
         l0OO(B, "mini-outlookbar-firstGroup");
         l0OO(B, "mini-outlookbar-lastGroup");
         if (_ == 0)
-            olO0(B, "mini-outlookbar-firstGroup");
+            mini.addClass(B, "mini-outlookbar-firstGroup");
         if (_ == H - 1)
-            olO0(B, "mini-outlookbar-lastGroup")
+            mini.addClass(B, "mini-outlookbar-lastGroup")
     }
     this.doLayout()
 };
@@ -13429,11 +13429,11 @@ mini_OutlookBar_doLayout = function () {
                 B = _._el,
                 D = B.lastChild;
         if (_.expanded) {
-            olO0(B, "mini-outlookbar-expand");
+            mini.addClass(B, "mini-outlookbar-expand");
             l0OO(B, "mini-outlookbar-collapse")
         } else {
             l0OO(B, "mini-outlookbar-expand");
-            olO0(B, "mini-outlookbar-collapse")
+            mini.addClass(B, "mini-outlookbar-collapse")
         }
         D.style.height = "auto";
         D.style.display = _.expanded ? "block" : "none";
@@ -13624,7 +13624,7 @@ mini_OutlookBar_collapseGroup = function (_) {
         var A = {
             height: "1px"
         };
-        olO0(C, "mini-outlookbar-overflow");
+        mini.addClass(C, "mini-outlookbar-overflow");
         l0OO(this.getGroupEl(_), "mini-outlookbar-expand");
         var B = this,
                 H = jQuery(C);
@@ -13674,8 +13674,8 @@ mini_OutlookBar_expandGroup = function ($) {
         },
                 I = G.style.overflow;
         G.style.overflow = "hidden";
-        olO0(G, "mini-outlookbar-overflow");
-        olO0(this.getGroupEl($), "mini-outlookbar-expand");
+        mini.addClass(G, "mini-outlookbar-overflow");
+        mini.addClass(this.getGroupEl($), "mini-outlookbar-expand");
         var F = this,
                 K = jQuery(G);
         K.animate(E, 180, function () {
@@ -13716,7 +13716,7 @@ mini_OutlookBar_lOOO0l = function ($) {
     }
 };
 mini_OutlookBar_llO1Oo = function (B) {
-    var _ = oOlO(B.target, "mini-outlookbar-group");
+    var _ = mini.findParent(B.target, "mini-outlookbar-group");
     if (!_)
         return null;
     var $ = _.id.split("$"),
@@ -13726,7 +13726,7 @@ mini_OutlookBar_llO1Oo = function (B) {
 mini_OutlookBar_Ol1o1 = function (A) {
     if (this.O1lll0)
         return;
-    var _ = oOlO(A.target, "mini-outlookbar-groupHeader");
+    var _ = mini.findParent(A.target, "mini-outlookbar-groupHeader");
     if (!_)
         return;
     var $ = this.llO1Oo(A);
@@ -13811,7 +13811,7 @@ mini_ButtonEdit__createButtonHtml = function (B, _, A) {
     B = B || "";
     _ = _ || "";
     A = A || "";
-    var $ = "onmouseover=\"olO0(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
     return "<span title=\"" + A + "\" name=\"" + B + "\" class=\"mini-buttonedit-button mini-buttonedit-" + B + "\" " + $ + "><span class=\"mini-buttonedit-icon " + _ + "\"></span></span>"
 };
 mini_ButtonEdit_loOOoOsHTML = function () {
@@ -14063,12 +14063,12 @@ mini_ButtonEdit_Ol1o1 = function (_) {
     });
     if (this.isReadOnly())
         return;
-    if (!Oolo(this._borderEl, _.target))
+    if (!mini.isAncestor(this._borderEl, _.target))
         return;
     var $ = new Date();
-    if (Oolo(this._buttonEl, _.target))
+    if (mini.isAncestor(this._buttonEl, _.target))
         this.lo101(_);
-    if (oOlO(_.target, this._closeCls)) {
+    if (mini.findParent(_.target, this._closeCls)) {
         if (this.autoClear)
             if ((this.value && this.value !== 0) || this.text !== "") {
                 this.setValue("");
@@ -14082,7 +14082,7 @@ mini_ButtonEdit_Ol1o1 = function (_) {
     this._handlerButtonElClick(_)
 };
 mini_ButtonEdit__handlerButtonElClick = function (C) {
-    var _ = oOlO(C.target, "mini-buttonedit-button");
+    var _ = mini.findParent(C.target, "mini-buttonedit-button");
     if (_ && _ != this._buttonEl && _ != this._closeEl) {
         var A = jQuery(_).attr("name"),
                 B = this.getButtonByName(A),
@@ -14098,33 +14098,33 @@ mini_ButtonEdit__handlerButtonElClick = function (C) {
 mini_ButtonEdit_olol = function (C) {
     if (this.isReadOnly() || this.enabled == false)
         return;
-    if (!Oolo(this._borderEl, C.target))
+    if (!mini.isAncestor(this._borderEl, C.target))
         return;
-    if (!Oolo(this._textEl, C.target)) {
+    if (!mini.isAncestor(this._textEl, C.target)) {
         this._clickTarget = C.target;
         var $ = this;
         setTimeout(function () {
             $.focus();
             mini.selectRange($._textEl, 1000, 1000)
         }, 1);
-        if (Oolo(this._buttonEl, C.target)) {
-            var _ = oOlO(C.target, "mini-buttonedit-up"),
-                    B = oOlO(C.target, "mini-buttonedit-down");
+        if (mini.isAncestor(this._buttonEl, C.target)) {
+            var _ = mini.findParent(C.target, "mini-buttonedit-up"),
+                    B = mini.findParent(C.target, "mini-buttonedit-down");
             if (_) {
-                olO0(_, this.ll111);
+                mini.addClass(_, this.ll111);
                 this.O1Oo1(C, "up")
             } else if (B) {
-                olO0(B, this.ll111);
+                mini.addClass(B, this.ll111);
                 this.O1Oo1(C, "down")
             } else {
-                olO0(this._buttonEl, this.ll111);
+                mini.addClass(this._buttonEl, this.ll111);
                 this.O1Oo1(C)
             }
         }
         O1Oo(document, "mouseup", this.lo010o, this);
-        var A = oOlO(C.target, "mini-buttonedit-button");
+        var A = mini.findParent(C.target, "mini-buttonedit-button");
         if (A)
-            olO0(A, this.ll111)
+            mini.addClass(A, this.ll111)
     }
 };
 mini_ButtonEdit_lo010o = function (_) {
@@ -14300,7 +14300,7 @@ mini_ButtonEdit_getAttrs = function (el) {
 };
 mini_FileUpload__create = function () {
     mini.FileUpload.superclass._create.call(this);
-    olO0(this.el, "mini-htmlfile");
+    mini.addClass(this.el, "mini-htmlfile");
     this._progressbarEl = mini.append(this._borderEl, "<div id=\"" + this._id + "$progressbar\"  class=\"mini-fileupload-progressbar\"><div id=\"" + this._id + "$complete\" class=\"mini-fileupload-complete\"></div></div>");
     this._completeEl = this._progressbarEl.firstChild;
     this._uploadId = this._id + "$button_placeholder";
@@ -14314,7 +14314,7 @@ mini_DatePicker_getShowOkButton = function () {
 };
 mini_FileUpload_loOOoOHtml = function () {
 
-    var $ = "onmouseover=\"olO0(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
     return "<span class=\"mini-buttonedit-button\" " + $ + ">" + this.buttonText + "</span>"
 };
 mini_FileUpload_destroy = function ($) {
@@ -14607,7 +14607,7 @@ mini_DatePicker_hidePopup = function () {
     this.Ol0Oo.hideMenu()
 };
 mini_DatePicker_within = function ($) {
-    if (Oolo(this.el, $.target))
+    if (mini.isAncestor(this.el, $.target))
         return true;
     if (this.Ol0Oo.within($))
         return true;
@@ -15421,7 +15421,7 @@ mini_ListControl_setName = function ($) {
         mini.setAttr(this.ll10l, "name", this.name)
 };
 mini_ListControl_o11o1o = function (_) {
-    var A = oOlO(_.target, this.l1lO);
+    var A = mini.findParent(_.target, this.l1lO);
     if (A) {
         var $ = parseInt(mini.getAttr(A, "index"));
         return this.data[$]
@@ -15430,7 +15430,7 @@ mini_ListControl_o11o1o = function (_) {
 mini_ListControl_addItemCls = function (_, A) {
     var $ = this.getItemEl(_);
     if ($)
-        olO0($, A)
+        mini.addClass($, A)
 };
 mini_ListControl_removeItemCls = function (_, A) {
     var $ = this.getItemEl(_);
@@ -15452,13 +15452,13 @@ mini_ListControl_l1O000 = function (_, $) {
         this.scrollIntoView(_);
     if (this.OO0OlItem == _) {
         if (A)
-            olO0(A, this.o1Ol);
+            mini.addClass(A, this.o1Ol);
         return
     }
     this.o11l();
     this.OO0OlItem = _;
     if (A)
-        olO0(A, this.o1Ol)
+        mini.addClass(A, this.o1Ol)
 };
 mini_ListControl_o11l = function () {
     if (!this.OO0OlItem)
@@ -16459,7 +16459,7 @@ mini_OutlookTree__Ol0O1l = function ($) {
     this.fire("drawnode", $)
 };
 mini_TimeSpinner_loOOoOHtml = function () {
-    var $ = "onmouseover=\"olO0(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
     return "<span class=\"mini-buttonedit-button\" " + $ + "><span class=\"mini-buttonedit-up\"><span></span></span><span class=\"mini-buttonedit-down\"><span></span></span></span>"
 };
 mini_TimeSpinner__initEvents = function () {
@@ -16946,7 +16946,7 @@ mini_TextBoxList_oll01 = function (_) {
     if (this.isReadOnly())
         return;
     if (this.isShowPopup)
-        if (!Oolo(this.popup.el, _.target))
+        if (!mini.isAncestor(this.popup.el, _.target))
             this.hidePopup();
     var $ = this;
     if (this.OO0Ol)
@@ -17047,7 +17047,7 @@ mini_TextBoxList_doUpdate = function () {
     this.doReadOnly()
 };
 mini_TextBoxList_o11o1o = function (_) {
-    var A = oOlO(_.target, "mini-textboxlist-item");
+    var A = mini.findParent(_.target, "mini-textboxlist-item");
     if (A) {
         var $ = A.id.split("$"),
                 B = $[$.length - 1];
@@ -17074,9 +17074,9 @@ mini_TextBoxList_hoverItem = function ($, A) {
         return;
     this.blurItem();
     var _ = this.getItemEl($);
-    olO0(_, this.OOOll);
-    if (A && o00ol(A.target, "mini-textboxlist-close"))
-        olO0(A.target, this.l10OOl)
+    mini.addClass(_, this.OOOll);
+    if (A && mini.hasClass(A.target, "mini-textboxlist-close"))
+        mini.addClass(A.target, this.l10OOl)
 };
 mini_TextBoxList_blurItem = function () {
     var _ = this.selecteds.length;
@@ -17130,7 +17130,7 @@ mini_TextBoxList_select = function (_) {
     this.O1l0l1 = _;
     if (this.O1l0l1) {
         $ = this.getItemEl(this.O1l0l1);
-        olO0($, this.oOoo)
+        mini.addClass($, this.oOoo)
     }
     var A = this;
     if (this.O1l0l1) {
@@ -17474,7 +17474,7 @@ mini_TextBoxList_O0loo = function () {
 };
 mini_TextBoxList_within = function ($) {
 
-    if (Oolo(this.el, $.target))
+    if (mini.isAncestor(this.el, $.target))
         return true;
     if (this.showPopup && this.popup && this.popup.within($))
         return true;
@@ -17578,7 +17578,7 @@ mini_TextBoxList_Ol1o1 = function (_) {
         return;
     var $ = this.o11o1o(_);
     if (!$) {
-        if (oOlO(_.target, "mini-textboxlist-input"))
+        if (mini.findParent(_.target, "mini-textboxlist-input"))
             ;
         else
             this.showInput();
@@ -17586,7 +17586,7 @@ mini_TextBoxList_Ol1o1 = function (_) {
     }
     this.focusEl.focus();
     this.select($);
-    if (_ && o00ol(_.target, "mini-textboxlist-close"))
+    if (_ && mini.hasClass(_.target, "mini-textboxlist-close"))
         this.removeItem($)
 };
 mini_TextBoxList_l001l = function (B) {
@@ -18428,7 +18428,7 @@ mini_ValidatorBase_setLabelField = function ($) {
         }
         this.lo1ooO.style.display = $ ? "block" : "none";
         if ($)
-            olO0(this.el, this._labelFieldCls);
+            mini.addClass(this.el, this._labelFieldCls);
         else
             l0OO(this.el, this._labelFieldCls);
         this._labelLayout()
@@ -18825,7 +18825,7 @@ mini.extend(mini.Container, mini.Control, {
         return this._contentEl
     },
     within: function (C) {
-        if (Oolo(this.el, C.target))
+        if (mini.isAncestor(this.el, C.target))
             return true;
         var $ = mini.getChildControls(this);
         for (var _ = 0, B = $.length; _ < B; _++) {
@@ -19100,7 +19100,7 @@ mini.l111Ol = function (G) {
             }
         }
     }
-    if (F == "select" || o00ol(G, "mini-menu") || o00ol(G, "mini-datagrid") || o00ol(G, "mini-treegrid") || o00ol(G, "mini-tree") || o00ol(G, "mini-button") || o00ol(G, "mini-textbox") || o00ol(G, "mini-buttonedit"))
+    if (F == "select" || mini.hasClass(G, "mini-menu") || mini.hasClass(G, "mini-datagrid") || mini.hasClass(G, "mini-treegrid") || mini.hasClass(G, "mini-tree") || mini.hasClass(G, "mini-button") || mini.hasClass(G, "mini-textbox") || mini.hasClass(G, "mini-buttonedit"))
         return;
     var J = mini.getChildNodes(G, true);
     for (E = 0, C = J.length; E < C; E++) {
@@ -19380,13 +19380,13 @@ mini.CheckColumn = function (_) {
                     A = document.getElementById(D);
             if (A) {
                 var B = "mini-grid-checkbox-checked",
-                        C = !o00ol(A, B);
+                        C = !mini.hasClass(A, B);
                 this._checkedAll = C;
                 if (_.getMultiSelect()) {
                     if (C) {
                         var $ = _.getDataView();
                         _.selects($);
-                        olO0(A, B)
+                        mini.addClass(A, B)
                     } else {
                         $ = _.getDataView();
                         _.deselects($);
@@ -19396,7 +19396,7 @@ mini.CheckColumn = function (_) {
                     _.deselectAll();
                     if (C) {
                         _.select(0);
-                        olO0(A, B)
+                        mini.addClass(A, B)
                     }
                 }
                 _.fire("checkall")
@@ -19464,7 +19464,7 @@ mini.ExpandColumn = function ($) {
         OolOl: function (A) {
             var $ = A.sender;
             if (A.column == this && $.isShowRowDetail)
-                if (oOlO(A.htmlEvent.target, "mini-grid-ecIcon")) {
+                if (mini.findParent(A.htmlEvent.target, "mini-grid-ecIcon")) {
                     var _ = $.isShowRowDetail(A.record);
                     if (!_) {
                         A.cancel = false;
@@ -19763,7 +19763,7 @@ l1l0oo = function ($) {
 };
 l1l0oo.prototype = {
     olol: function (A) {
-        var $ = o00ol(A.target, "mini-resizer-trigger");
+        var $ = mini.hasClass(A.target, "mini-resizer-trigger");
         if ($ && this.owner.allowResize) {
             var _ = this.l11O();
             _.start(A)
@@ -21654,14 +21654,14 @@ mini.createElements = function ($) {
     mini.__wrap.innerHTML = $;
     return _ ? mini.__wrap.firstChild.rows : mini.__wrap.childNodes
 };
-mini.byId = function (D, A) {
+mini_byId = function (D, A) {
     if (typeof D == "string") {
         if (D.charAt(0) == "#")
             D = D.substr(1);
         var _ = document.getElementById(D);
         if (_)
             return _;
-        if (A && !Oolo(document.body, A)) {
+        if (A && !mini.isAncestor(document.body, A)) {
             var B = A.getElementsByTagName("*");
             for (var $ = 0, C = B.length; $ < C; $++) {
                 _ = B[$];
@@ -21674,7 +21674,7 @@ mini.byId = function (D, A) {
     } else
         return D
 };
-o00ol = function ($, _) {
+mini_hasClass = function ($, _) {
     $ = mini.byId($);
     if (!$)
         return;
@@ -21683,10 +21683,10 @@ o00ol = function ($, _) {
     var A = String($.className).split(" ");
     return A.indexOf(_) != -1
 };
-olO0 = function ($, _) {
+mini_addClass = function ($, _) {
     if (!_)
         return;
-    if (o00ol($, _) == false)
+    if (mini.hasClass($, _) == false)
         jQuery($).addClass(_)
 };
 l0OO = function ($, _) {
@@ -21812,48 +21812,66 @@ lO00 = function () {
     var $ = document.defaultView;
     return new Function("el", "style", ["style.indexOf('-')>-1 && (style=style.replace(/-(\\w)/g,function(m,a){return a.toUpperCase()}));", "style=='float' && (style='", $ ? "cssFloat" : "styleFloat", "');return el.style[style] || ", $ ? "window.getComputedStyle(el,null)[style]" : "el.currentStyle[style]", " || null;"].join(""))
 }();
-Oolo = function (A, $) {
-    var _ = false;
-    A = mini.byId(A);
-    $ = mini.byId($);
-    if (A === $)
-        return true;
-    if (A && $)
-        if (A.contains) {
+/*
+ * 判断参数p是否是c的祖先节点。注意，p === c也被认为是正确的。
+ * @exports mini_isAncestor as mini.isAncestor
+ * @param p 祖先对象
+ * @param c 子孙对象
+ * @return 判断结果{Boolean}
+ */
+mini_isAncestor = function (p, c) {
+    var ret = false;
+    p = mini.byId(p);
+    c = mini.byId(c);
+    if (p === c)
+        return true;	//两个DOM绝对相等。
+    if (p && c) {
+        if (p.contains) {
             try {
-                return A.contains($)
-            } catch (B) {
-                return false
+                return p.contains(c);	//判断包含关系p包含c
+            } catch (e) {
+                return false;
             }
-        } else if (A.compareDocumentPosition)
-            return !!(A.compareDocumentPosition($) & 16);
-        else
-            while ($ = $.parentNode)
-                _ = $ == A || _;
-    return _
+        } else if (p.compareDocumentPosition) {
+            return !!(p.compareDocumentPosition(c) & 16);	//p包含c。
+        } else {
+            while (c = c.parentNode) {
+                ret = c == p || ret;
+            }
+        }
+    }
+    return ret;
 };
-oOlO = function (B, A, $) {
-    B = mini.byId(B);
-    var C = document.body,
-            _ = 0,
-            D;
-    $ = $ || 50;
-    if (typeof $ != "number") {
-        D = mini.byId($);
-        $ = 10
+/*
+ * 在N层内找到有 cls 定义的样式类名的祖先节点。
+ * @exports mini_findParent as mini.findParent
+ * @param p 起始节点，可以是ID,DOM
+ * @param cls 要匹配的样式类名
+ * @param maxDepth 最多向上查找的层次，默认值为50
+ * @returns 匹配的祖先节点，或者null
+ * @function
+ */
+mini_findParent = function (p, cls, maxDepth) {
+    p = mini.byId(p);
+    var b = document.body, depth = 0, stopEl;
+    maxDepth = maxDepth || 50;
+    if (typeof maxDepth != "number") {
+        stopEl = mini.byId(maxDepth);
+        maxDepth = 10;
     }
-    while (B && B.nodeType == 1 && _ < $ && B != C && B != D) {
-        if (o00ol(B, A))
-            return B;
-        _++;
-        B = B.parentNode
+    while (p && p.nodeType == 1 && depth < maxDepth && p != b && p != stopEl) {
+        if (mini.hasClass(p, cls)) {
+            return p;
+        }
+        depth++;
+        p = p.parentNode;
     }
-    return null
+    return null;
 };
 mini.copyTo(mini, {
-    byId: mini.byId,
-    hasClass: o00ol,
-    addClass: olO0,
+    byId: mini_byId,
+    hasClass: mini_hasClass,
+    addClass: mini_addClass,
     removeClass: l0OO,
     getMargins: l0l1,
     getBorders: l00OO,
@@ -21869,7 +21887,7 @@ mini.copyTo(mini, {
     repaint: function ($) {
         if (!$)
             $ = document.body;
-        olO0($, "mini-repaint");
+        mini.addClass($, "mini-repaint");
         setTimeout(function () {
             l0OO($, "mini-repaint")
         }, 1)
@@ -21967,7 +21985,7 @@ mini.copyTo(mini, {
                 J += ";position:fixed;";
             l1O1l(F, J);
             mini.setXY(E.el, E.x, E.y);
-            return
+            return;
         }
         if (I == "left")
             J += "left:" + C + "px;";
@@ -22028,14 +22046,14 @@ mini.copyTo(mini, {
                 B.removeChild(C[$])
         }
     },
-    isAncestor: Oolo,
-    findParent: oOlO,
+    isAncestor: mini_isAncestor,
+    findParent: mini_findParent,
     findChild: function (_, A) {
         _ = mini.byId(_);
         var B = _.getElementsByTagName("*");
         for (var $ = 0, C = B.length; $ < C; $++) {
             var _ = B[$];
-            if (o00ol(_, A))
+            if (mini.hasClass(_, A))
                 return _
         }
     },
@@ -22440,7 +22458,7 @@ mini.mask = function (C) {
     mini._MaskObjects[_._maskid] = C;
     var $ = mini.append(_, "<div class=\"mini-mask\">" + "<div class=\"mini-mask-background\" style=\"" + C.backStyle + "\"></div>" + "<div class=\"mini-mask-msg " + C.cls + "\" style=\"" + C.style + "\">" + C.html + "</div>" + "</div>");
     if (_ == document.body)
-        olO0($, "mini-fixed");
+        mini.addClass($, "mini-fixed");
     C.maskEl = $;
     if (!mini.isNull(C.opacity))
         mini.setOpacity($.firstChild, C.opacity);
@@ -22729,7 +22747,7 @@ mini.layoutIFrames = function ($) {
         for (var A = 0, C = _.length; A < C; A++) {
             var B = _[A];
             try {
-                if (mini.isDisplay(B) && Oolo($, B)) {
+                if (mini.isDisplay(B) && mini.isAncestor($, B)) {
                     if (B.contentWindow.mini)
                         if (B.contentWindow.o101O1 == false) {
                             B.contentWindow.o101O1 = B.contentWindow.mini.isWindowDisplay();
@@ -23356,7 +23374,7 @@ OOooo1_prototype = {
             popupCls: this.popupCls
         };
         mini.copyTo(B, E);
-        olO0(I, B.popupCls);
+        mini.addClass(I, B.popupCls);
         I.popupCls = B.popupCls;
         this._popupEl = I;
         this.el.style.position = "absolute";
@@ -23567,13 +23585,13 @@ OOooo1_prototype = {
         this.allowDrag = $;
         l0OO(this.el, this.OO00oO);
         if ($)
-            olO0(this.el, this.OO00oO)
+            mini.addClass(this.el, this.OO00oO)
     },
     setAllowResize: function ($) {
         this.allowResize = $;
         l0OO(this.el, this.Ol1OlO);
         if ($)
-            olO0(this.el, this.Ol1OlO)
+            mini.addClass(this.el, this.Ol1OlO)
     },
     Ol0110: function (_) {
         if (this.O1lll0)
@@ -23623,13 +23641,13 @@ OOooo1_prototype = {
             return;
         if (!this.isPopup)
             return;
-        if (this.within($) || (this.popupEl && Oolo(this.popupEl, $.target)))
+        if (this.within($) || (this.popupEl && mini.isAncestor(this.popupEl, $.target)))
             ;
         else
             this.doHide($)
     },
     lOo0Ol: function (_) {
-        if (Oolo(this.el, _.target) || (this.popupEl && Oolo(this.popupEl, _.target)))
+        if (mini.isAncestor(this.el, _.target) || (this.popupEl && mini.isAncestor(this.popupEl, _.target)))
             ;
         else {
             clearTimeout(this._showTimer);
@@ -23647,7 +23665,7 @@ OOooo1_prototype = {
             this.oll01l()
     },
     within: function (C) {
-        if (Oolo(this.el, C.target))
+        if (mini.isAncestor(this.el, C.target))
             return true;
         var $ = mini.getChildControls(this);
         for (var _ = 0, B = $.length; _ < B; _++) {
@@ -24168,7 +24186,7 @@ mini_ComboBox._initInput = mini_ComboBox__initInput;
 mini.regClass(mini.ComboBox, "combobox");
 mini.DatePicker = function () {
     mini.DatePicker.superclass.constructor.apply(this, arguments);
-    olO0(this.el, "mini-datepicker");
+    mini.addClass(this.el, "mini-datepicker");
     this.on("validation", this.O0OO, this)
 };
 mini.extend(mini.DatePicker, mini.PopupEdit, {
@@ -25387,7 +25405,7 @@ mini.extend(mini.Form, mini.Component, {
         var $ = mini.findControls(function ($) {
             if (!$.el || $.formField != true)
                 return false;
-            if (Oolo(this.el, $.el))
+            if (mini.isAncestor(this.el, $.el))
                 return true;
             return false
         }, this);
@@ -25497,7 +25515,7 @@ mini.extend(mini.Form, mini.Component, {
     getValidateFields: function (C) {
         function A($) {
             return $.isDisplay(function ($) {
-                if (o00ol($, "mini-tabs-body"))
+                if (mini.hasClass($, "mini-tabs-body"))
                     return true
             })
         }
@@ -26193,9 +26211,9 @@ mini.copyTo(mini.Layout.prototype, {
                     E = C._split,
                     D = C._proxy;
             if (C.cls)
-                olO0(B, C.cls);
+                mini.addClass(B, C.cls);
             if (C.headerCls)
-                olO0(B.firstChild, C.headerCls);
+                mini.addClass(B.firstChild, C.headerCls);
             C._header.style.display = C.showHeader ? "" : "none";
             C._header.innerHTML = this.l01O1(C);
             if (C._proxy) {
@@ -26208,7 +26226,7 @@ mini.copyTo(mini.Layout.prototype, {
             if (E) {
                 l0OO(E, "mini-layout-split-nodrag");
                 if (C.expanded == false || !C.allowResize)
-                    olO0(E, "mini-layout-split-nodrag")
+                    mini.addClass(E, "mini-layout-split-nodrag")
             }
         }
         this.doLayout()
@@ -26362,12 +26380,12 @@ mini.copyTo(mini.Layout.prototype, {
             if (E.showSplit && E.expanded && E.allowResize == true)
                 l0OO(F, "mini-layout-split-nodrag");
             else
-                olO0(F, "mini-layout-split-nodrag");
+                mini.addClass(F, "mini-layout-split-nodrag");
             F.firstChild.style.display = E.showSplitIcon ? "block" : "none";
             if (E.expanded)
                 l0OO(F.firstChild, "mini-layout-spliticon-collapse");
             else
-                olO0(F.firstChild, "mini-layout-spliticon-collapse")
+                mini.addClass(F.firstChild, "mini-layout-spliticon-collapse")
         }
         mini.layout(this._borderEl);
         this.fire("layout")
@@ -26375,7 +26393,7 @@ mini.copyTo(mini.Layout.prototype, {
     olol: function (B) {
         if (this.O1lll0)
             return;
-        if (oOlO(B.target, "mini-layout-split")) {
+        if (mini.findParent(B.target, "mini-layout-split")) {
             var A = jQuery(B.target).attr("uid");
             if (A != this.uid)
                 return;
@@ -26514,7 +26532,7 @@ mini.copyTo(mini.Layout.prototype, {
         var A = D.region,
                 H = D._el;
         D._Expanded = true;
-        olO0(H, "mini-layout-popup");
+        mini.addClass(H, "mini-layout-popup");
         var E = O1loO1(D._proxy),
                 B = O1loO1(D._el),
                 F = {};
@@ -26557,7 +26575,7 @@ mini.copyTo(mini.Layout.prototype, {
                 top: $ - B.height
             }
         }
-        olO0(D._proxy, "mini-layout-maxZIndex");
+        mini.addClass(D._proxy, "mini-layout-maxZIndex");
         this.O1lll0 = true;
         var G = this,
                 L = jQuery(H);
@@ -26595,7 +26613,7 @@ mini.copyTo(mini.Layout.prototype, {
                 top: $ + D.height
             }
         }
-        olO0(F._proxy, "mini-layout-maxZIndex");
+        mini.addClass(F._proxy, "mini-layout-maxZIndex");
         this.O1lll0 = true;
         var A = this,
                 G = jQuery(E);
@@ -26612,7 +26630,7 @@ mini.copyTo(mini.Layout.prototype, {
             var _ = this.regions[$];
             if (!_._Expanded)
                 continue;
-            if (Oolo(_._el, B.target) || Oolo(_._proxy, B.target))
+            if (mini.isAncestor(_._el, B.target) || mini.isAncestor(_._proxy, B.target))
                 ;
             else
                 this.l1Ol0(_)
@@ -31023,9 +31041,9 @@ mini.extend(mini.GridView, mini.Panel, {
     _create: function () {
         mini.GridView.superclass._create.call(this);
         var A = this.el;
-        olO0(A, "mini-grid");
-        olO0(this._borderEl, "mini-grid-border");
-        olO0(this.ololOO, "mini-grid-viewport");
+        mini.addClass(A, "mini-grid");
+        mini.addClass(this._borderEl, "mini-grid-border");
+        mini.addClass(this.ololOO, "mini-grid-viewport");
         var C = "<div class=\"mini-grid-pager\"></div>",
                 $ = "<div class=\"mini-grid-filterRow\"><div class=\"mini-grid-filterRow-view\"></div><div class=\"mini-grid-scrollHeaderCell\"></div></div>",
                 _ = "<div class=\"mini-grid-summaryRow\"><div class=\"mini-grid-summaryRow-view\"></div><div class=\"mini-grid-scrollHeaderCell\"></div></div>",
@@ -31033,7 +31051,7 @@ mini.extend(mini.GridView, mini.Panel, {
         this._columnsEl = mini.after(this.OO01O, B);
         this.O1OOol = mini.after(this._columnsEl, $);
         this._rowsEl = this.l10ll1;
-        olO0(this._rowsEl, "mini-grid-rows");
+        mini.addClass(this._rowsEl, "mini-grid-rows");
         this.o01o = mini.after(this._rowsEl, _);
         this._bottomPagerEl = mini.after(this.o01o, C);
         this._columnsViewEl = this._columnsEl.childNodes[0];
@@ -31088,7 +31106,7 @@ mini.extend(mini.GridView, mini.Panel, {
         var $ = this.isAutoHeight();
         if (mini.isIE)
             if ($)
-                olO0(this._rowsViewEl, "mini-grid-hidden-y");
+                mini.addClass(this._rowsViewEl, "mini-grid-hidden-y");
             else
                 l0OO(this._rowsViewEl, "mini-grid-hidden-y")
     },
@@ -31134,7 +31152,7 @@ mini.extend(mini.GridView, mini.Panel, {
                     $.parentNode.style.width = "auto";
                     $.parentNode.style["paddingRight"] = "0px";
                     if (mini.isIE8)
-                        olO0(this._rowsViewEl, "mini-grid-hidden-y")
+                        mini.addClass(this._rowsViewEl, "mini-grid-hidden-y")
                 }
             } else {
                 A.style.width = "0px";
@@ -31815,7 +31833,7 @@ mini.extend(mini.GridView, mini.Panel, {
         return _
     },
     _getRowGroupByEvent: function (B) {
-        var _ = oOlO(B.target, "mini-grid-groupRow");
+        var _ = mini.findParent(B.target, "mini-grid-groupRow");
         if (_) {
             var $ = _.id.split("$");
             if ($[0] != this._id)
@@ -31901,7 +31919,7 @@ mini.extend(mini.GridView, mini.Panel, {
         this.fitColumns = $;
         l0OO(this.el, "mini-grid-fixwidth");
         if (this.fitColumns == false)
-            olO0(this.el, "mini-grid-fixwidth");
+            mini.addClass(this.el, "mini-grid-fixwidth");
         this.deferLayout()
     },
     getBodyHeight: function (_) {
@@ -33084,9 +33102,9 @@ mini._Gridooo0l = function ($) {
 mini._Gridooo0l.prototype = {
     o0l11: function (L) {
         var H = this.owner,
-                E = oOlO(L.target, "mini-grid-detailRow"),
-                I = E ? Oolo(H.el, E) : false;
-        if (Oolo(H.O1OOol, L.target) || Oolo(H.o01o, L.target) || Oolo(H.OO01O, L.target) || Oolo(H.OOO1ll, L.target) || (oOlO(L.target, "mini-grid-detailRow") && I) || oOlO(L.target, "mini-grid-rowEdit") || oOlO(L.target, "mini-tree-editinput"))
+                E = mini.findParent(L.target, "mini-grid-detailRow"),
+                I = E ? mini.isAncestor(H.el, E) : false;
+        if (mini.isAncestor(H.O1OOol, L.target) || mini.isAncestor(H.o01o, L.target) || mini.isAncestor(H.OO01O, L.target) || mini.isAncestor(H.OOO1ll, L.target) || (mini.findParent(L.target, "mini-grid-detailRow") && I) || mini.findParent(L.target, "mini-grid-rowEdit") || mini.findParent(L.target, "mini-tree-editinput"))
             return;
         var A = H.getCurrentCell();
         if (L.shiftKey || L.ctrlKey || L.altKey)
@@ -33318,7 +33336,7 @@ mini._Grid_RowGroup.prototype = {
         var $ = this.owner,
                 _ = $._getRowGroupByEvent(B);
         if (_) {
-            if (!$.groupTitleCollapsible && !o00ol(B.target, "mini-grid-group-ecicon"))
+            if (!$.groupTitleCollapsible && !mini.hasClass(B.target, "mini-grid-group-ecicon"))
                 return;
             var A = {
                 htmlEvent: B,
@@ -33381,7 +33399,7 @@ mini._Grido11O1Menu.prototype = {
         var $ = this.owner;
         if ($.showColumnsMenu == false)
             return;
-        if (Oolo($._columnsEl, _.target) == false)
+        if (mini.isAncestor($._columnsEl, _.target) == false)
             return;
         this.updateMenu();
         this.menu.showAtPos(_.pageX, _.pageY);
@@ -33416,7 +33434,7 @@ mini._Grid_CellToolTip = function ($) {
 mini._Grid_CellToolTip.prototype = {
     __OnGridMouseMove: function (D) {
         var $ = this.owner;
-        if (o00ol(D.target, "mini-grid-headerCell-inner")) {
+        if (mini.hasClass(D.target, "mini-grid-headerCell-inner")) {
             var _ = D.target;
             if (_.scrollWidth > _.clientWidth) {
                 var C = _.innerText || _.textContent || "";
@@ -33438,9 +33456,9 @@ mini._Grid_CellToolTip.prototype = {
             setTimeout(function () {
                 var B = _;
                 if (_.firstChild) {
-                    if (o00ol(_.firstChild, "mini-grid-cell-inner"))
+                    if (mini.hasClass(_.firstChild, "mini-grid-cell-inner"))
                         B = _.firstChild;
-                    if (o00ol(_.firstChild, "mini-tree-nodetitle"))
+                    if (mini.hasClass(_.firstChild, "mini-tree-nodetitle"))
                         B = _.firstChild
                 }
                 if (B.scrollWidth > B.clientWidth && $.getShowCellTip() && A[1].showCellTip) {
@@ -33464,15 +33482,15 @@ mini._Grid_Sorter.prototype = {
             l0OO(this.OO0OlColumnEl, "mini-grid-headerCell-hover")
     },
     __OnGridHeaderMouseMove: function (_) {
-        var $ = oOlO(_.target, "mini-grid-headerCell");
+        var $ = mini.findParent(_.target, "mini-grid-headerCell");
         if ($) {
-            olO0($, "mini-grid-headerCell-hover");
+            mini.addClass($, "mini-grid-headerCell-hover");
             this.OO0OlColumnEl = $
         }
     },
     __OnGridHeaderCellClick: function (C) {
         var $ = this.owner;
-        if (!o00ol(C.htmlEvent.target, "mini-grid-column-splitter"))
+        if (!mini.hasClass(C.htmlEvent.target, "mini-grid-column-splitter"))
             if ($.allowSortColumn && $.isEditing() == false) {
                 var _ = C.column;
                 if (!_.columns || _.columns.length == 0) {
@@ -33496,11 +33514,11 @@ mini._Grid_ColumnMove.prototype = {
         var $ = this.owner;
         if ($.isEditing())
             return;
-        if (o00ol(B.target, "mini-grid-column-splitter"))
+        if (mini.hasClass(B.target, "mini-grid-column-splitter"))
             return;
         if (B.button == mini.MouseButton.Right)
             return;
-        var A = oOlO(B.target, $._headerCellCls);
+        var A = mini.findParent(B.target, $._headerCellCls);
         if (A) {
             this._remove();
             var _ = $.O1loo(B);
@@ -33534,7 +33552,7 @@ mini._Grid_ColumnMove.prototype = {
         this.O0Ool = mini.append(document.body, "<div class=\"mini-grid-columnproxy\"></div>");
         this.O0Ool.innerHTML = "<div class=\"mini-grid-columnproxy-inner\" style=\"height:26px;\">" + A(this.dragColumn) + "</div>";
         mini.setXY(this.O0Ool, _.now[0] + 15, _.now[1] + 18);
-        olO0(this.O0Ool, "mini-grid-no");
+        mini.addClass(this.O0Ool, "mini-grid-no");
         this.moveTop = mini.append(document.body, "<div class=\"mini-grid-movetop\"></div>");
         this.moveBottom = mini.append(document.body, "<div class=\"mini-grid-movebottom\"></div>")
     },
@@ -33543,7 +33561,7 @@ mini._Grid_ColumnMove.prototype = {
                 G = A.now[0];
         mini.setXY(this.O0Ool, G + 15, A.now[1] + 18);
         this.targetColumn = this.insertAction = null;
-        var D = oOlO(A.event.target, $._headerCellCls);
+        var D = mini.findParent(A.event.target, $._headerCellCls);
         if (D) {
             var C = $.O1loo(A.event);
             if (C && C != this.dragColumn) {
@@ -33559,7 +33577,7 @@ mini._Grid_ColumnMove.prototype = {
             }
         }
         if (this.targetColumn) {
-            olO0(this.O0Ool, "mini-grid-ok");
+            mini.addClass(this.O0Ool, "mini-grid-ok");
             l0OO(this.O0Ool, "mini-grid-no");
             var B = $.getColumnBox(this.targetColumn);
             this.moveTop.style.display = "block";
@@ -33573,7 +33591,7 @@ mini._Grid_ColumnMove.prototype = {
             }
         } else {
             l0OO(this.O0Ool, "mini-grid-ok");
-            olO0(this.O0Ool, "mini-grid-no");
+            mini.addClass(this.O0Ool, "mini-grid-no");
             this.moveTop.style.display = "none";
             this.moveBottom.style.display = "none"
         }
@@ -33599,7 +33617,7 @@ mini._Grid_ColumnSplitter.prototype = {
     olol: function (B) {
         var $ = this.owner,
                 A = B.target;
-        if (o00ol(A, "mini-grid-column-splitter")) {
+        if (mini.hasClass(A, "mini-grid-column-splitter")) {
             var _ = $.olo1(A.id);
             if ($.isEditing())
                 return;
@@ -33674,7 +33692,7 @@ mini._Grid_DragDrop.prototype = {
         if ($._dragging)
             return;
         this.dropObj = $;
-        if (oOlO(C.htmlEvent.target, "mini-tree-editinput"))
+        if (mini.findParent(C.htmlEvent.target, "mini-tree-editinput"))
             return;
         if ($.isReadOnly() || $.isAllowDrag(C.record, C.column) == false)
             return;
@@ -33702,7 +33720,7 @@ mini._Grid_DragDrop.prototype = {
         $.setEnableHotTrack(false)
     },
     _getDropTargetObj: function (_) {
-        var $ = oOlO(_.target, "mini-grid", 500);
+        var $ = mini.findParent(_.target, "mini-grid", 500);
         if ($)
             return mini.get($)
     },
@@ -33940,17 +33958,17 @@ mini._Grid_Events.prototype = {
     },
     olol: function (A) {
         var $ = this.owner;
-        if (oOlO(A.target, "mini-tree-editinput"))
+        if (mini.findParent(A.target, "mini-tree-editinput"))
             return;
-        if (oOlO(A.target, "mini-tree-node-ecicon"))
+        if (mini.findParent(A.target, "mini-tree-node-ecicon"))
             return;
         this.o00lol(A, "MouseDown");
         var _ = 300;
         if (A.target.tagName.toLowerCase() == "a" && A.target.href)
             _ = 10;
         setTimeout(function () {
-            var _ = oOlO(A.target, "mini-grid-detailRow");
-            if (Oolo($.el, _))
+            var _ = mini.findParent(A.target, "mini-grid-detailRow");
+            if (mini.isAncestor($.el, _))
                 return;
             if (!!$.o01Ol1)
                 return;
@@ -33958,14 +33976,14 @@ mini._Grid_Events.prototype = {
         }, _)
     },
     oOlo0: function (_) {
-        if (oOlO(_.target, "mini-tree-editinput"))
+        if (mini.findParent(_.target, "mini-tree-editinput"))
             return;
-        if (oOlO(_.target, "mini-tree-node-ecicon"))
+        if (mini.findParent(_.target, "mini-tree-node-ecicon"))
             return;
-        if (oOlO(_.target, "mini-tree-checkbox"))
+        if (mini.findParent(_.target, "mini-tree-checkbox"))
             return;
         var $ = this.owner;
-        if (Oolo($.el, _.target))
+        if (mini.isAncestor($.el, _.target))
             this.o00lol(_, "MouseUp")
     },
     ol1o0: function ($) {
@@ -34030,7 +34048,7 @@ mini._Grid_Events.prototype = {
             if (C["onCell" + E])
                 C["onCell" + E].call(C, B)
         }
-        if (!A && C && oOlO(G.target, "mini-grid-headerCell")) {
+        if (!A && C && mini.findParent(G.target, "mini-grid-headerCell")) {
             B = {
                 column: C,
                 htmlEvent: G
@@ -34509,18 +34527,18 @@ l1loOo_CellValidator_Prototype = {
             this._cellMapErrors[E] = C;
             this._cellErrors.add(C);
             if ($)
-                olO0($, "mini-grid-cell-error")
+                mini.addClass($, "mini-grid-cell-error")
         }
     }
 };
 mini.copyTo(mini.DataGrid.prototype, l1loOo_CellValidator_Prototype);
 mini.TreeGrid = function () {
     mini.TreeGrid.superclass.constructor.apply(this, arguments);
-    olO0(this.el, "mini-tree");
+    mini.addClass(this.el, "mini-tree");
     this.setAjaxAsync(false);
     this.setAutoLoad(true);
     if (this.showTreeLines == true)
-        olO0(this.el, "mini-tree-treeLine");
+        mini.addClass(this.el, "mini-tree-treeLine");
     this._AsyncLoader = new mini._Tree_AsyncLoader(this);
     this._Expander = new mini._Tree_Expander(this);
     this.setShowArrow(this.showArrow)
@@ -34674,7 +34692,7 @@ mini.Tree = function () {
     this._columnModel.setColumns($);
     this._column = this._columnModel.getColumn("node");
     l0OO(this.el, "mini-treegrid");
-    olO0(this.el, "mini-tree-nowrap");
+    mini.addClass(this.el, "mini-tree-nowrap");
     this.setBorderStyle("border:0")
 };
 mini.extend(mini.Tree, mini.TreeGrid, {
@@ -34726,10 +34744,10 @@ mini._Tree_Expander.prototype = {
                 $ = _.l110O0ByEvent(B, false);
         if (!$ || $.enabled === false)
             return;
-        if (oOlO(B.target, "mini-tree-checkbox"))
+        if (mini.findParent(B.target, "mini-tree-checkbox"))
             return;
         var A = _.isLeaf($);
-        if (oOlO(B.target, _.oO0o)) {
+        if (mini.findParent(B.target, _.oO0o)) {
             if (this._canToggle() == false)
                 return;
             _._tryToggleNode($)
@@ -34749,7 +34767,7 @@ mini._Tree_Expander.prototype = {
         var A = _.isLeaf($);
         if (_.O1lll0)
             return;
-        if (oOlO(B.target, _.oO0o))
+        if (mini.findParent(B.target, _.oO0o))
             return;
         if (_.expandOnNodeClick)
             return;
