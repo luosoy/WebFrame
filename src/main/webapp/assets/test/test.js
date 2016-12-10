@@ -1,4 +1,4 @@
-var jsview = View.extend({
+var view = View.extend({
     uis: {
         magazineGrid: {
             el: '#magazineGrid',
@@ -9,44 +9,16 @@ var jsview = View.extend({
                 height: '250px',
                 singleSelect: true,
                 collapsible: true,
-                url: SYS.stc + '/test/datagrid_data1.json',
+                url: '/assets/test/datagrid_data1.json',
                 method: 'get',
-                columns: [[
-                        {field: 'itemid', title: 'Item ID', width: 80, editor: 'text'},
-                        {field: 'productid', title: 'Product', width: 150, editor: 'text'},
-                        {field: 'listprice', title: 'List Price', width: 100, align: 'right', editor: {type: 'numberbox', options: {precision: 2}}},
-                        {field: 'unitcost', title: 'Unit Cost', width: 100, align: 'right', editor: {type: 'numberbox'}},
-                        {field: 'attr1', title: 'Attribute', width: 100, editor: 'text'},
-                        {field: 'status', title: 'Status', width: 100, align: 'center',
-                            editor: {type: 'checkbox', options: {on: 'Y', off: 'N'}}
-                        }
-                    ]],
-                tools: [{
-                        iconCls: 'icon-add',
-                        handler: function () {
-                            alert('new')
-                        }
-                    }, {
-                        iconCls: 'icon-save',
-                        handler: function () {
-                            alert('save')
-                        }
-                    }],
-                onLoadSuccess: function (data) {
-                    console.log($(this).datagrid('getData'));
-                }
-            },
-            render: function () {
-                this.eui.datagrid('enableCellEdit');
-            }
-        },
-        cc: {
-            el: '#cc',
-            type: 'calendar',
-            config: {
-                width: '200px',
-                height: '200px',
-                current: new Date()
+                columns: [
+                    {field: 'itemid', header: 'Item ID', name: 'Item ID', width: 80},
+                    {field: 'productid', header: 'Product', width: 150},
+                    {field: 'listprice', header: 'List Price', width: 100, align: 'right'},
+                    {field: 'unitcost', header: 'Unit Cost', width: 100, align: 'right'},
+                    {field: 'attr1', header: 'Attribute', width: 100},
+                    {field: 'status', header: 'Status', width: 100}
+                ],
             },
             render: function () {
             }

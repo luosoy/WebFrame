@@ -1,7 +1,13 @@
+/**
+ * 基础设置.
+ * 
+ * @author luozp
+ */
 /*
  * 全局变量.
  */
 var S = SYS = $.extend(SYS || {}, {});
+var mini_debugger = false;
 try {
     console.log;
 } catch (e) {
@@ -31,36 +37,39 @@ $.ajaxSetup({
 });
 $.jqAjax = $.ajax;
 $.ajax = $.send = function (settings) {
+    SysUtils.mask($(settings.mask));
     settings.url = settings.url || '';
     var newst = $.extend(true, {}, settings, {
-        url: (settings.url || '').indexOf('/') === 0 ? (SYS.ctx + settings.url) : (SYS.path + settings.url),
+        url: (settings.url || '').indexOf('/') == 0 ? (SYS.ctx + settings.url) : (SYS.path + settings.url),
         success: function (data) {
             var args = arguments, ndata = data, func;
+            ndata = mini.decode(ndata);
             if (ndata.content) {
-                if ('SESSION_TIMEOUT' === ndata.content) {
+                if ('SESSION_TIMEOUT' == ndata.content) {
                     window.location.reload();
                     return;
                 } else if (!settings.nomsg) {
                     if (ndata.contentList && ndata.contentList.length) {
-                        $.messager.alert(ndata.contentList.join('<br>'));
+                        mini.alert(ndata.contentList.join('<br>'));
                     } else {
-                        $.messager.alert(ndata.content);
+                        mini.alert(ndata.content);
                     }
                 }
             }
-            func = ndata.type === 'SUCCESS' ? settings.success : settings.failed;
+            func = ndata.type == 'SUCCESS' ? settings.success : settings.failed;
             if (func) {
                 func.call(this, settings.isMini ? ndata.data : ndata, args[1], args[2]);
             }
         },
         error: function (jqx, type, text) {
             var args = arguments;
-            if (jqx.status !== 0 && !settings.nomsg) {
-                $.messager.alert('[' + jqx.status + '] ' + text, jqx.status);
+            if (jqx.status != 0 && !settings.nomsg) {
+                mini.alert('[' + jqx.status + '] ' + text, jqx.status);
             }
             settings.error && settings.error.call(this, jqx, type, text);
         },
         complete: function (jqx, text) {
+            SysUtils.unmask($(settings.mask));
             settings.complete && settings.complete.call(this, jqx, text);
         }
     });
@@ -84,8 +93,8 @@ $.ajax = $.send = function (settings) {
     }
     return $.jqAjax(newst);
 };
-
-var DateUtils = SYS.DateUtils = {padLeft: function (s, l, c) {
+var DateUtils = SYS.DateUtils = {
+    padLeft: function (s, l, c) {
         s = '' + s;
         if (l < s.length)
             return s;
@@ -95,7 +104,8 @@ var DateUtils = SYS.DateUtils = {padLeft: function (s, l, c) {
     parseValue: function (val, fmt) {
         var today = new Date,
                 params = val.split(','),
-                d = {oy: params[0] || 'y',
+                d = {
+                    oy: params[0] || 'y',
                     oM: params[1] || 'M',
                     od: params[2] || 'd'
                 };
@@ -136,7 +146,8 @@ $.formatDate = function (date, ptn) {
     }
     ptn = ptn || "yyyy-MM-dd";
     date = date || new Date();
-    var dt = {// 年份
+    var dt = {
+        // 年份
         "yyyy": date.getFullYear(),
         // 月份
         "MM": date.getMonth() + 1,
@@ -164,11 +175,33 @@ $.formatDate = function (date, ptn) {
     return ptn;
 };
 
+$.fn.mask = function (opt) {
+    return this.each(function () {
+        var $el = $(this),
+                dis = {
+                    w: $el.outerWidth(),
+                    h: $el.outerHeight()
+                };
+        if (opt === undefined) {
+            opt = !$el.find('>.icon-spinner.icon-spin').length;
+        }
+        if (opt == true) {
+            $el.find('.mask-loading').remove();
+            $('<div class="mask-loading"></div>').appendTo($el).css({
+                lineHeight: dis.h + 'px'
+            });
+        } else {
+            $el.find('.mask-loading').remove();
+        }
+    });
+};
 $.submit = function (opts) {
+    SysUtils.mask($(opts.mask));
     opts = opts || {};
     opts.url = opts.url || '';
     var $form = $('<form>').appendTo('body'), data = {};
-    var attr = {action: opts.url.indexOf('/') === 0 ? (SYS.ctx + opts.url) : (SYS.path + opts.url),
+    var attr = {
+        action: opts.url.indexOf('/') == 0 ? (SYS.ctx + opts.url) : (SYS.path + opts.url),
         method: opts.type || opts.method || 'POST',
         target: opts.target
     };
@@ -190,7 +223,33 @@ $.submit = function (opts) {
     $form.submit();
 };
 
-var SysUtils = SYS.SysUtils = {a2d: function (value, preKey) {
+var SysUtils = SYS.SysUtils = {
+    mask: function ($els) {
+        $els.each(function () {
+            var $this = $(this),
+                    $mui = $this.mini();
+            if (mini.isControl($mui)) {
+                $mui.disable();
+            } else if ($this.is('body')) {
+                mini.mask({
+                    "iconCls": "mini-messagebox-waiting",
+                    "message": "数据加载中..."
+                });
+            }
+        });
+    },
+    unmask: function ($els) {
+        $els.each(function () {
+            var $this = $(this),
+                    $mui = $this.mini();
+            if (mini.isControl($mui)) {
+                $mui.enable();
+            } else if ($this.is('body')) {
+                mini.unmask();
+            }
+        });
+    },
+    a2d: function (value, preKey) {
         var data = {}, key, val;
         preKey = preKey + '[_IDX_]';
         for (var i = 0; i < value.length; i++) {
@@ -303,7 +362,6 @@ var SysUtils = SYS.SysUtils = {a2d: function (value, preKey) {
         return json;
     }
 };
-
 $.fn.j2f = function (json, opts) {
     opts = opts || {};
     var type = typeof opts == 'string';
@@ -312,7 +370,11 @@ $.fn.j2f = function (json, opts) {
     }
     SysUtils.j2f($(this), "", json, opts);
 };
-
+$.fn.j2m = function (data) {
+    $.each(this, function () {
+        new mini.Form(this).setData(data);
+    });
+};
 $.fn.f2j = function (encode) {
     var json = {}, data;
     $(this).find('[name]').each(function () {
@@ -329,141 +391,344 @@ $.fn.f2j = function (encode) {
     });
     return json;
 };
+$.fn.m2j = function (json, encode) {
+    var arrs = $.map(this, function (dom) {
+        return (new mini.Form(dom)).getData();
+    });
+    return arrs.length == 1 ? arrs[0] : arrs;
+};
+$.fn.miniAttr = function (type) {
+    var ui = new name();
+    return ui.getAttrs(el) || {};
+};
+$.fn.mini = function (name, opts) {
+    var tmp;
+    if (typeof name == 'string') {
+        name = mini.getClassByUICls('mini-' + name);
+    }
+    if ($.isFunction(name)) {
+        tmp = this.map(function () {
+            var el = this, $el = $(el), ui = $el.data('mini'), cfg;
+            if (ui)
+                return this;
+            ui = new name(); // 创建组件
+            ui._allowLayout = false;
+            cfg = ui.getAttrs(el) || {};
+            cfg.cls = cfg.cls ? cfg.cls.replace(/(?:ui-\w*|fn-hide)\s*/g, '') : '';
+            opts = $.extend((cfg || {}), opts);
+            if (opts.replace) {
+                $el.replaceWith(ui.el);
+                $el = $(ui.el);
+            } else {
+                $el.html(ui.el);
+            }
+            ui.set(opts || {});
+            ui.$ctn = $el;
+            $el.data('mini', ui);
+            if (!opts.replace) {
+                $(ui.el).attr('id', $el.attr('id') + '_mini');
+            }
+            return ui;
+        });
+    } else {
+        tmp = this.map(function () {
+            return $(this).data('mini');
+        });
+    }
+    if (tmp && tmp.length === 1)
+        return tmp.get(0);
+};
 
+
+mini._open = mini.open;
+mini.open = function (opts) {
+    opts.url = opts.url.indexOf('/') == 0 ? (SYS.ctx + opts.url) : (SYS.path + opts.url);
+    return mini._open(opts);
+};
+var Global = {
+    component: {
+        combobox: {
+            config: {
+                autoLoad: true,
+                textField: 'label',
+                valueField: 'value',
+                showNullItem: true,
+                value: '',
+                nullItemText: '请选择',
+                width: '100%',
+                cache: true,
+                popupWidth: '100%'
+            }
+        },
+        radiobuttonlist: {
+            config: {
+                textField: 'label',
+                valueField: 'value'
+            }
+        },
+        checkboxlist: {
+            config: {
+                textField: 'label',
+                valueField: 'value'
+            }
+        },
+        textbox: {
+            config: {
+                width: '100%'
+            }
+        },
+        moneybox: {
+            config: {
+                width: '100%',
+                minValue: 0,
+                maxValue: 99999999999999.99
+            }
+        },
+        datagrid: {
+            config: {
+                width: '100%'
+            }
+        },
+        datepicker: {
+            config: {
+                width: '100%'
+            }
+        },
+        monthpicker: {
+            config: {
+                width: '100%'
+            }
+        },
+        yearpicker: {
+            config: {
+                width: '100%'
+            }
+        },
+        button: {
+            config: {
+                replace: true
+            }
+        },
+        treeselect: {
+            config: {
+                valueField: 'value',
+                textField: 'label',
+                parentField: 'parent',
+                width: '100%',
+                popupWidth: '100%',
+                emptyText: '请选择',
+            }
+        },
+        window: {
+            config: {
+                replace: true
+            }
+        },
+        panel: {
+            config: {
+                width: '100%'
+            }
+        },
+        tabs: {
+            init: function (config) {
+                $.each(config.tabs, function (idx, obj) {
+                    obj.bodyParent = obj.bodyParent ? obj.bodyParent : $(obj.el).get(0)
+                });
+                return config;
+            }
+        }
+    }
+};
 var ViewList = [];
-var View = {render: $.noop,
-    _cmp: {config: {},
+var View = {
+    autoRun: true,
+    minis: {},
+    _cmp: {
+        config: {
+            autoLoad: true
+        },
         render: $.noop
+    },
+    _loading: 0,
+    ui: {},
+    render: $.noop,
+    afterLoad: $.noop,
+    extendView: {
+        init: $.noop,
+        afterRender: $.noop,
+        ui: {}
     },
     _init: function () {
         if (!this.$el || !this.$el.length) {
             this.$el = $(this.el);
             if (!this.$el || !this.$el.length) {
+                this.el = 'body'
                 this.$el = $('body');
             }
         }
         this._initUI();
+        this._initEvent();
         this.render.apply(this);
         return this;
     },
+    _initEvent: function () {
+        $('body').on('click', '.section.expand h3', function () {
+            $(this).closest('.section').toggleClass('hide');
+        });
+    },
     _initUI: function () {
-        var base = this;
+        var base = this, map = {}, __length = 0;
+        if (!this.data) {
+            var elData = this.data = {};
+            this.$el.find('input[type=hidden]').each(function () {
+                elData[this.name] = this.value;
+            });
+            this.data = $.extend(elData, $('#' + this.el.replace('#', '') + '-data').data());
+        }
         base.uis = base.uis || {};
+        var tempuis = $.extend({}, base.uis);
         $.each(base.uis, function (key, obj) {
             obj._id = key;
             obj.el = obj.el ? obj.el : '#' + key;
+            map[obj.el] = obj;
             obj.$el = obj.$el ? obj.$el : $(obj.el);
-            var $ui = obj.$el;
-            if (!$ui || !$ui.length) {
-                return;
-            }
-            var id = $ui.attr('id'),
-                    opts = $ui.data(),
-                    data = $.extend({}, opts),
+            obj.$el.attr("mini", true);
+            __length++;
+        });
+        this.$el.find('[class^="ui-"], [class*=" ui-"]').each(function () {
+            var $el = $(this),
+                    data = $el.data(),
+                    id = $el.attr('id') || data.name,
+                    el = '#' + id,
                     uis = base.uis,
-                    type = obj.type,
-                    cmp, eui, config;
+                    attr = $.grep($el.attr('class').split(' '), function (key) {
+                        return key.indexOf('ui-') == 0;
+                    }),
+                    type = attr[0].replace('ui-', ''),
+                    ui = map[el] || {el: el, _id: id};
+            ui.type = type;
+            ui.$el = $el;
+            uis[ui._id] = ui;
+        });
 
-            if ($ui.data('inited')) {
-                return;
-            }
-            if (!opts.id) {
-                if (id) {
-                    opts.id = id;
-                } else {
-                    opts.id = opts.name;
+        while (__length != 0) {
+            $.each(tempuis, function (key, obj) {
+                var $mini = obj.$el,
+                        innertmpuis = {};
+                if ($mini.parents('[mini]').length) {
+                    return;
+                }
+                __length--;
+                delete tempuis[key];
+                if (!$mini || !$mini.length) {
+                    return;
+                }
+                obj.$el = $mini;
+                var id = $mini.attr('id'),
+                        opts = $mini.data(),
+                        data = $.extend({}, opts),
+                        uis = base.uis,
+                        type = obj.type,
+                        dCfg = Global.component[type] || {},
+                        cmp, mini, config;
+                if ($mini.data('inited')) {
+                    return;
+                }
+                if (!opts.id) {
+                    if (id) {
+                        opts.id = id;
+                    } else {
+                        opts.id = opts.name;
+                    }
+                }
+                base.uis[key] = cmp = $.extend(true, {}, base._cmp, obj);
+                config = $.extend(true, {
+                    required: opts.required,
+                    readonly: opts.readonly,
+                    value: opts.value
+                }, dCfg.config, cmp.config);
+                // code存在，从后台获取数据
+                opts.code = opts.code || config.code;
+                opts.url = opts.url || config.url;
+                delete config.url;
+                delete config.code;
+                if ($.isFunction(dCfg.init)) {
+                    config = dCfg.init(config);
+                }
+                base.minis[opts.id] = cmp.mui = mui = $mini.mini(type, config);
+                if (!mui) {
+                    console.error('ui "' + opts.id + '" not exist.');
+                    return;
+                }
+                if (config.replace) {
+                    cmp.$el = $(mui.el);
+                }
+                cmp.uis = mui.uis = uis;
+                cmp.view = mui.view = base;
+                mui.ui = cmp;
+                cmp.data = data;
+                cmp.param = $.extend(base._generateDynParam(opts), cmp.param);
+                data.param = cmp.param;
+                if (opts.url) {
+                    base._loading++;
+                    mui.url = config.url || opts.url;
+                    mui.load(mui.url, cmp.param);
+                }
+
+                try {
+                    cmp.render.call(cmp, mui, opts);
+                } catch (e) {
+                    console.error(mui, opts.id, ' render error! ', e);
+                }
+                $mini.data('inited', true);
+                $mini.removeAttr("mini");
+            });
+        }
+    },
+    _generateDynParam: function (opts) {
+        var base = this,
+                json = {};
+        $.each(opts, function (key, value) {
+            if (typeof value === 'string' || typeof value === 'number') {
+                if (key.indexOf('param') === 0) {
+                    json[base._replaceLetter(key.substring(5))] = value;
                 }
             }
-            base.uis[key] = cmp = $.extend(true, {}, base._cmp, obj);
-            config = $.extend(true, {required: opts.required,
-                readonly: opts.readonly,
-                value: opts.value
-            }, cmp.config);
-            if ($ui[type]) {
-                cmp.eui = eui = $ui[type](config);
-            } else {
-                console.error("[", type, "] no this type for easyui");
-                return;
-            }
-
-            cmp.uis = eui.uis = uis;
-            cmp.view = eui.view = base;
-            eui.ui = cmp;
-            cmp.data = data;
-            try {
-                cmp.render.call(cmp, eui, opts);
-            } catch (e) {
-                console.error(eui, opts.id, ' render error! ', e);
-            }
-            $ui.data('inited', true);
+        });
+        return json;
+    },
+    _replaceLetter: function (str) {
+        return str.replace(/^[A-Z]/, function (letter) {
+            return letter.toLowerCase();
         });
     },
     extend: function (config) {
         var ViewExtend = $.extend(true, {}, View, config);
         ViewList.push(ViewExtend);
         return ViewExtend;
+    },
+    require: function () {
+
+    },
+    get: function (id) {
+        return this.minis[id];
+    },
+    init: function () {
+        this._init();
+        return this;
+    },
+    require: function () {
+
     }
 };
-
-
-$.extend($.fn.datagrid.methods,
-        {
-            editCell: function (jq, param) {
-                return jq.each(function () {
-                    var opts = $(this).datagrid('options');
-                    var fields = $(this).datagrid('getColumnFields', true).concat($(this).datagrid('getColumnFields'));
-                    for (var i = 0; i < fields.length; i++) {
-                        var col = $(this).datagrid('getColumnOption', fields[i]);
-                        col.editor1 = col.editor;
-                        if (fields[i] !== param.field) {
-                            col.editor = null;
-                        }
-                    }
-                    $(this).datagrid('beginEdit', param.index);
-                    var ed = $(this).datagrid('getEditor', param);
-                    if (ed) {
-                        if ($(ed.target).hasClass('textbox-f')) {
-                            $(ed.target).textbox('textbox').focus();
-                        } else {
-                            $(ed.target).focus();
-                        }
-                    }
-                    for (var i = 0; i < fields.length; i++) {
-                        var col = $(this).datagrid('getColumnOption', fields[i]);
-                        col.editor = col.editor1;
-                    }
-                });
-            },
-            enableCellEdit: function (jq) {
-                return jq.each(function () {
-                    var dg = $(this);
-                    var opts = dg.datagrid('options');
-                    opts.oldOnClickCell = opts.onClickCell;
-                    opts.onClickCell = function (index, field) {
-                        if (opts.editIndex !== undefined) {
-                            if (dg.datagrid('validateRow', opts.editIndex)) {
-                                dg.datagrid('endEdit', opts.editIndex);
-                                opts.editIndex = undefined;
-                            } else {
-                                return;
-                            }
-                        }
-                        dg.datagrid('selectRow', index).datagrid('editCell', {index: index,
-                            field: field
-                        });
-                        opts.editIndex = index;
-                        opts.oldOnClickCell.call(this, index, field);
-                    };
-                });
-            }
-        });
-
 $(function () {
     if (ViewList.length) {
         $.each(ViewList, function () {
-            this._init();
+            if (this.autoRun) {
+                this._init();
+            }
         });
     } else {
-        View._init();
+        View.autoRun && View._init();
     }
 });

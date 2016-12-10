@@ -12,9 +12,8 @@
         <meta http-equiv="Pragma" content="no-cache" />
         <meta http-equiv="Expires" content="0" />
         <title><sitemesh:write property='title' /> - ${title}</title>
-        <link href="${stc}/lib/easyui/themes/default/easyui.css" rel="stylesheet"/>
-        <link href="${stc}/lib/easyui/themes/icon.css" rel="stylesheet"/>
-        <link href="${stc}/lib/easyui/themes/color.css" rel="stylesheet"/>
+        <link href="${stc}/lib/miniui/themes/default/miniui.css" rel="stylesheet"/>
+        <link href="${stc}/lib/miniui/themes/icons.css" rel="stylesheet"/>
         <script type="text/javascript">
             var SYS = {
                 ctx: '${ctx}',
@@ -24,12 +23,11 @@
         </script>
         <!--[if lt IE 8]><script src="${stc}/lib/json/json3.min.js" type="text/javascript"></script><![endif]-->
         <script src="${stc}/lib/jquery/jquery.min.js" type="text/javascript"></script>
-        <script src="${stc}/lib/easyui/jquery.easyui.min.js" type="text/javascript"></script>
-        <script src="${stc}/lib/easyui/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+        <script src="${stc}/lib/miniui/miniui.js" type="text/javascript"></script>
         <script src="${stc}/lib/common.js" type="text/javascript"></script>
-    <sitemesh:write property='head'/>
-</head>
-<body>
-<sitemesh:write property='body'/>
-</body>
+        <sitemesh:write property='head'/>
+    </head>
+    <body>
+        <sitemesh:write property='body'/>
+    </body>
 </html>
