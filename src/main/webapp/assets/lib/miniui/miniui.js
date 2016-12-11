@@ -16207,210 +16207,454 @@ mini_ValidatorBase_getLabelStyle = function() {
     this.labelStyle
 };
 mini = {
+    /*
+     * @description 以KEY-VALUE形式存储标签ID 与 组件实例
+     * @default {} 空对象
+     */
     components: {},
-    uids: {},
+    /*
+     * @description 以KEY-VALUE形式存储uid 与 组件实例  。uiid是创建组件实例时动态创建的唯一标识。
+     * @default {} 空对象
+     */
+    uids: {}, //存储组件实例，根据动态分配的uid找到组件。
+    /*
+     * 源代码中未使用过的属性
+     * @default {} 空对象
+     */
     ux: {},
     doc: document,
     window: window,
+    /*
+     * @description mini UI框架加载是否已经准备完成。
+     * @default false
+     */
     isReady: false,
     createTime: new Date(),
-    byClass: function(_, $) {
-        if (typeof $ == "string") $ = lO0O($);
-        return jQuery("." + _, $)[0]
-    },
-    getComponents: function() {
-        var _ = [];
-        for (var A in mini.components) {
-            var $ = mini.components[A];
-            if ($.isControl) _.push($)
+    /*
+     * @description 根据给定的样式类名匹配 HTML元素。
+     * @param {String} cls 给定的样式类名
+     * @param {String|DOMObject|jquery Object} el 设置范围匹配范围，可以接受 ID字符串，或者DOM对象
+     * @return 匹配的第一个DOM对象。如果没有找到则返回undefined
+     * @requires jQuery
+     */
+    byClass: function (cls, el) {
+        if (typeof el == "string") {
+            el = lO0O(el);
         }
-        return _
+        return jQuery("." + cls, el)[0];
     },
-    get: function(_) {
-        if (!_) return null;
-        if (mini.isControl(_)) return _;
-        if (typeof _ == "string")
-            if (_.charAt(0) == "#") _ = _.substr(1);
-        if (typeof _ == "string") return mini.components[_];
-        else {
-            var $ = mini.uids[_.uid];
-            if ($ && $.el == _) return $
+    /*
+     * @description 取得已经实例化的组件实例数组。
+     * @return 已经实例化的组件数组，如果没有实例化的组件则返回一个空数组
+     */
+    getComponents: function () {
+        var cs = [];
+        for (var id in mini.components) {
+            var c = mini.components[id];
+            if (c.isControl)
+                cs.push(c)
         }
-        return null
+        return cs;
     },
-    getbyUID: function($) {
-        return mini.uids[$]
-    },
-    findControls: function(E, B) {
-        if (!E) return [];
-        B = B || mini;
-        var $ = [],
-            D = mini.uids;
-        for (var A in D) {
-            var _ = D[A],
-                C = E.call(B, _);
-            if (C === true || C === 1) {
-                $.push(_);
-                if (C === 1) break
+    /*
+     * <p>取得指定的组件实例，可接三种合法的参数:
+     * <ul><li>1，组件实例对象，</li><li>2，标签id和 uid，</li><li>3，组件DOM对象。</li><ul>
+     * </p>
+     * @param {String|Object} id 获取组件的条件
+     * @returns 组件实例对象，未找到匹配的组件实例则返回null
+     */
+    get: function (id) {
+        if (!id) {
+            return null;
+        }
+        if (mini.isControl(id)) {
+            return id
+        }
+        ;
+        if (typeof id == "string") {
+            if (id.charAt(0) == "#") {
+                id = id.substr(1);
             }
         }
-        return $
+        if (typeof id == "string") {
+            return mini.components[id];
+        } else {
+            var control = mini.uids[id.uid];
+            if (control && control.el == id) {
+                return control;
+            }
+        }
+        return null;
     },
-    getChildControls: function(A) {
-        var _ = A.el ? A.el : A,
-            $ = mini.findControls(function($) {
-                if (!$.el || A == $) return false;
-                if (Oolo(_, $.el) && $.within) return true;
-                return false
-            });
-        return $
+    /*
+     * 根据动态分配的uid找到对应组件实例
+     * @param {String} uid 创建组件式动态分配的唯一标识
+     * @returns 返回组件实例，如果未找到 则返回undefined。
+     */
+    getbyUID: function (uid) {
+        return mini.uids[uid];
     },
-    emptyFn: function() {},
-    createNameControls: function(A, F) {
-        if (!A || !A.el) return;
-        if (!F) F = "_";
-        var C = A.el,
-            $ = mini.findControls(function($) {
-                if (!$.el || !$.name) return false;
-                if (Oolo(C, $.el)) return true;
-                return false
-            });
-        for (var _ = 0, D = $.length; _ < D; _++) {
-            var B = $[_],
-                E = F + B.name;
-            if (F === true) E = B.name[0].toUpperCase() + B.name.substring(1, B.name.length);
-            A[E] = B
+    /*
+     * 通过给定判断函数和函数作用域，判断每个组件是否符合fn规则，如果符合则被添加到返回数组中。
+     * @param {Function} fn 过滤规则函数,函数传入组件实例作为参数，方法返回true 或 1代表通过过滤规则
+     * @param scope 过滤函数执行的上下文对象。
+     * @returns {Array} 返回符合过滤条件的组件实例数组
+     */
+    findControls: function (fn, scope) {
+        if (!fn) {
+            return [];
+        }
+        scope = scope || mini;
+        var controls = [],
+                uids = mini.uids;
+        for (var uid in uids) {
+            var control = uids[uid],
+                    ret = fn.call(scope, control);
+            if (ret === true || ret === 1) {
+                controls.push(control);
+                if (ret === 1) {
+                    break;
+                }
+            }
+        }
+        return controls;
+    },
+    /*
+     * 取得给定祖先组件的子孙组件实例对象数组。
+     * @param {Object} parent 包含子孙组件的组件实例。
+     * @param {Array} 返回给定组件实例的子孙组件实例数组。
+     */
+    getChildControls: function (parent) {
+        var pel = parent.el ? parent.el : parent,
+                controls = mini.findControls(function (control) {
+                    if (!control.el || parent == control)
+                        return false;
+                    if (Oolo(pel, control.el) && control.within)
+                        return true;
+                    return false;
+                });
+        return controls;
+    },
+    emptyFn: function () {},
+    /*
+     * 将给定组件的子孙组件实例作为其属性，属性名是组件的name属性值，如果有多个同name子孙组件，则最后只保留最后一个。
+     * @param obj 指定的包含子孙组件的组件实例。
+     * @param {String|Boolean} pre 参数等于true时子孙组件作为属性的属性名为子孙组件的name属性的首字母大写。
+     * @returns 无
+     */
+    createNameControls: function (obj, pre) {
+        if (!obj || !obj.el)
+            return;
+        if (!pre)
+            pre = "_";
+        var el = obj.el;
+        var controls = mini.findControls(function (control) {
+            if (!control.el || !control.name)
+                return false;
+            if (Oolo(el, control.el))
+                return true;
+            return false;
+        });
+        for (var i = 0, l = controls.length; i < l; i++) {
+            var c = controls[i];
+            var name = pre + c.name;
+            if (pre === true) {
+                name = c.name[0].toUpperCase() + c.name.substring(1, c.name.length);
+            }
+            obj[name] = c;
         }
     },
-    getsbyName: function(D, _) {
-        var C = mini.isControl(_),
-            B = _;
-        if (_ && C) _ = _.el;
-        _ = lO0O(_);
-        _ = _ || document.body;
-        var $ = mini.findControls(function($) {
-            if (!$.el) return false;
-            if ($.name == D && Oolo(_, $.el)) return true;
-            return false
+    /*
+     * 取得给定名字，给定祖先节点的子组件实例，如果存在多个同名子组件，则选择第一个。
+     * @param {String} name 匹配子组件name属性的值
+     * @param {Object} parentNode 子集范围
+     * @returns 符合条件的组件实例，如果未找到则返回undefined。
+     */
+    getsbyName: function (name, parentNode) {
+        var isControl = mini.isControl(parentNode),
+                parentControl = parentNode;
+        if (parentNode && isControl)
+            parentNode = parentNode.el;
+        parentNode = lO0O(parentNode);
+        parentNode = parentNode || document.body;
+        var controls = mini.findControls(function (control) {
+            if (!control.el)
+                return false;
+            if (control.name == name && Oolo(parentNode, control.el))
+                return true;
+            return false;
         }, this);
-        if (C && $.length == 0 && B && B.getbyName) {
-            var A = B.getbyName(D);
-            if (A) $.push(A)
-        }
-        return $
-    },
-    getbyName: function(_, $) {
-        return mini.getsbyName(_, $)[0]
-    },
-    getParams: function(C) {
-        if (!C) C = location.href;
-        C = C.split("?")[1];
-        var B = {};
-        if (C) {
-            var A = C.split("&");
-            for (var _ = 0, D = A.length; _ < D; _++) {
-                var $ = A[_].split("=");
-                try {
-                    B[$[0]] = decodeURIComponent(unescape($[1]))
-                } catch (E) {}
+        if (isControl && controls.length == 0 && parentControl && parentControl.getbyName) {
+            var control = parentControl.getbyName(name);
+            if (control) {
+                controls.push(control);
             }
         }
-        return B
+        return controls;
     },
-    reg: function($) {
-        this.components[$.id] = $;
-        this.uids[$.uid] = $
+    /*
+     * 取得给定名字，给定祖先节点的子组件实例，如果存在多个同名子组件，则选择第一个。
+     * @param {String} name 匹配子组件name属性的值
+     * @param {Object} parentNode 子集范围
+     * @returns 符合条件的组件实例，如果未找到则返回undefined。
+     */
+    getbyName: function (name, parentNode) {
+        return mini.getsbyName(name, parentNode)[0];
     },
-    unreg: function($) {
-        delete mini.components[$.id];
-        delete mini.uids[$.uid]
-    },
-    classes: {},
-    uiClasses: {},
-    getClass: function($) {
-        if (!$) return null;
-        return this.classes[$.toLowerCase()]
-    },
-    getClassByUICls: function($) {
-        return this.uiClasses[$.toLowerCase()]
-    },
-    idPre: "mini-",
-    idIndex: 1,
-    newId: function($) {
-        return ($ || this.idPre) + this.idIndex++
-    },
-    copyTo: function($, A) {
-        if ($ && A)
-            for (var _ in A) $[_] = A[_];
-        return $
-    },
-    copyIf: function($, A) {
-        if ($ && A)
-            for (var _ in A)
-                if (mini.isNull($[_])) $[_] = A[_];
-        return $
-    },
-    createDelegate: function(_, $) {
-        if (!_) return function() {};
-        return function() {
-            return _.apply($, arguments)
-        }
-    },
-    isControl: function($) {
-        return !!($ && $.isControl)
-    },
-    isElement: function($) {
-        return $ && $.appendChild
-    },
-    isDate: function($) {
-        return !!($ && $.getFullYear)
-    },
-    isArray: function($) {
-        return !!($ && !!$.unshift)
-    },
-    isNull: function($) {
-        return $ === null || $ === undefined
-    },
-    isNumber: function($) {
-        return !isNaN($) && typeof $ == "number"
-    },
-    isEquals: function($, _) {
-        if ($ !== 0 && _ !== 0)
-            if ((mini.isNull($) || $ == "") && (mini.isNull(_) || _ == "")) return true;
-        if ($ && _ && $.getFullYear && _.getFullYear) return $.getTime() === _.getTime();
-        if (typeof $ == "object" && typeof _ == "object") return $ === _;
-        return String($) === String(_)
-    },
-    forEach: function(E, D, B) {
-        var _ = E.clone();
-        for (var A = 0, C = _.length; A < C; A++) {
-            var $ = _[A];
-            if (D.call(B, $, A, E) === false) break
-        }
-    },
-    sort: function(B, A, _) {
-        _ = _ || B;
+    /*
+     * 获取给URL地址附带的数据。
+     * 例如：www.xxx.com?a=1&b=2 -> {a:1,b:2}
+     * @param url 待解析地址字符窜
+     * @returns {Object} json对象
+     */
+    getParams: function (url) {
+        if (!url)
+            url = location.href;
+        url = url.split("?")[1];
+        var params = {};
+        if (url) {
+            var us = url.split("&");
+            for (var i = 0, l = us.length; i < l; i++) {
+                var ps = us[i].split("=");
+                try {
+                    params[ps[0]] = decodeURIComponent(unescape(ps[1]));
+                } catch (ex) {
 
-        function $(G, D) {
-            var A = 0,
-                _ = G.length,
-                E, $;
-            for (; A < _; A++)
-                for (E = A; E < _; E++) {
-                    var C = G[A],
-                        F = G[E],
-                        B = D(C, F);
-                    if (B > 0) {
-                        G.removeAt(E);
-                        G.insert(A, F)
+                }
+            }
+        }
+        return params;
+    },
+    /*
+     * 将组件实例注册到组件实例缓冲区中。也就是在mini.components和mini.uids中各保存一个引用。
+     * @param {Object} cmp 待注册组件实例
+     * @returns 无
+     */
+    reg: function (cmp) {
+        this.components[cmp.id] = cmp;	//通过组件既有id属性找到对应的组件实例
+        this.uids[cmp.uid] = cmp;		//通过动态分配的uid属性找到对应的组件实例
+
+    },
+    /*
+     * 从组件实例缓冲区中删除组件实例注册信息，也就是从mini.components和mini.uids中删除组件实例引用。
+     * @param {Object} cmp 待注销组件实例
+     * @returns 无
+     */
+    unreg: function (cmp) {
+        delete mini.components[cmp.id];
+        delete mini.uids[cmp.uid];
+    },
+    /*
+     * 组件类名与组件类的键值关系保存组件类引用。例如：button -> Button
+     */
+    classes: {},
+    /*
+     * 样式类名与组件类的键值关系保存组件类引用。例如：mini-button -> Button
+     */
+    uiClasses: {},
+    /*
+     * 通过组件类名获取组件类。
+     * @param className 组件类名
+     * @return 组件类引用。
+     */
+    getClass: function (className) {
+        if (!className)
+            return null;
+        return this.classes[className.toLowerCase()];
+    },
+    /*
+     * 根据样式类名获取对应的组件类。
+     * @param uiCls 组件样式类名
+     * return 组件类引用。
+     */
+    getClassByUICls: function (uiCls) {
+        return this.uiClasses[uiCls.toLowerCase()];
+    },
+    /*
+     * mini UI动态生成id的默认前缀
+     * @default "mini-"
+     */
+    idPre: "mini-",
+    /*
+     * mini UI动态生成id的递进增长数。
+     * @default 1
+     */
+    idIndex: 1,
+    /*
+     * 根据给定前缀创建一个新的唯一id。如果未指定前缀则使用mini.idPre作为默认设置。
+     * @param {String} idPre 生成id的前缀
+     * @returns 生成的id字符串
+     */
+    newId: function (idPre) {
+        return (idPre || this.idPre) + this.idIndex++;
+    },
+    /*
+     * 浅拷贝，从源对象中将属性复制并替换到目标对象中。
+     * @param to 拷贝目标对象
+     * @param from 拷贝源对象
+     * @returns 拷贝目标对象
+     */
+    copyTo: function (to, from) {
+        if (to && from) {
+            for (var p in from) {
+                to[p] = from[p];
+            }
+        }
+        return to;
+    },
+    /*
+     * 浅拷贝，从源对象中将属性复制到目标对象中。不覆盖目标对象中的值。
+     * @param to 拷贝目标对象
+     * @param from 拷贝源对象
+     * @returns 拷贝目标对象
+     */
+    copyIf: function (to, from) {
+        if (to && from) {
+            for (var p in from) {
+                if (mini.isNull(to[p])) {
+                    to[p] = from[p];
+                }
+            }
+        }
+        return to;
+    },
+    /*
+     * 创建一个函数，这个函数用于将给定函数的上下文对象设置为给定对象。
+     * @param {Function} fn 源函数
+     * @param scope 上下文对象
+     * @returns {Function} 绑定在给定上下文对象上的可执行函数。
+     */
+    createDelegate: function (fn, scope) {
+        if (!fn)
+            return function () {};
+        return function () {
+            return fn.apply(scope, arguments);
+        };
+    },
+    /*
+     * 判断一个实例是否是组件实例
+     * @param obj 待判断对象
+     * @returns {Boolean} true/false
+     */
+    isControl: function (obj) {
+        return !!(obj && obj.isControl);
+    },
+    /*
+     * 使用DOM元素是否拥有appendChild方法判断参数是否是一个合法的DOM对象。
+     * @param obj 待判断对象
+     * @returns {Boolean} true/false
+     */
+    isElement: function (obj) {
+        return obj && obj.appendChild;
+    },
+    /*
+     * 判断参数是否是Date实例
+     * @param obj 待判断对象
+     * @returns {Boolean} true/false
+     */
+    isDate: function (value) {
+        return !!(value && value.getFullYear);
+    },
+    /*
+     * 判断参数是否是Array实例
+     * @param obj 待判断对象
+     * @returns {Boolean} true/false
+     *该判断是否数组的方法太过简单，附上比较“高级”的判断方法:
+     *if(myVal && typeof myVal === 'object' && typeof myVal.length === 'number' 
+     *  && !(myVal.propertyIsEnumerable('length'))){
+     * //myVal确实是一个数组（前提propertyIsEnumerable不被覆盖），arguments满足此条件
+     * //可通过增加条件typeof myVal.slice==='function'来区分，因为arguments不拥有数组的任何方法
+     *  }
+     */
+    isArray: function (value) {
+        return !!(value && !!value.unshift);
+    },
+    /*
+     * 判断参数是否为空，这里null 和undefined 都返回true
+     * @param obj 待判断对象
+     * @returns {Boolean} true/false
+     */
+    isNull: function (value) {
+        return value === null || value === undefined;
+    },
+    /*
+     * 判断参数是否是数值。
+     * @param obj 待判断对象
+     * @returns {Boolean} true/false
+     */
+    isNumber: function (value) {
+        return !isNaN(value) && typeof value == "number";
+    },
+    /*
+     * 比较有意思的比较规则，1 "",null,undefined被认为是相等的。
+     * 时间，getTime()相等被认为是相等的。
+     * Object === 被认为是相等的。
+     * String(a) === String(b)被认为是相等的。。。
+     * @param a 待判断对象
+     * @param b 待判断对象
+     * @returns {Boolean} true/false
+     */
+    isEquals: function (a, b) {
+
+        if (a !== 0 && b !== 0) {
+            if ((mini.isNull(a) || a == "") && (mini.isNull(b) || b == ""))
+                return true;
+        }
+
+        if (a && b && a.getFullYear && b.getFullYear)
+            return a.getTime() === b.getTime();
+        if (typeof a == 'object' && typeof b == 'object') {
+            return a === b;
+        }
+        return String(a) === String(b);
+    },
+    /*
+     * 数组循环方法。
+     * @param {Array} array数组对象
+     * @param {Function} method 循环执行的函数，函数会传入三个参数依次是值，下标，源数组对象。
+     * @param scope 循环函数执行的作用域。
+     * @returns 无
+     */
+    forEach: function (array, method, scope) {
+        var list = array.clone();
+        for (var i = 0, l = list.length; i < l; i++) {
+            var o = list[i];
+            if (method.call(scope, o, i, array) === false)
+                break;
+        }
+    },
+    /*
+     * 数组排序方法。此方法没有什么优秀的设计之处。第三个参数在方法内并没有用到。
+     * @param array 数组对象
+     * @param 排序算法函数,内部实现还是使用了Array.prototype.sort()方法
+     * @param scope 没有用到的参数
+     * @returns 无
+     */
+    sort: function (array, fn, scope) {
+        scope = scope || array;
+
+        function $(array, fn) {
+            var i = 0,
+                    l = array.length,
+                    j, $;
+            for (; i < l; i++)
+                for (j = i; j < l; j++) {
+                    var a = array[i],
+                            b = array[j],
+                            c = fn(a, b);
+                    if (c > 0) {
+                        array.removeAt(j);
+                        array.insert(i, b);
                     }
                 }
-            return G
+            return array;
         }
-        $(B, A)
+        $(array, fn);
     },
     elWarp: document.createElement("div")
 };
+
+
 if (typeof mini_debugger == "undefined") mini_debugger = true;
 if (typeof mini_useShims == "undefined") mini_useShims = false;
 if (typeof mini_ajaxAsyncInvoke == "undefined") mini_ajaxAsyncInvoke = true;
@@ -31557,8 +31801,6 @@ if (window.mini.Gantt) {
         ZoomOut_Text: "缩小",
         Deselect_Text: "取消选择",
         Split_Text: "拆分任务"
-
-
     });
 
 }
