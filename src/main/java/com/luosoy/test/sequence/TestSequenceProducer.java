@@ -16,7 +16,8 @@ import com.luosoy.frame.jpa.identity.Context;
 public class TestSequenceProducer extends AbstractDbSequenceProducer{
     @Override
     protected String getSequenceSql() {
-        return "SELECT XH_SEQ.NEXTVAL FROM DUAL";
+//        return "SELECT XH_SEQ.NEXTVAL FROM DUAL";
+        return "SELECT NEXTVAL('TestSeq')";
     }
 
     @Override

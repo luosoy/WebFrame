@@ -18,9 +18,16 @@ var view = View.extend({
                     {field: 'unitcost', header: 'Unit Cost', width: 100, align: 'right'},
                     {field: 'attr1', header: 'Attribute', width: 100},
                     {field: 'status', header: 'Status', width: 100}
-                ],
+                ]
             },
             render: function () {
+            }
+        },
+        cc: {
+            el: '#cc',
+            type: 'calendar',
+            config: {
+
             }
         }
     },
