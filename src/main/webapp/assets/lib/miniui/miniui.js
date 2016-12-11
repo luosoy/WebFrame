@@ -11,7 +11,7 @@
 mini_Fit__create = function() {
     this.el = document.createElement("div");
     this.el.className = "mini-fit";
-    this.l10ll1 = this.el
+    this._bodyEl = this.el
 };
 mini_Fit__initEvents = function() {};
 mini_Fit_isFixedSize = function() {
@@ -22,20 +22,20 @@ mini_Fit_doLayout = function() {
     var $ = this.el.parentNode,
         _ = mini.getChildNodes($);
     if ($ == document.body) this.el.style.height = "0px";
-    var F = Olol($, true);
+    var F = mini.getHeight($, true);
     for (var E = 0, D = _.length; E < D; E++) {
         var C = _[E],
             J = C.tagName ? C.tagName.toLowerCase() : "";
         if (C == this.el || (J == "style" || J == "script" || C.type == "hidden")) continue;
-        var G = lO00(C, "position");
+        var G = mini.getStyle(C, "position");
         if (G == "absolute" || G == "fixed") continue;
-        var A = Olol(C),
-            I = l0l1(C);
+        var A = mini.getHeight(C),
+            I = mini.getMargins(C);
         F = F - A - I.top - I.bottom
     }
-    var H = l00OO(this.el),
-        B = lol0(this.el),
-        I = l0l1(this.el);
+    var H = mini.getBorders(this.el),
+        B = mini.getPaddings(this.el),
+        I = mini.getMargins(this.el);
     F = F - I.top - I.bottom;
     if (jQuery.boxModel) F = F - B.top - B.bottom - H.top - H.bottom;
     if (F < 0) F = 0;
@@ -50,7 +50,7 @@ mini_Fit_doLayout = function() {
 };
 mini_Fit_set_bodyParent = function($) {
     if (!$) return;
-    var _ = this.l10ll1,
+    var _ = this._bodyEl,
         A = $;
     while (A.firstChild) {
         try {
@@ -68,48 +68,48 @@ mini_Box__create = function() {
     this.el = document.createElement("div");
     this.el.className = "mini-box";
     this.el.innerHTML = "<div class=\"mini-box-border\"></div>";
-    this.l10ll1 = this._borderEl = this.el.firstChild;
-    this._contentEl = this.l10ll1
+    this._bodyEl = this._borderEl = this.el.firstChild;
+    this._contentEl = this._bodyEl
 };
 mini_Box__initEvents = function() {};
 mini_Box_doLayout = function() {
     if (!this.canLayout()) return;
     var C = this.isAutoHeight(),
         E = this.isAutoWidth(),
-        B = lol0(this.l10ll1),
-        D = l0l1(this.l10ll1);
+        B = mini.getPaddings(this._bodyEl),
+        D = mini.getMargins(this._bodyEl);
     if (!C) {
         var A = this.getHeight(true);
         if (jQuery.boxModel) A = A - B.top - B.bottom;
         A = A - D.top - D.bottom;
         if (A < 0) A = 0;
-        this.l10ll1.style.height = A + "px"
-    } else this.l10ll1.style.height = "";
+        this._bodyEl.style.height = A + "px"
+    } else this._bodyEl.style.height = "";
     var $ = this.getWidth(true),
         _ = $;
     $ = $ - D.left - D.right;
     if (jQuery.boxModel) $ = $ - B.left - B.right;
     if ($ < 0) $ = 0;
-    this.l10ll1.style.width = $ + "px";
+    this._bodyEl.style.width = $ + "px";
     mini.layout(this._borderEl);
     this.fire("layout")
 };
 mini_Box_setBody = function(_) {
     if (!_) return;
     if (!mini.isArray(_)) _ = [_];
-    for (var $ = 0, A = _.length; $ < A; $++) mini.append(this.l10ll1, _[$]);
-    mini.parse(this.l10ll1);
+    for (var $ = 0, A = _.length; $ < A; $++) mini.append(this._bodyEl, _[$]);
+    mini.parse(this._bodyEl);
     this.doLayout()
 };
 mini_Box_set_bodyParent = function($) {
     if (!$) return;
-    var _ = this.l10ll1,
+    var _ = this._bodyEl,
         A = $;
     while (A.firstChild) _.appendChild(A.firstChild);
     this.doLayout()
 };
 mini_Box_setBodyStyle = function($) {
-    l1O1l(this.l10ll1, $);
+    mini.setStyle(this._bodyEl, $);
     this.doLayout()
 };
 mini_Box_getAttrs = function($) {
@@ -170,8 +170,8 @@ mini_Tree_beginEdit = function(C) {
         _._editInput = document.getElementById($);
         _._editInput.focus();
         mini.selectRange(_._editInput, 0, 1000);
-        O1Oo(_._editInput, "keydown", _.oOlo11, _);
-        O1Oo(_._editInput, "blur", _.oollOO, _)
+        mini.on(_._editInput, "keydown", _.oOlo11, _);
+        mini.on(_._editInput, "blur", _.oollOO, _)
     }
     setTimeout(function() {
         $()
@@ -183,8 +183,8 @@ mini_Tree_cancelEdit = function($) {
     this._editingNode = null;
     if (_) {
         if ($ !== false) this.OoO1(_);
-        OoOo(this._editInput, "keydown", this.oOlo11, this);
-        OoOo(this._editInput, "blur", this.oollOO, this)
+        mini.un(this._editInput, "keydown", this.oOlo11, this);
+        mini.un(this._editInput, "blur", this.oollOO, this)
     }
     this._editInput = null
 };
@@ -216,18 +216,18 @@ mini_Tree_oollOO = function(A) {
 mini_Tree_addRowCls = function($, A) {
     var _ = this.OOl0($, 1),
         B = this.OOl0($, 2);
-    if (_) olO0(_, A);
-    if (B) olO0(B, A);
-    if (_) olO0(_.cells[1], A);
-    if (B) olO0(B.cells[1], A)
+    if (_) mini.addClass(_, A);
+    if (B) mini.addClass(B, A);
+    if (_) mini.addClass(_.cells[1], A);
+    if (B) mini.addClass(B.cells[1], A)
 };
 mini_Tree_removeRowCls = function($, A) {
     var _ = this.OOl0($, 1),
         B = this.OOl0($, 2);
-    if (_) l0OO(_, A);
-    if (B) l0OO(B, A);
-    if (_) l0OO(_.cells[1], A);
-    if (B) l0OO(B.cells[1], A)
+    if (_) mini.removeClass(_, A);
+    if (B) mini.removeClass(B, A);
+    if (_) mini.removeClass(_.cells[1], A);
+    if (B) mini.removeClass(B.cells[1], A)
 };
 mini_Tree_scrollIntoView = function(_) {
     _ = this.getNode(_);
@@ -264,8 +264,8 @@ mini_Tabs__create = function() {
     this.Oo01o = $[0];
     this.Ool1oO = $[1];
     this.ll011O = $[2];
-    this.l10ll1 = this.Ool1oO.firstChild;
-    this._borderEl = this.l10ll1;
+    this._bodyEl = this.Ool1oO.firstChild;
+    this._borderEl = this._bodyEl;
     this.doUpdate()
 };
 mini_Tabs_destroy = function(A) {
@@ -275,24 +275,24 @@ mini_Tabs_destroy = function(A) {
             _.ll1ol = null
         }
     this.o01oo = this.Oo01o = this.Ool1oO = this.ll011O = null;
-    this.l10ll1 = this._borderEl = this.headerEl = null;
+    this._bodyEl = this._borderEl = this.headerEl = null;
     this.tabs = null;
     mini.Tabs.superclass.destroy.call(this, A)
 };
 mini_Tabs_l0OOl = function() {
-    l0OO(this.Oo01o, "mini-tabs-header");
-    l0OO(this.ll011O, "mini-tabs-header");
+    mini.removeClass(this.Oo01o, "mini-tabs-header");
+    mini.removeClass(this.ll011O, "mini-tabs-header");
     this.Oo01o.innerHTML = "";
     this.ll011O.innerHTML = "";
-    mini.removeChilds(this.Ool1oO, this.l10ll1)
+    mini.removeChilds(this.Ool1oO, this._bodyEl)
 };
 mini_Tabs__initEvents = function() {
-    l0o11(function() {
-        O1Oo(this.el, "mousedown", this.olol, this);
-        O1Oo(this.el, "click", this.Ol1o1, this);
-        O1Oo(this.el, "mouseover", this.O1l1lo, this);
-        O1Oo(this.el, "mouseout", this.O11O11, this);
-        O1Oo(this.el, "dblclick", this.o1oo11, this)
+    mini._BindEvents(function() {
+        mini.on(this.el, "mousedown", this.__OnMouseDown, this);
+        mini.on(this.el, "click", this.__OnClick, this);
+        mini.on(this.el, "mouseover", this.__OnMouseOver, this);
+        mini.on(this.el, "mouseout", this.__OnMouseOut, this);
+        mini.on(this.el, "dblclick", this.__OnDblClick, this)
     }, this)
 };
 mini_Tabs_ooO0o = function() {
@@ -370,7 +370,7 @@ mini_Tabs_getButtonsAlign = function() {
     return this.buttonsAlign
 };
 mini_Tabs_setButtons = function($) {
-    this._buttons = lO0O($);
+    this._buttons = mini.byId($);
     if (this._buttons) {
         var _ = mini.byClass("mini-tabs-buttons", this.el);
         if (_) {
@@ -434,7 +434,7 @@ mini_Tabs_addTab = function(C, $) {
     if (F) this.activeIndex = this.tabs.indexOf(F);
     var G = this.OO1o0O(C),
         H = "<div id=\"" + G + "\" class=\"mini-tabs-body " + C.bodyCls + "\" style=\"" + C.bodyStyle + ";display:none;\"></div>";
-    mini.append(this.l10ll1, H);
+    mini.append(this._bodyEl, H);
     var A = this.getTabBodyEl(C),
         B = C.body;
     delete C.body;
@@ -465,7 +465,7 @@ mini_Tabs_removeTab = function(C) {
     this.tabs.remove(C);
     this.O01o0l(C);
     var _ = this.getTabBodyEl(C);
-    if (_) this.l10ll1.removeChild(_);
+    if (_) this._bodyEl.removeChild(_);
     if (A && B) {
         for (var $ = this.activeIndex; $ >= 0; $--) {
             var C = this.getTab($);
@@ -512,7 +512,7 @@ mini_Tabs_updateTab = function(B, D) {
     this.doUpdate()
 };
 mini_Tabs_oOlolO = function() {
-    return this.l10ll1
+    return this._bodyEl
 };
 mini_Tabs_O01o0l = function(D, A) {
     if (D.ll1ol && D.ll1ol.parentNode) {
@@ -647,7 +647,7 @@ mini_Tabs_loadTab = function(B, A, _, D) {
     if (!A) A = this.getActiveTab();
     if (!A) return;
     var $ = this.getTabBodyEl(A);
-    if ($) olO0($, "mini-tabs-hideOverflow");
+    if ($) mini.addClass($, "mini-tabs-hideOverflow");
     A.url = B;
     delete A.loadedUrl;
     if (_) A.onload = _;
@@ -682,36 +682,36 @@ mini_Tabs_getTabRows = function() {
 mini_Tabs_doUpdate = function() {
     if (this.lO10O === false) return;
     if (this._buttons && this._buttons.parentNode) this._buttons.parentNode.removeChild(this._buttons);
-    l0OO(this.el, "mini-tabs-position-left");
-    l0OO(this.el, "mini-tabs-position-top");
-    l0OO(this.el, "mini-tabs-position-right");
-    l0OO(this.el, "mini-tabs-position-bottom");
+    mini.removeClass(this.el, "mini-tabs-position-left");
+    mini.removeClass(this.el, "mini-tabs-position-top");
+    mini.removeClass(this.el, "mini-tabs-position-right");
+    mini.removeClass(this.el, "mini-tabs-position-bottom");
     if (this.tabPosition == "bottom") {
-        olO0(this.el, "mini-tabs-position-bottom");
+        mini.addClass(this.el, "mini-tabs-position-bottom");
         this.oO00()
     } else if (this.tabPosition == "right") {
-        olO0(this.el, "mini-tabs-position-right");
+        mini.addClass(this.el, "mini-tabs-position-right");
         this.oO11OO()
     } else if (this.tabPosition == "left") {
-        olO0(this.el, "mini-tabs-position-left");
+        mini.addClass(this.el, "mini-tabs-position-left");
         this.O0ll00()
     } else {
-        olO0(this.el, "mini-tabs-position-top");
+        mini.addClass(this.el, "mini-tabs-position-top");
         this.OOO11l()
     }
     var $ = this.o1oO0,
         _ = "mini-tabs-header-";
-    l0OO($, _ + "left");
-    l0OO($, _ + "top");
-    l0OO($, _ + "right");
-    l0OO($, _ + "bottom");
-    olO0($, _ + this.tabPosition);
-    $ = this.l10ll1, _ = "mini-tabs-body-";
-    l0OO($, _ + "left");
-    l0OO($, _ + "top");
-    l0OO($, _ + "right");
-    l0OO($, _ + "bottom");
-    olO0($, _ + this.tabPosition);
+    mini.removeClass($, _ + "left");
+    mini.removeClass($, _ + "top");
+    mini.removeClass($, _ + "right");
+    mini.removeClass($, _ + "bottom");
+    mini.addClass($, _ + this.tabPosition);
+    $ = this._bodyEl, _ = "mini-tabs-body-";
+    mini.removeClass($, _ + "left");
+    mini.removeClass($, _ + "top");
+    mini.removeClass($, _ + "right");
+    mini.removeClass($, _ + "bottom");
+    mini.addClass($, _ + this.tabPosition);
     if (this._buttons) {
         $ = mini.byClass("mini-tabs-buttons", this.el);
         if ($) {
@@ -725,16 +725,16 @@ mini_Tabs_doUpdate = function() {
 mini_Tabs__handleIFrameOverflow = function() {
     var _ = this.getTabBodyEl(this.activeIndex);
     if (_) {
-        l0OO(_, "mini-tabs-hideOverflow");
+        mini.removeClass(_, "mini-tabs-hideOverflow");
         var $ = mini.getChildNodes(_)[0];
-        if ($ && $.tagName && $.tagName.toUpperCase() == "IFRAME") olO0(_, "mini-tabs-hideOverflow")
+        if ($ && $.tagName && $.tagName.toUpperCase() == "IFRAME") mini.addClass(_, "mini-tabs-hideOverflow")
     }
 };
 mini_Tabs_doLayout = function() {
 
     var f = this,
         H = f.o1oO0,
-        G = f.l10ll1,
+        G = f._bodyEl,
         h = f.tabPosition;
     if (!this.canLayout()) return;
     H.style.display = this.showHeader ? "" : "none";
@@ -747,8 +747,8 @@ mini_Tabs_doLayout = function() {
     if (this.showBody) G.style.display = "";
     else G.style.display = "none";
     var $ = this.el.firstChild;
-    if (this.plain) olO0($, "mini-tabs-plain");
-    else l0OO($, "mini-tabs-plain");
+    if (this.plain) mini.addClass($, "mini-tabs-plain");
+    else mini.removeClass($, "mini-tabs-plain");
     if (!l && this.showBody) {
         var T = jQuery(H).outerHeight(),
             Y = jQuery(H).outerWidth();
@@ -759,12 +759,12 @@ mini_Tabs_doLayout = function() {
         if (h == "left" || h == "right") b = b - Y;
         else B = B - T;
         if (jQuery.boxModel) {
-            var C = lol0(G),
-                U = l00OO(G);
+            var C = mini.getPaddings(G),
+                U = mini.getBorders(G);
             B = B - C.top - C.bottom - U.top - U.bottom;
             b = b - C.left - C.right - U.left - U.right
         }
-        margin = l0l1(G);
+        margin = mini.getMargins(G);
         B = B - margin.top - margin.bottom;
         b = b - margin.left - margin.right;
         if (B < 0) B = 0;
@@ -823,9 +823,9 @@ mini_Tabs_doLayout = function() {
     var a = this.getTabBodyEl(this.activeIndex);
     if (a)
         if (!l && this.showBody) {
-            var B = Olol(G, true);
+            var B = mini.getHeight(G, true);
             if (jQuery.boxModel) {
-                C = lol0(a), U = l00OO(a);
+                C = lol0(a), U = mini.getBorders(a);
                 B = B - C.top - C.bottom - U.top - U.bottom
             }
             a.style.height = B + "px"
@@ -835,36 +835,36 @@ mini_Tabs_doLayout = function() {
             var Q = H.childNodes;
             for (O = 0, g = Q.length; O < g; O++) {
                 c = Q[O];
-                l0OO(c, "mini-tabs-header2");
-                if (g > 1 && O != 0) olO0(c, "mini-tabs-header2")
+                mini.removeClass(c, "mini-tabs-header2");
+                if (g > 1 && O != 0) mini.addClass(c, "mini-tabs-header2")
             }
             break;
         case "left":
             D = H.firstChild.rows[0].cells;
             for (O = 0, g = D.length; O < g; O++) {
                 var L = D[O];
-                l0OO(L, "mini-tabs-header2");
-                if (g > 1 && O == 0) olO0(L, "mini-tabs-header2")
+                mini.removeClass(L, "mini-tabs-header2");
+                if (g > 1 && O == 0) mini.addClass(L, "mini-tabs-header2")
             }
             break;
         case "right":
             D = H.firstChild.rows[0].cells;
             for (O = 0, g = D.length; O < g; O++) {
                 L = D[O];
-                l0OO(L, "mini-tabs-header2");
-                if (g > 1 && O != 0) olO0(L, "mini-tabs-header2")
+                mini.removeClass(L, "mini-tabs-header2");
+                if (g > 1 && O != 0) mini.addClass(L, "mini-tabs-header2")
             }
             break;
         default:
             Q = H.childNodes;
             for (O = 0, g = Q.length; O < g; O++) {
                 c = Q[O];
-                l0OO(c, "mini-tabs-header2");
-                if (g > 1 && O == 0) olO0(c, "mini-tabs-header2")
+                mini.removeClass(c, "mini-tabs-header2");
+                if (g > 1 && O == 0) mini.addClass(c, "mini-tabs-header2")
             }
             break
     }
-    l0OO(this.el, "mini-tabs-scroll");
+    mini.removeClass(this.el, "mini-tabs-scroll");
     var L = mini.byClass("mini-tabs-lastSpace", this.el),
         K = mini.byClass("mini-tabs-buttons", this.el),
         X = H.parentNode;
@@ -877,7 +877,7 @@ mini_Tabs_doLayout = function() {
         K.style.right = "auto";
         K.style.left = "0"
     }
-    o0l0(X, S);
+    mini.setWidth(X, S);
     if ((h == "top" || h == "bottom") && (this.tabAlign == "left" || this.tabAlign == "right")) {
         H.style.width = "auto";
         K.style.display = "block";
@@ -902,7 +902,7 @@ mini_Tabs_doLayout = function() {
             }
             this._navEl.style.right = (A ? i : 0) + d + "px";
             var b = _ - i - N - I - d;
-            o0l0(H, b)
+            mini.setWidth(H, b)
         }
         H.style.marginLeft = (A ? 0 : i) + "px"
     }
@@ -984,7 +984,7 @@ mini_Tabs_getHeaderEl = function() {
     return this.o1oO0
 };
 mini_Tabs_getBodyEl = function() {
-    return this.l10ll1
+    return this._bodyEl
 };
 mini_Tabs_getTabEl = function($) {
     var C = this.getTab($);
@@ -1001,7 +1001,7 @@ mini_Tabs_getTabBodyEl = function($) {
     var C = this.getTab($);
     if (!C) return null;
     var E = this.OO1o0O(C),
-        B = this.l10ll1.childNodes;
+        B = this._bodyEl.childNodes;
     for (var _ = 0, D = B.length; _ < D; _++) {
         var A = B[_];
         if (A.id == E) return A
@@ -1021,14 +1021,14 @@ mini_Tabs_OO1o0O = function($) {
 };
 mini_Tabs_OO1o = function() {
     if (this.tabPosition == "top" || this.tabPosition == "bottom") {
-        l0OO(this.OoOOO, "mini-disabled");
-        l0OO(this.oOo1ll, "mini-disabled");
-        if (this.o1oO0.scrollLeft == 0) olO0(this.OoOOO, "mini-disabled");
+        mini.removeClass(this.OoOOO, "mini-disabled");
+        mini.removeClass(this.oOo1ll, "mini-disabled");
+        if (this.o1oO0.scrollLeft == 0) mini.addClass(this.OoOOO, "mini-disabled");
         var _ = this.getTabEl(this.tabs.length - 1);
         if (_) {
-            var $ = O1loO1(_),
-                A = O1loO1(this.o1oO0);
-            if ($.right <= A.right) olO0(this.oOo1ll, "mini-disabled")
+            var $ = mini.getBox(_),
+                A = mini.getBox(this.o1oO0);
+            if ($.right <= A.right) mini.addClass(this.oOo1ll, "mini-disabled")
         }
     }
 };
@@ -1043,9 +1043,9 @@ mini_Tabs_setActiveIndex = function($, I) {
     J = this.getTabBodyEl(this.activeIndex);
     if (J) J.style.display = "";
     J = this.getTabEl(D);
-    if (J) l0OO(J, this.l11l);
+    if (J) mini.removeClass(J, this.l11l);
     J = this.getTabEl(K);
-    if (J) olO0(J, this.l11l);
+    if (J) mini.addClass(J, this.l11l);
     if (J && N) {
         if (this.tabPosition == "bottom") {
             var A = oOlO(J, "mini-tabs-header");
@@ -1076,7 +1076,7 @@ mini_Tabs_setActiveIndex = function($, I) {
         }
         for (var H = 0, F = this.tabs.length; H < F; H++) {
             var M = this.getTabEl(this.tabs[H]);
-            if (M) l0OO(M, this.llolO1)
+            if (M) mini.removeClass(M, this.llolO1)
         }
     }
     var E = this;
@@ -1120,8 +1120,8 @@ mini_Tabs__scrollToTab = function(B) {
         var C = this.getTabEl(B);
         if (C) {
             var $ = this,
-                A = O1loO1(C),
-                D = O1loO1($.o1oO0);
+                A = mini.getBox(C),
+                D = mini.getBox($.o1oO0);
             if (A.x < D.x) $.o1oO0.scrollLeft -= (D.x - A.x);
             else if (A.right > D.right) $.o1oO0.scrollLeft += (A.right - D.right)
         }
@@ -1174,7 +1174,7 @@ mini_Tabs_getShowBody = function() {
 };
 mini_Tabs_setBodyStyle = function($) {
     this.bodyStyle = $;
-    l1O1l(this.l10ll1, $);
+    mini.setStyle(this._bodyEl, $);
     this.doLayout()
 };
 mini_Tabs_getBodyStyle = function() {
@@ -1262,14 +1262,14 @@ mini_Tabs_O1l1lo = function(A) {
     var $ = this.oO101O(A);
     if ($ && $.enabled) {
         var _ = this.getTabEl($);
-        olO0(_, this.llolO1);
+        mini.addClass(_, this.llolO1);
         this.hoverTab = $
     }
 };
 mini_Tabs_O11O11 = function(_) {
     if (this.hoverTab) {
         var $ = this.getTabEl(this.hoverTab);
-        l0OO($, this.llolO1)
+        mini.removeClass($, this.llolO1)
     }
     this.hoverTab = null
 };
@@ -1294,13 +1294,13 @@ mini_Tabs_olol = function(B) {
             _.OO1o()
         }, 25);
         else if (B.target == this._headerMenuEl) this._setHeaderMenuItems();
-        O1Oo(document, "mouseup", this.lo010o, this)
+        mini.on(document, "mouseup", this.lo010o, this)
     }
 };
 mini_Tabs_lo010o = function($) {
     clearInterval(this.l10o0l);
     this.l10o0l = null;
-    OoOo(document, "mouseup", this.lo010o, this)
+    mini.un(document, "mouseup", this.lo010o, this)
 };
 mini_Tabs_OOO11l = function() {
     var L = this.tabPosition == "top",
@@ -1330,7 +1330,7 @@ mini_Tabs_OOO11l = function() {
             O += "<span class=\"mini-tab-text\">" + N.title + "</span>";
             if (N.showCloseButton) {
                 var _ = "";
-                if (N.enabled) _ = "onmouseover=\"olO0(this,'mini-tab-close-hover')\" onmouseout=\"l0OO(this,'mini-tab-close-hover')\"";
+                if (N.enabled) _ = "onmouseover=\"mini.addClass(this,'mini-tab-close-hover')\" onmouseout=\"l0OO(this,'mini-tab-close-hover')\"";
                 O += "<span class=\"mini-tab-close\" " + _ + " ></span>"
             }
             O += "</td>";
@@ -1411,7 +1411,7 @@ mini_Tabs_O0ll00 = function() {
             J += "<span class=\"mini-tab-text\">" + I.title + "</span>";
             if (I.showCloseButton) {
                 var _ = "";
-                if (I.enabled) _ = "onmouseover=\"olO0(this,'mini-tab-close-hover')\" onmouseout=\"l0OO(this,'mini-tab-close-hover')\"";
+                if (I.enabled) _ = "onmouseover=\"mini.addClass(this,'mini-tab-close-hover')\" onmouseout=\"l0OO(this,'mini-tab-close-hover')\"";
                 J += "<span class=\"mini-tab-close\" " + _ + "></span>"
             }
             J += "</td></tr>";
@@ -1422,7 +1422,7 @@ mini_Tabs_O0ll00 = function() {
     }
     J += "</tr ></table>";
     this.l0OOl();
-    olO0(this.Oo01o, "mini-tabs-header");
+    mini.addClass(this.Oo01o, "mini-tabs-header");
     mini.append(this.Oo01o, J);
     this.o1oO0 = this.Oo01o
 };
@@ -1430,8 +1430,8 @@ mini_Tabs_oO11OO = function() {
 
 
     this.O0ll00();
-    l0OO(this.Oo01o, "mini-tabs-header");
-    l0OO(this.ll011O, "mini-tabs-header");
+    mini.removeClass(this.Oo01o, "mini-tabs-header");
+    mini.removeClass(this.ll011O, "mini-tabs-header");
     mini.append(this.ll011O, this.Oo01o.firstChild);
     this.o1oO0 = this.ll011O
 };
@@ -1526,7 +1526,7 @@ mini_Menu__create = function() {
     this._innerEl.innerHTML = "<div class=\"mini-menu-float\"></div><div class=\"mini-menu-toolbar\"></div><div style=\"clear:both;max-height:1px;\"></div>";
     this._contentEl = this._innerEl.firstChild;
     this.OO01O = this._innerEl.childNodes[1];
-    if (this.isVertical() == false) olO0(this.el, "mini-menu-horizontal")
+    if (this.isVertical() == false) mini.addClass(this.el, "mini-menu-horizontal")
 };
 mini_Menu_destroy = function(_) {
     if (this.items)
@@ -1536,15 +1536,15 @@ mini_Menu_destroy = function(_) {
     this._topArrowEl = this._bottomArrowEl = null;
     this.owner = null;
     this.window = null;
-    OoOo(document, "mousedown", this.lO00Oo, this);
-    OoOo(window, "resize", this.l10Ol, this);
+    mini.un(document, "mousedown", this.lO00Oo, this);
+    mini.un(window, "resize", this.l10Ol, this);
     mini.Menu.superclass.destroy.call(this, _)
 };
 mini_Menu__initEvents = function() {
-    l0o11(function() {
-        O1Oo(document, "mousedown", this.lO00Oo, this);
-        OooO(this.el, "mouseover", this.O1l1lo, this);
-        O1Oo(window, "resize", this.l10Ol, this);
+    mini._BindEvents(function() {
+        mini.on(document, "mousedown", this.lO00Oo, this);
+        OooO(this.el, "mouseover", this.__OnMouseOver, this);
+        mini.on(window, "resize", this.l10Ol, this);
         if (this._disableContextMenu) OooO(this.el, "contextmenu", function($) {
             $.preventDefault()
         }, this);
@@ -1562,8 +1562,8 @@ mini_Menu_within = function(B) {
 };
 mini_Menu_setVertical = function($) {
     this.vertical = $;
-    if (!$) olO0(this.el, "mini-menu-horizontal");
-    else l0OO(this.el, "mini-menu-horizontal")
+    if (!$) mini.addClass(this.el, "mini-menu-horizontal");
+    else mini.removeClass(this.el, "mini-menu-horizontal")
 };
 mini_Menu_getVertical = function() {
     return this.vertical
@@ -1722,8 +1722,8 @@ mini_Menu_getIconClsField = function() {
 };
 mini_Menu_setOverflow = function($) {
     this.overflow = $;
-    if ($) olO0(this.el, "mini-menu-overflow");
-    else l0OO(this.el, "mini-menu-overflow")
+    if ($) mini.addClass(this.el, "mini-menu-overflow");
+    else mini.removeClass(this.el, "mini-menu-overflow")
 };
 mini_Menu_getOverflow = function() {
     return this.overflow
@@ -1735,21 +1735,21 @@ mini_Menu_doLayout = function() {
         $ = this._topArrowEl,
         D = this._bottomArrowEl;
     if (!this.isAutoHeight()) {
-        var A = Olol(this.el, true);
-        l11o(this._borderEl, A);
+        var A = mini.getHeight(this.el, true);
+        mini.setHeight(this._borderEl, A);
         $.style.display = D.style.display = "none";
         this._contentEl.style.height = "auto";
         if (this.showNavArrow && this._borderEl.scrollHeight > this._borderEl.clientHeight) {
             $.style.display = D.style.display = "block";
-            A = Olol(this._borderEl, true);
-            var F = Olol($),
-                E = Olol(D),
+            A = mini.getHeight(this._borderEl, true);
+            var F = mini.getHeight($),
+                E = mini.getHeight(D),
                 B = A - F - E;
             if (B < 0) B = 0;
-            l11o(this._contentEl, B);
-            var _ = oOo01O(this._borderEl, true);
-            o0l0($, _);
-            o0l0(D, _)
+            mini.setHeight(this._contentEl, B);
+            var _ = mini.getWidth(this._borderEl, true);
+            mini.setWidth($, _);
+            mini.setWidth(D, _)
         } else this._contentEl.style.height = "auto"
     } else {
         this._borderEl.style.height = "auto";
@@ -1771,10 +1771,10 @@ mini_Menu_O0oOoo = function() {
         this._contentEl.style.height = "auto";
         this._topArrowEl.style.display = this._bottomArrowEl.style.display = "none";
         var B = mini.getViewportBox(),
-            A = O1loO1(this.el);
+            A = mini.getBox(this.el);
         this.maxHeight = B.height - 25;
         if (this.ownerItem) {
-            var A = O1loO1(this.ownerItem.el),
+            var A = mini.getBox(this.ownerItem.el),
                 C = A.top,
                 _ = B.height - A.bottom,
                 $ = C > _ ? C : _;
@@ -1783,22 +1783,22 @@ mini_Menu_O0oOoo = function() {
         }
     }
     this.el.style.display = "";
-    A = O1loO1(this.el);
+    A = mini.getBox(this.el);
     if (A.width > this.maxWidth) {
-        o0l0(this.el, this.maxWidth);
-        A = O1loO1(this.el)
+        mini.setWidth(this.el, this.maxWidth);
+        A = mini.getBox(this.el)
     }
     if (A.height > this.maxHeight) {
-        l11o(this.el, this.maxHeight);
-        A = O1loO1(this.el)
+        mini.setHeight(this.el, this.maxHeight);
+        A = mini.getBox(this.el)
     }
     if (A.width < this.minWidth) {
-        o0l0(this.el, this.minWidth);
-        A = O1loO1(this.el)
+        mini.setWidth(this.el, this.minWidth);
+        A = mini.getBox(this.el)
     }
     if (A.height < this.minHeight) {
-        l11o(this.el, this.minHeight);
-        A = O1loO1(this.el)
+        mini.setHeight(this.el, this.minHeight);
+        A = mini.getBox(this.el)
     }
 };
 mini_Menu__doLoad = function() {
@@ -1901,8 +1901,8 @@ mini_Menu__getScrollWidth = function() {
         C = jQuery(".mini-menuitem", A.el).first()[0],
         $ = jQuery(".mini-menuitem", A.el).last()[0];
     if (C && $) {
-        var D = O1loO1(C),
-            B = O1loO1($);
+        var D = mini.getBox(C),
+            B = mini.getBox($);
         _ = B.right - D.left
     }
     return _
@@ -1914,9 +1914,9 @@ mini_Menu__startScrollMove = function($) {
     clearInterval(this.l10o0l);
     var B = function() {
         clearInterval(A.l10o0l);
-        OoOo(document, "mouseup", B)
+        mini.un(document, "mouseup", B)
     };
-    O1Oo(document, "mouseup", B);
+    mini.on(document, "mouseup", B);
     var _ = this._getMaxScrollLeft(),
         A = this;
     this.l10o0l = setInterval(function() {
@@ -1996,8 +1996,8 @@ mini_Popup__create = function() {
     this._contentEl = this.el
 };
 mini_Popup__initEvents = function() {
-    l0o11(function() {
-        OooO(this.el, "mouseover", this.O1l1lo, this)
+    mini._BindEvents(function() {
+        OooO(this.el, "mouseover", this.__OnMouseOver, this)
     }, this)
 };
 mini_Popup_doLayout = function() {
@@ -2015,8 +2015,8 @@ mini_Popup_destroy = function($) {
 
     if (this.el) this.el.onmouseover = null;
     if (!mini._destroying) {
-        OoOo(document, "mousedown", this.lO00Oo, this);
-        OoOo(window, "resize", this.l10Ol, this)
+        mini.un(document, "mousedown", this.lO00Oo, this);
+        mini.un(window, "resize", this.l10Ol, this)
     }
     if ($ !== false) {
         if (this.Ooo1) jQuery(this.Ooo1).remove();
@@ -2031,14 +2031,14 @@ mini_Popup_destroy = function($) {
 mini_Popup_setWidth = function($) {
     if (parseInt($) == $) $ += "px";
     this.width = $;
-    if ($.indexOf("px") != -1) o0l0(this.el, $);
+    if ($.indexOf("px") != -1) mini.setWidth(this.el, $);
     else this.el.style.width = $;
     this._sizeChanged()
 };
 mini_Popup_setHeight = function($) {
     if (parseInt($) == $) $ += "px";
     this.height = $;
-    if ($.indexOf("px") != -1) l11o(this.el, $);
+    if ($.indexOf("px") != -1) mini.setHeight(this.el, $);
     else this.el.style.height = $;
     this._sizeChanged()
 };
@@ -2163,10 +2163,10 @@ mini_Pager__initEvents = function() {
         }, 100)
     }
     var _ = false;
-    O1Oo(this.numInput, "change", function(_) {
+    mini.on(this.numInput, "change", function(_) {
         $.call(this)
     }, this);
-    O1Oo(this.numInput, "keydown", function(_) {
+    mini.on(this.numInput, "keydown", function(_) {
         if (_.keyCode == 13) {
             $.call(this);
             _.stopPropagation()
@@ -2426,7 +2426,7 @@ mini_Pager_getAttrs = function(el) {
     mini._ParseBool(el, attrs, ["showPageIndex", "showPageSize", "showTotalCount", "showPageInfo", "showReloadButton", "showButtonText", "showButtonIcon"]);
     mini._ParseInt(el, attrs, ["pageIndex", "pageSize", "totalCount", "pageSizeWidth"]);
     if (typeof attrs.sizeList == "string") attrs.sizeList = eval(attrs.sizeList);
-    if (attrs.buttons) attrs.buttons = lO0O(attrs.buttons);
+    if (attrs.buttons) attrs.buttons = mini.byId(attrs.buttons);
     return attrs
 };
 mini_Panel_set = function(_) {
@@ -2461,27 +2461,27 @@ mini_Panel__create = function() {
     this.o1oO0 = this._borderEl.firstChild;
     this.ololOO = this._borderEl.lastChild;
     this.OO01O = mini.byClass("mini-panel-toolbar", this.el);
-    this.l10ll1 = mini.byClass("mini-panel-body", this.el);
+    this._bodyEl = mini.byClass("mini-panel-body", this.el);
     this.OOO1ll = mini.byClass("mini-panel-footer", this.el);
     this.Ooo0OO = mini.byClass("mini-resizer-trigger", this.el);
     var $ = mini.byClass("mini-panel-header-inner", this.el);
     this.o01O0 = mini.byClass("mini-panel-icon", this.el);
     this.lo0o0o = mini.byClass("mini-panel-title", this.el);
     this.olOo0o = mini.byClass("mini-tools", this.el);
-    l1O1l(this.l10ll1, this.bodyStyle);
+    mini.setStyle(this._bodyEl, this.bodyStyle);
     this._doTitle()
 };
 mini_Panel_destroy = function($) {
     this.O01o0l();
     this.ll1ol = null;
-    this.ololOO = this._borderEl = this.l10ll1 = this.OOO1ll = this.OO01O = null;
+    this.ololOO = this._borderEl = this._bodyEl = this.OOO1ll = this.OO01O = null;
     this.olOo0o = this.lo0o0o = this.o01O0 = this.Ooo0OO = null;
     mini.Panel.superclass.destroy.call(this, $)
 };
 mini_Panel__initEvents = function() {
 
-    l0o11(function() {
-        O1Oo(this.el, "click", this.Ol1o1, this)
+    mini._BindEvents(function() {
+        mini.on(this.el, "click", this.__OnClick, this)
     }, this)
 };
 mini_Panel__doVisibleEls = function() {
@@ -2496,15 +2496,15 @@ mini_Panel_doLayout = function() {
         D = this.isAutoWidth(),
         $ = this.getWidth(true),
         _ = $;
-    if (mini.isIE6) o0l0(this.l10ll1, $);
+    if (mini.isIE6) mini.setWidth(this._bodyEl, $);
     if (!A) {
         var C = this.getViewportHeight();
-        l11o(this.ololOO, C);
+        mini.setHeight(this.ololOO, C);
         var B = this.getBodyHeight();
-        l11o(this.l10ll1, B)
+        mini.setHeight(this._bodyEl, B)
     } else {
         this.ololOO.style.height = "auto";
-        this.l10ll1.style.height = "auto"
+        this._bodyEl.style.height = "auto"
     }
     mini.layout(this._borderEl);
     if (this.Ooo0OO) mini.repaint(this.Ooo0OO);
@@ -2530,9 +2530,9 @@ mini_Panel_getViewportHeight = function(_) {
 
     var $ = this.getHeight(true) - this.getHeaderHeight();
     if (_) {
-        var C = lol0(this.ololOO),
-            B = l00OO(this.ololOO),
-            A = l0l1(this.ololOO);
+        var C = mini.getPaddings(this.ololOO),
+            B = mini.getBorders(this.ololOO),
+            A = mini.getMargins(this.ololOO);
         if (jQuery.boxModel) $ = $ - C.top - C.bottom - B.top - B.bottom;
         $ = $ - A.top - A.bottom
     }
@@ -2542,9 +2542,9 @@ mini_Panel_getBodyHeight = function(A) {
     var _ = this.getViewportHeight(),
         _ = _ - this.getToolbarHeight() - this.getFooterHeight();
     if (A) {
-        var $ = lol0(this.l10ll1),
-            B = l00OO(this.l10ll1),
-            C = l0l1(this.l10ll1);
+        var $ = mini.getPaddings(this._bodyEl),
+            B = mini.getBorders(this._bodyEl),
+            C = mini.getMargins(this._bodyEl);
         if (jQuery.boxModel) _ = _ - $.top - $.bottom - B.top - B.bottom;
         _ = _ - C.top - C.bottom
     }
@@ -2575,7 +2575,7 @@ mini_Panel_getFooterHeight = function() {
 mini_Panel_setHeaderStyle = function($) {
 
     this.headerStyle = $;
-    l1O1l(this.o1oO0, $);
+    mini.setStyle(this.o1oO0, $);
     this.doLayout()
 };
 mini_Panel_getHeaderStyle = function() {
@@ -2583,7 +2583,7 @@ mini_Panel_getHeaderStyle = function() {
 };
 mini_Panel_setBodyStyle = function($) {
     this.bodyStyle = $;
-    l1O1l(this.l10ll1, $);
+    mini.setStyle(this._bodyEl, $);
     this.doLayout()
 };
 mini_Panel_getBodyStyle = function() {
@@ -2591,7 +2591,7 @@ mini_Panel_getBodyStyle = function() {
 };
 mini_Panel_setToolbarStyle = function($) {
     this.toolbarStyle = $;
-    l1O1l(this.OO01O, $);
+    mini.setStyle(this.OO01O, $);
     this.doLayout()
 };
 mini_Panel_getToolbarStyle = function() {
@@ -2599,7 +2599,7 @@ mini_Panel_getToolbarStyle = function() {
 };
 mini_Panel_setFooterStyle = function($) {
     this.footerStyle = $;
-    l1O1l(this.OOO1ll, $);
+    mini.setStyle(this.OOO1ll, $);
     this.doLayout()
 };
 mini_Panel_getFooterStyle = function() {
@@ -2616,8 +2616,8 @@ mini_Panel_getHeaderCls = function() {
     return this.headerCls
 };
 mini_Panel_setBodyCls = function($) {
-    jQuery(this.l10ll1).removeClass(this.bodyCls);
-    jQuery(this.l10ll1).addClass($);
+    jQuery(this._bodyEl).removeClass(this.bodyCls);
+    jQuery(this._bodyEl).addClass($);
     this.bodyCls = $;
     this.doLayout()
 };
@@ -2648,7 +2648,7 @@ mini_Panel__doTitle = function() {
     this.lo0o0o.innerHTML = $;
     this.o01O0.style.display = (this.iconCls || this.iconStyle) ? "inline" : "none";
     this.o01O0.className = "mini-panel-icon mini-iconfont " + this.iconCls;
-    l1O1l(this.o01O0, this.iconStyle)
+    mini.setStyle(this.o01O0, this.iconStyle)
 };
 mini_Panel_setTitle = function($) {
 
@@ -2871,7 +2871,7 @@ mini_Panel_getButton = function($) {
         }
 };
 mini_Panel_setBody = function($) {
-    __mini_setControls($, this.l10ll1, this)
+    __mini_setControls($, this._bodyEl, this)
 };
 mini_Panel_set_bodyParent = function($) {};
 mini_Panel_setToolbar = function($) {
@@ -2888,7 +2888,7 @@ mini_Panel_getToolbarEl = function() {
     return this.OO01O
 };
 mini_Panel_getBodyEl = function() {
-    return this.l10ll1
+    return this._bodyEl
 };
 mini_Panel_getFooterEl = function() {
     return this.OOO1ll
@@ -2904,7 +2904,7 @@ mini_Panel_getClearTimeStamp = function() {
     return this.clearTimeStamp
 };
 mini_Panel_oOlolO = function() {
-    return this.l10ll1
+    return this._bodyEl
 };
 mini_Panel_O01o0l = function($) {
     if (this.ll1ol) {
@@ -2925,7 +2925,7 @@ mini_Panel_O01o0l = function($) {
         } catch (A) {}
     }
     this.ll1ol = null;
-    if ($ === true) mini.removeChilds(this.l10ll1)
+    if ($ === true) mini.removeChilds(this._bodyEl)
 };
 mini_Panel__doLoad = function() {
     if (!this.url) return;
@@ -2934,7 +2934,7 @@ mini_Panel__doLoad = function() {
         $ = this;
     this.loadedUrl = this.url;
     if (this.maskOnLoad) this.loading();
-    jQuery(this.l10ll1).css("overflow", "hidden");
+    jQuery(this._bodyEl).css("overflow", "hidden");
 
     function A(_) {
         $.__HideAction = _;
@@ -2970,7 +2970,7 @@ mini_Panel__doLoad = function() {
             $.fire("load", E)
         }
     }, this.clearTimeStamp);
-    this.l10ll1.appendChild(_);
+    this._bodyEl.appendChild(_);
     this.ll1ol = _
 };
 mini_Panel_load = function(_, $, A) {
@@ -3037,7 +3037,7 @@ mini_Panel_collapse = function() {
     if (this.state != "max") this._height = this.el.style.height;
     this.el.style.height = "auto";
     this.ololOO.style.display = "none";
-    olO0(this.el, "mini-panel-collapse");
+    mini.addClass(this.el, "mini-panel-collapse");
     this.doLayout()
 };
 mini_Panel_expand = function() {
@@ -3045,7 +3045,7 @@ mini_Panel_expand = function() {
     if (this._height) this.el.style.height = this._height;
     this.ololOO.style.display = "block";
     if (this.state != "max") delete this._height;
-    l0OO(this.el, "mini-panel-collapse");
+    mini.removeClass(this.el, "mini-panel-collapse");
     if (this.url && this.url != this.loadedUrl) this._doLoad();
     this.doLayout()
 };
@@ -3056,8 +3056,8 @@ mini_TreeSelect_setExpandOnPopup = function(value) {
 
 mini_Panel_setCollapseOnTitleClick = function($) {
     this.collapseOnTitleClick = $;
-    l0OO(this.el, "mini-panel-titleclick");
-    if ($) olO0(this.el, "mini-panel-titleclick")
+    mini.removeClass(this.el, "mini-panel-titleclick");
+    if ($) mini.addClass(this.el, "mini-panel-titleclick")
 };
 mini_Panel_getCollapseOnTitleClick = function() {
     return this.collapseOnTitleClick
@@ -3113,12 +3113,12 @@ mini_Layout__create = function() {
     this.doUpdate()
 };
 mini_Layout__initEvents = function() {
-    l0o11(function() {
-        O1Oo(this.el, "click", this.Ol1o1, this);
-        O1Oo(this.el, "mousedown", this.olol, this);
-        O1Oo(this.el, "mouseover", this.O1l1lo, this);
-        O1Oo(this.el, "mouseout", this.O11O11, this);
-        O1Oo(document, "mousedown", this.oll01, this)
+    mini._BindEvents(function() {
+        mini.on(this.el, "click", this.__OnClick, this);
+        mini.on(this.el, "mousedown", this.__OnMouseDown, this);
+        mini.on(this.el, "mouseover", this.__OnMouseOver, this);
+        mini.on(this.el, "mouseout", this.__OnMouseOut, this);
+        mini.on(document, "mousedown", this.oll01, this)
     }, this)
 };
 mini_Layout_getRegionEl = function($) {
@@ -3148,7 +3148,7 @@ mini_Layout_getRegionProxyEl = function($) {
 };
 mini_Layout_getRegionBox = function(_) {
     var $ = this.getRegionEl(_);
-    if ($) return O1loO1($);
+    if ($) return mini.getBox($);
     return null
 };
 mini_Layout_getRegion = function($) {
@@ -3217,19 +3217,19 @@ mini_Layout_olOO = function($) {
     $._el = this._borderEl.lastChild;
     $._header = $._el.firstChild;
     $._body = $._el.lastChild;
-    if ($.cls) olO0($._el, $.cls);
-    if ($.style) l1O1l($._el, $.style);
-    if ($.headerCls) olO0($._el.firstChild, $.headerCls);
-    olO0($._el, "mini-layout-region-" + $.region);
+    if ($.cls) mini.addClass($._el, $.cls);
+    if ($.style) mini.setStyle($._el, $.style);
+    if ($.headerCls) mini.addClass($._el.firstChild, $.headerCls);
+    mini.addClass($._el, "mini-layout-region-" + $.region);
     if ($.region != "center") {
         mini.append(this._borderEl, "<div uid=\"" + this.uid + "\" id=\"" + $.region + "\" class=\"mini-layout-split\"><div class=\"mini-layout-spliticon\" title=\"" + $.splitToolTip + "\"></div></div>");
         $._split = this._borderEl.lastChild;
-        olO0($._split, "mini-layout-split-" + $.region)
+        mini.addClass($._split, "mini-layout-split-" + $.region)
     }
     if ($.region != "center") {
         mini.append(this._borderEl, "<div id=\"" + $.region + "\" class=\"mini-layout-proxy\"></div>");
         $._proxy = this._borderEl.lastChild;
-        olO0($._proxy, "mini-layout-proxy-" + $.region)
+        mini.addClass($._proxy, "mini-layout-proxy-" + $.region)
     }
 };
 mini_Layout_setRegionControls = function(A, $) {
@@ -3402,7 +3402,7 @@ mini_Layout_Ol1o1 = function(D) {
             visible: false
         })
     }
-    if (o00ol(D.target, "mini-layout-spliticon")) {
+    if (mini.hasClass(D.target, "mini-layout-spliticon")) {
         _ = D.target.parentNode.id;
         this.o0o0(_)
     }
@@ -3429,12 +3429,12 @@ mini_Layout_O1Oo1 = function(_, A, $) {
 mini_Layout_O1l1lo = function(_) {
     var $ = this.llooOl(_);
     if ($) {
-        olO0($, "mini-layout-proxy-hover");
+        mini.addClass($, "mini-layout-proxy-hover");
         this.hoverProxyEl = $
     }
 };
 mini_Layout_O11O11 = function($) {
-    if (this.hoverProxyEl) l0OO(this.hoverProxyEl, "mini-layout-proxy-hover");
+    if (this.hoverProxyEl) mini.removeClass(this.hoverProxyEl, "mini-layout-proxy-hover");
     this.hoverProxyEl = null
 };
 mini_Layout_onButtonClick = function(_, $) {
@@ -3463,9 +3463,9 @@ mini_Button__create = function() {
     this.doUpdate()
 };
 mini_Button__initEvents = function() {
-    l0o11(function() {
-        OooO(this.el, "mousedown", this.olol, this);
-        OooO(this.el, "click", this.Ol1o1, this)
+    mini._BindEvents(function() {
+        OooO(this.el, "mousedown", this.__OnMouseDown, this);
+        OooO(this.el, "click", this.__OnClick, this)
     }, this)
 };
 mini_Button_destroy = function($) {
@@ -3590,7 +3590,7 @@ mini_Button_getChecked = function() {
     return this.checked
 };
 mini_Button_doClick = function() {
-    this.Ol1o1(null)
+    this.__OnClick(null)
 };
 mini_Button_Ol1o1 = function(D) {
 
@@ -3619,11 +3619,11 @@ mini_Button_Ol1o1 = function(D) {
 mini_Button_olol = function($) {
     if (this.isReadOnly()) return;
     this.addCls(this.oll001);
-    O1Oo(document, "mouseup", this.lo010o, this)
+    mini.on(document, "mouseup", this.lo010o, this)
 };
 mini_Button_lo010o = function($) {
     this.removeCls(this.oll001);
-    OoOo(document, "mouseup", this.lo010o, this)
+    mini.un(document, "mouseup", this.lo010o, this)
 };
 
 mini_DatePicker_setMinDateErrorText = function(value) {
@@ -3676,10 +3676,10 @@ mini_Window_ol110 = function() {
 };
 mini_Window__initEvents = function() {
     mini.Window.superclass._initEvents.call(this);
-    l0o11(function() {
-        O1Oo(this.el, "mouseover", this.O1l1lo, this);
-        O1Oo(window, "resize", this.l10Ol, this);
-        O1Oo(this.el, "mousedown", this.l10l1, this)
+    mini._BindEvents(function() {
+        mini.on(this.el, "mouseover", this.__OnMouseOver, this);
+        mini.on(window, "resize", this.l10Ol, this);
+        mini.on(this.el, "mousedown", this.l10l1, this)
     }, this)
 };
 mini_Window_doLayout = function() {
@@ -3691,10 +3691,10 @@ mini_Window_doLayout = function() {
         mini.setSize(this.el, $.width, $.height)
     }
     mini.Window.superclass.doLayout.call(this);
-    if (this.allowDrag) olO0(this.el, this.OO00oO);
+    if (this.allowDrag) mini.addClass(this.el, this.OO00oO);
     if (this.state == "max") {
         this.Ooo0OO.style.display = "none";
-        l0OO(this.el, this.OO00oO)
+        mini.removeClass(this.el, this.OO00oO)
     }
     this.oll01l()
 };
@@ -3715,13 +3715,13 @@ mini_Window_oll01l = function() {
     }
     if (_) {
         this.Ooo1.style.display = "block";
-        this.Ooo1.style.zIndex = lO00(this.el, "zIndex") - 1
+        this.Ooo1.style.zIndex = mini.getStyle(this.el, "zIndex") - 1
     } else this.Ooo1.style.display = "none"
 };
 mini_Window_getParentBox = function() {
     var $ = mini.getViewportBox(),
         _ = this._containerEl || document.body;
-    if (_ != document.body) $ = O1loO1(_);
+    if (_ != document.body) $ = mini.getBox(_);
     return $
 };
 mini_Window_setShowModal = function($) {
@@ -3760,8 +3760,8 @@ mini_Window_getMaxHeight = function() {
 };
 mini_Window_setAllowDrag = function($) {
     this.allowDrag = $;
-    l0OO(this.el, this.OO00oO);
-    if ($) olO0(this.el, this.OO00oO)
+    mini.removeClass(this.el, this.OO00oO);
+    if ($) mini.addClass(this.el, this.OO00oO)
 };
 mini_Window_getAllowDrag = function() {
     return this.allowDrag
@@ -3836,10 +3836,10 @@ mini_Window_hide = function() {
 };
 mini_Window_getWidth = function(_) {
     this.o1oO0.style.width = "50px";
-    var $ = oOo01O(this.el);
+    var $ = mini.getWidth(this.el);
     this.o1oO0.style.width = "auto";
     if (_ && this._borderEl) {
-        var A = l00OO(this._borderEl);
+        var A = mini.getBorders(this._borderEl);
         $ = $ - A.left - A.right
     }
     return $
@@ -3847,9 +3847,9 @@ mini_Window_getWidth = function(_) {
 mini_Window_getBox = function() {
     this.o1oO0.style.width = "50px";
     this.el.style.display = "";
-    var $ = oOo01O(this.el);
+    var $ = mini.getWidth(this.el);
     this.o1oO0.style.width = "auto";
-    var _ = O1loO1(this.el);
+    var _ = mini.getBox(this.el);
     _.width = $;
     _.right = _.x + $;
     return _
@@ -3859,19 +3859,19 @@ mini_Window_O0oOoo = function() {
     this.el.style.display = "";
     var $ = this.getBox();
     if ($.width > this.maxWidth) {
-        o0l0(this.el, this.maxWidth);
+        mini.setWidth(this.el, this.maxWidth);
         $ = this.getBox()
     }
     if ($.height > this.maxHeight) {
-        l11o(this.el, this.maxHeight);
+        mini.setHeight(this.el, this.maxHeight);
         $ = this.getBox()
     }
     if ($.width < this.minWidth) {
-        o0l0(this.el, this.minWidth);
+        mini.setWidth(this.el, this.minWidth);
         $ = this.getBox()
     }
     if ($.height < this.minHeight) {
-        l11o(this.el, this.minHeight);
+        mini.setHeight(this.el, this.minHeight);
         $ = this.getBox()
     }
 };
@@ -3985,15 +3985,15 @@ mini_Window_l10l1 = function(B) {
                         width: A.width,
                         height: A.height
                     };
-                    looO(_.O0Ool, G);
+                    mini.setBox(_.O0Ool, G);
                     this.moved = true
                 },
                 onStop: function() {
                     if (_.el) {
                         _.el.style.display = "block";
                         if (this.moved) {
-                            var $ = O1loO1(_.O0Ool);
-                            looO(_.el, $)
+                            var $ = mini.getBox(_.O0Ool);
+                            mini.setBox(_.el, $)
                         }
                     }
                     jQuery(_.Oool0o).remove();
@@ -4007,7 +4007,7 @@ mini_Window_l10l1 = function(B) {
     }
 };
 mini_Window_destroy = function($) {
-    OoOo(window, "resize", this.l10Ol, this);
+    mini.un(window, "resize", this.l10Ol, this);
     if (this.Ooo1) {
         jQuery(this.Ooo1).remove();
         this.Ooo1 = null
@@ -4029,7 +4029,7 @@ mini_Window_getAttrs = function($) {
 };
 mini_Window_showAtEl = function(H, D) {
 
-    H = lO0O(H);
+    H = mini.byId(H);
     if (!H) return;
     if (!this.isRender() || this.el.parentNode != document.body) this.render(document.body);
     var A = {
@@ -4049,7 +4049,7 @@ mini_Window_showAtEl = function(H, D) {
     this.O0oOoo();
     var J = mini.getViewportBox(),
         B = this.getBox(),
-        L = O1loO1(H),
+        L = mini.getBox(H),
         F = A.xy,
         C = A.xAlign,
         E = A.yAlign,
@@ -4350,7 +4350,7 @@ mini_Control_isRender = function($) {
 mini_Control_render = function(_, $) {
     if (typeof _ === "string")
         if (_ == "#body") _ = document.body;
-        else _ = lO0O(_);
+        else _ = mini.byId(_);
     if (!_) return;
     if (!$) $ = "append";
     $ = $.toLowerCase();
@@ -4395,7 +4395,7 @@ mini_Control_getWidth = function(A) {
     var _ = this.el,
         $ = A ? jQuery(_).width() : jQuery(_).outerWidth();
     if (A && this._borderEl) {
-        var B = l00OO(this._borderEl);
+        var B = mini.getBorders(this._borderEl);
         $ = $ - B.left - B.right
     }
     return $
@@ -4410,18 +4410,18 @@ mini_Control_getHeight = function(_) {
 
     var $ = _ ? jQuery(this.el).height() : jQuery(this.el).outerHeight();
     if (_ && this._borderEl) {
-        var A = l00OO(this._borderEl);
+        var A = mini.getBorders(this._borderEl);
         $ = $ - A.top - A.bottom
     }
     return $
 };
 mini_Control_getBox = function() {
-    return O1loO1(this.el)
+    return mini.getBox(this.el)
 };
 
 mini_Control_setBorderStyle = function($) {
     var _ = this._borderEl || this.el;
-    l1O1l(_, $);
+    mini.setStyle(_, $);
     this.doLayout()
 };
 mini_Control_getBorderStyle = function() {
@@ -4429,7 +4429,7 @@ mini_Control_getBorderStyle = function() {
 };
 mini_Control_setStyle = function($) {
     this.style = $;
-    l1O1l(this.el, $);
+    mini.setStyle(this.el, $);
     if (this._clearBorder) {
         this.el.style.borderWidth = "0";
         this.el.style.padding = "0px"
@@ -4448,10 +4448,10 @@ mini_Control_getCls = function() {
     return this.cls
 };
 mini_Control_addCls = function($) {
-    olO0(this.el, $)
+    mini.addClass(this.el, $)
 };
 mini_Control_removeCls = function($) {
-    l0OO(this.el, $)
+    mini.removeClass(this.el, $)
 };
 mini_Control__doReadOnly = function() {
     if (this.readOnly) this.addCls(this.OooO01);
@@ -4658,7 +4658,7 @@ mini_Control_setContextMenu = function($) {
     if (this.contextMenu !== _) {
         this.contextMenu = _;
         this.contextMenu.owner = this;
-        O1Oo(this.el, "contextmenu", this.Ol0l10, this)
+        mini.on(this.el, "contextmenu", this.Ol0l10, this)
     }
 };
 mini_Control_getContextMenu = function() {
@@ -4758,11 +4758,11 @@ mini_DataSet_add = function(_, $) {
     $._set_autoCreateNewID(true);
     $._setOo0o($.getIdField());
     $._setOlo0(false);
-    $.on("addrow", this.l0l00, this);
-    $.on("updaterow", this.l0l00, this);
-    $.on("deleterow", this.l0l00, this);
-    $.on("removerow", this.l0l00, this);
-    $.on("preload", this.Oo1l, this);
+    $.on("addrow", this.__OnRowChanged, this);
+    $.on("updaterow", this.__OnRowChanged, this);
+    $.on("deleterow", this.__OnRowChanged, this);
+    $.on("removerow", this.__OnRowChanged, this);
+    $.on("preload", this.__OnDataSelectionChanged, this);
     $.on("selectionchanged", this.__OnDataSelectionChanged, this)
 };
 mini_TreeSelect_getItem = function(item) {
@@ -4780,7 +4780,7 @@ mini_DataSet_addLink = function(B, _, $) {
 };
 mini_DataSet_clearData = function() {
     this._data = {};
-    this.lOOoO = {};
+    this._originals = {};
     for (var $ in this._sources) this._data = []
 };
 mini_DataSet_getData = function() {
@@ -4804,8 +4804,8 @@ mini_DataSet_l110O0 = function(E, _, D) {
 mini_DataSet_l0l00 = function(F) {
     var C = F.type,
         _ = F.record,
-        D = this.l001(F.sender),
-        E = this.l110O0(D, _, F.sender.getIdField()),
+        D = this._getNameByListControl(F.sender),
+        E = this._getRecord(D, _, F.sender.getIdField()),
         A = this._data[D];
     if (E) {
         A = this._data[D];
@@ -4813,9 +4813,9 @@ mini_DataSet_l0l00 = function(F) {
     }
     if (C == "removerow" && _._state == "added");
     else A.push(_);
-    this.lOOoO[D] = F.sender._getlOOoO();
+    this._originals[D] = F.sender._getlOOoO();
     if (_._state == "added") {
-        var $ = this.l1lo(F.sender);
+        var $ = this._getParentSource(F.sender);
         if ($) {
             var B = $.getSelected();
             if (B) _._parentId = B[$.getIdField()];
@@ -4825,7 +4825,7 @@ mini_DataSet_l0l00 = function(F) {
 };
 mini_DataSet_Oo1l = function(M) {
     var J = M.sender,
-        L = this.l001(J),
+        L = this._getNameByListControl(J),
         K = M.sender.getIdField(),
         A = this._data[L],
         $ = {};
@@ -4833,7 +4833,7 @@ mini_DataSet_Oo1l = function(M) {
         var G = A[F];
         $[G[K]] = G
     }
-    var N = this.lOOoO[L];
+    var N = this._originals[L];
     if (N) J._setlOOoO(N);
     var I = M.data || [];
     for (F = 0, C = I.length; F < C; F++) {
@@ -4844,7 +4844,7 @@ mini_DataSet_Oo1l = function(M) {
             mini.copyTo(G, H)
         }
     }
-    var D = this.l1lo(J);
+    var D = this._getParentSource(J);
     if (J.getPageIndex && J.getPageIndex() == 0) {
         var E = [];
         for (F = 0, C = A.length; F < C; F++) {
@@ -4868,14 +4868,14 @@ mini_DataSet_Oo1l = function(M) {
     }
 };
 mini_DataSet_l1lo = function(C) {
-    var _ = this.l001(C);
+    var _ = this._getNameByListControl(C);
     for (var $ = 0, B = this._links.length; $ < B; $++) {
         var A = this._links[$];
         if (A.childName == _) return this._sources[A.parentName]
     }
 };
 mini_DataSet_loloOl = function(B) {
-    var C = this.l001(B),
+    var C = this._getNameByListControl(B),
         D = [];
     for (var $ = 0, A = this._links.length; $ < A; $++) {
         var _ = this._links[$];
@@ -4886,7 +4886,7 @@ mini_DataSet_loloOl = function(B) {
 mini_DataSet___OnDataSelectionChanged = function(G) {
     var A = G.sender,
         _ = A.getSelected(),
-        F = this.loloOl(A);
+        F = this._getLinks(A);
     for (var $ = 0, E = F.length; $ < E; $++) {
         var D = F[$],
             C = this._sources[D.childName];
@@ -4911,11 +4911,11 @@ mini_TextBox__create = function() {
     this.o1olOo()
 };
 mini_TextBox__initEvents = function() {
-    l0o11(function() {
+    mini._BindEvents(function() {
         OooO(this._textEl, "drop", this.lOOo, this);
         OooO(this._textEl, "change", this.O00l10, this);
         OooO(this._textEl, "focus", this.ol00, this);
-        OooO(this.el, "mousedown", this.olol, this);
+        OooO(this.el, "mousedown", this.__OnMouseDown, this);
         var $ = this.value;
         this.value = null;
         if (this.el) this.setValue($)
@@ -4925,11 +4925,11 @@ mini_TextBox__initEvents = function() {
 mini_TextBox_o0oO = function() {
     if (this.l0l1O1) return;
     this.l0l1O1 = true;
-    O1Oo(this._textEl, "blur", this.Ol0O1, this);
-    O1Oo(this._textEl, "keydown", this.O10l1, this);
-    O1Oo(this._textEl, "keyup", this.OoOlO1, this);
-    O1Oo(this._textEl, "keypress", this.o1oO, this);
-    OooO(this.el, "click", this.Ol1o1, this)
+    mini.on(this._textEl, "blur", this.Ol0O1, this);
+    mini.on(this._textEl, "keydown", this.O10l1, this);
+    mini.on(this._textEl, "keyup", this.OoOlO1, this);
+    mini.on(this._textEl, "keypress", this.o1oO, this);
+    OooO(this.el, "click", this.__OnClick, this)
 };
 mini_TextBox_destroy = function(_) {
 
@@ -5012,9 +5012,9 @@ mini_TextBox_setMaxLength = function($) {
     this.maxLength = $;
     mini.setAttr(this._textEl, "maxLength", $);
     if (this.O000l == "textarea" && mini.isIE) {
-        O1Oo(this._textEl, "keyup", this.l00O1l, this);
-        O1Oo(this._textEl, "keypress", this.l00O1l, this);
-        O1Oo(this._textEl, "paste", this.__OnPaste, this)
+        mini.on(this._textEl, "keyup", this.l00O1l, this);
+        mini.on(this._textEl, "keypress", this.l00O1l, this);
+        mini.on(this._textEl, "paste", this.__OnPaste, this)
     }
 };
 mini_TextBox___OnPaste = function(_) {
@@ -5052,10 +5052,10 @@ mini_TextBox_doUpdate = function() {
     else this.addCls(this.o0010);
     if (this.isReadOnly() || this.allowInput == false) {
         this._textEl.readOnly = true;
-        olO0(this.el, "mini-textbox-readOnly")
+        mini.addClass(this.el, "mini-textbox-readOnly")
     } else {
         this._textEl.readOnly = false;
-        l0OO(this.el, "mini-textbox-readOnly")
+        mini.removeClass(this.el, "mini-textbox-readOnly")
     }
     if (this.required) this.addCls(this.o11o);
     else this.removeCls(this.o11o);
@@ -5202,7 +5202,7 @@ mini_TextBox_Ol0O1 = function(_) {
 };
 mini_TextBox_setInputStyle = function($) {
     this.inputStyle = $;
-    l1O1l(this._textEl, $)
+    mini.setStyle(this._textEl, $)
 };
 mini_TextBox_getAttrs = function($) {
     var A = mini.TextBox.superclass.getAttrs.call(this, $),
@@ -5359,7 +5359,7 @@ mini_ListBox__create = function() {
 };
 mini_ListBox__initEvents = function() {
     mini.ListBox.superclass._initEvents.call(this);
-    l0o11(function() {
+    mini._BindEvents(function() {
         OooO(this.oOooo1, "scroll", this.l0ol1, this)
     }, this)
 };
@@ -5399,8 +5399,8 @@ mini_ListBox_getColumns = function() {
 mini_ListBox_doUpdate = function() {
     if (this.lO10O === false) return;
     var S = this.columns && this.columns.length > 0;
-    if (S) olO0(this.el, "mini-listbox-showColumns");
-    else l0OO(this.el, "mini-listbox-showColumns");
+    if (S) mini.addClass(this.el, "mini-listbox-showColumns");
+    else mini.removeClass(this.el, "mini-listbox-showColumns");
     this.o1oO0.style.display = S ? "" : "none";
     var I = [];
     if (S) {
@@ -5500,10 +5500,10 @@ mini_ListBox_doUpdate = function() {
 };
 mini_ListBox_doLayout = function(I) {
     if (!this.canLayout()) return;
-    if (this.columns && this.columns.length > 0) olO0(this.el, "mini-listbox-showcolumns");
-    else l0OO(this.el, "mini-listbox-showcolumns");
-    if (this.showCheckBox) l0OO(this.el, "mini-listbox-hideCheckBox");
-    else olO0(this.el, "mini-listbox-hideCheckBox");
+    if (this.columns && this.columns.length > 0) mini.addClass(this.el, "mini-listbox-showcolumns");
+    else mini.removeClass(this.el, "mini-listbox-showcolumns");
+    if (this.showCheckBox) mini.removeClass(this.el, "mini-listbox-hideCheckBox");
+    else mini.addClass(this.el, "mini-listbox-hideCheckBox");
     var A = this.uid + "$ck$all",
         E = document.getElementById(A);
     if (E) E.style.display = this.showAllCheckBox ? "" : "none";
@@ -5511,10 +5511,10 @@ mini_ListBox_doLayout = function(I) {
         H = this.isAutoHeight();
     if (H) J.style.height = "auto";
     var _ = this.getHeight(true),
-        $ = oOo01O(this._borderEl, true),
+        $ = mini.getWidth(this._borderEl, true),
         G = $;
     if (!mini.isIE6) J.style.width = $ + "px";
-    var D = Olol(this.o1oO0);
+    var D = mini.getHeight(this.o1oO0);
     _ = _ - D;
     J.style.height = _ + "px";
     if (isIE) {
@@ -5687,14 +5687,14 @@ mini_Spinner_set = function(_) {
     return this
 };
 mini_Spinner_loOOoOHtml = function() {
-    var $ = "onmouseover=\"olO0(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
     return "<span name=\"trigger\" class=\"mini-buttonedit-button mini-buttonedit-trigger\" " + $ + "><span class=\"mini-buttonedit-up\"><span></span></span><span class=\"mini-buttonedit-down\"><span></span></span></span>"
 };
 mini_Spinner__initEvents = function() {
     mini.Spinner.superclass._initEvents.call(this);
-    l0o11(function() {
+    mini._BindEvents(function() {
         this.on("buttonmousedown", this.ll0Ol0, this);
-        O1Oo(this.el, "mousewheel", this.l1ll1, this)
+        mini.on(this.el, "mousewheel", this.l1ll1, this)
     }, this)
 };
 mini_Spinner_o10O0 = function() {
@@ -5843,7 +5843,7 @@ mini_Spinner_O0l11 = function(I, B, F) {
         if (C - $ > 500) A.oooO();
         $ = C
     }, B);
-    O1Oo(document, "mouseup", this.O1ol01, this)
+    mini.on(document, "mouseup", this.O1ol01, this)
 };
 mini_Spinner_oooO = function() {
 
@@ -5896,7 +5896,7 @@ mini_Spinner_l1ll1 = function(E) {
 };
 mini_Spinner_O1ol01 = function($) {
     this.oooO();
-    OoOo(document, "mouseup", this.O1ol01, this);
+    mini.un(document, "mouseup", this.O1ol01, this);
     if (this._DownValue != this.getValue()) this.Ol11o()
 };
 mini_Spinner_O00l10 = function(A) {
@@ -6453,7 +6453,7 @@ mini_TreeGrid__getNodeIcon = function(_) {
 mini_TreeGrid_o1oo = function($) {
     if (this.isVisibleNode($) == false) return null;
     var _ = this._id + "$checkbox$" + $._id;
-    return lO0O(_, this.el)
+    return mini.byId(_, this.el)
 };
 mini_TreeGrid__doExpandCollapseNode = function(A) {
     var $ = this;
@@ -6482,7 +6482,7 @@ mini_TreeGrid__doExpandCollapseNode = function(A) {
         function _(C, B, D) {
             var E = this.olo1O(C, B);
             if (E) {
-                var A = Olol(E);
+                var A = mini.getHeight(E);
                 E.style.overflow = "hidden";
                 E.style.height = "0px";
                 var $ = {
@@ -6503,7 +6503,7 @@ mini_TreeGrid__doExpandCollapseNode = function(A) {
         function E(C, B, D) {
             var E = this.olo1O(C, B);
             if (E) {
-                var A = Olol(E),
+                var A = mini.getHeight(E),
                     $ = {
                         height: 0 + "px"
                     },
@@ -6540,14 +6540,14 @@ mini_TreeGrid__doCheckNodeEl = function(B) {
     var _ = this.o1oo(B);
     if (_) {
         var A = this.getCheckModel();
-        l0OO(_, "mini-tree-checkbox-indeterminate");
+        mini.removeClass(_, "mini-tree-checkbox-indeterminate");
         if (A == "cascade") {
             var $ = this.getCheckState(B);
-            if ($ == "indeterminate") olO0(_, "mini-tree-checkbox-indeterminate");
-            else l0OO(_, "mini-tree-checkbox-indeterminate")
+            if ($ == "indeterminate") mini.addClass(_, "mini-tree-checkbox-indeterminate");
+            else mini.removeClass(_, "mini-tree-checkbox-indeterminate")
         }
-        if (B.checked) olO0(_, "mini-tree-checkbox-checked");
-        else l0OO(_, "mini-tree-checkbox-checked")
+        if (B.checked) mini.addClass(_, "mini-tree-checkbox-checked");
+        else mini.removeClass(_, "mini-tree-checkbox-checked")
     }
 };
 mini_TreeGrid___OnCheckChanged = function(C) {
@@ -6651,16 +6651,16 @@ mini_TreeGrid_getShowExpandButtons = function() {
 };
 mini_TreeGrid_setShowTreeLines = function($) {
     this.showTreeLines = $;
-    if ($ == true) olO0(this.el, "mini-tree-treeLine");
-    else l0OO(this.el, "mini-tree-treeLine")
+    if ($ == true) mini.addClass(this.el, "mini-tree-treeLine");
+    else mini.removeClass(this.el, "mini-tree-treeLine")
 };
 mini_TreeGrid_getShowTreeLines = function() {
     return this.showTreeLines
 };
 mini_TreeGrid_setShowArrow = function($) {
     this.showArrow = $;
-    if ($ == true) olO0(this.el, "mini-tree-showArrows");
-    else l0OO(this.el, "mini-tree-showArrows")
+    if ($ == true) mini.addClass(this.el, "mini-tree-showArrows");
+    else mini.removeClass(this.el, "mini-tree-showArrows")
 };
 mini_TreeGrid_getShowArrow = function() {
     return this.showArrow
@@ -6685,8 +6685,8 @@ mini_TreeGrid_getExpandOnDblClick = function() {
 };
 mini_TreeGrid_setExpandOnNodeClick = function($) {
     this.expandOnNodeClick = $;
-    if ($) olO0(this.el, "mini-tree-nodeclick");
-    else l0OO(this.el, "mini-tree-nodeclick")
+    if ($) mini.addClass(this.el, "mini-tree-nodeclick");
+    else mini.removeClass(this.el, "mini-tree-nodeclick")
 };
 mini_TreeGrid_getExpandOnNodeClick = function() {
     return this.expandOnNodeClick
@@ -6720,8 +6720,8 @@ mini_TreeGrid_enableNode = function(B) {
     B.enabled = true;
     var A = this._getNodeEl(B, 1),
         $ = this._getNodeEl(B, 2);
-    if (A) l0OO(A, "mini-disabled");
-    if ($) l0OO($, "mini-disabled");
+    if (A) mini.removeClass(A, "mini-disabled");
+    if ($) mini.removeClass($, "mini-disabled");
     var _ = this.o1oo(B);
     if (_) _.disabled = false
 };
@@ -6731,8 +6731,8 @@ mini_TreeGrid_disableNode = function(B) {
     B.enabled = false;
     var A = this._getNodeEl(B, 1),
         $ = this._getNodeEl(B, 2);
-    if (A) olO0(A, "mini-disabled");
-    if ($) olO0($, "mini-disabled");
+    if (A) mini.addClass(A, "mini-disabled");
+    if ($) mini.addClass($, "mini-disabled");
     var _ = this.o1oo(B);
     if (_) _.disabled = true
 };
@@ -6824,8 +6824,8 @@ mini_CheckBox_destroy = function($) {
     mini.CheckBox.superclass.destroy.call(this, $)
 };
 mini_CheckBox__initEvents = function() {
-    l0o11(function() {
-        O1Oo(this.el, "click", this.oollO, this);
+    mini._BindEvents(function() {
+        mini.on(this.el, "click", this.oollO, this);
         this.loooO0.onmouseup = function() {
             return false
         };
@@ -7120,7 +7120,7 @@ mini_DataGrid_setPagerButtons = function($) {
 };
 mini_DataGrid_setPager = function($) {
     if (typeof $ == "string") {
-        var _ = lO0O($);
+        var _ = mini.byId($);
         if (!_) return;
         mini.parse($);
         $ = mini.get($)
@@ -7180,7 +7180,7 @@ mini_DataGrid__doAddRowEl = function(A) {
     if (this.isFrozen()) $.call(this, A, 1, _, F);
     this.deferLayout();
     if (this.showEmptyText) {
-        var C = jQuery(".mini-grid-emptyText", this.l10ll1)[0];
+        var C = jQuery(".mini-grid-emptyText", this._bodyEl)[0];
         if (C) {
             C.style.display = "none";
             C.parentNode.style.display = "none"
@@ -7199,7 +7199,7 @@ mini_DataGrid__doRemoveRowEl = function(_) {
     if (C) C.parentNode.removeChild(C);
     this.deferLayout();
     if (this.showEmptyText && this.getVisibleRows().length == 0) {
-        var B = jQuery(".mini-grid-emptyText", this.l10ll1)[0];
+        var B = jQuery(".mini-grid-emptyText", this._bodyEl)[0];
         if (B) {
             B.style.display = "";
             B.parentNode.style.display = ""
@@ -7213,27 +7213,27 @@ mini_DataGrid__doMoveRowEl = function(_, $) {
 mini_DataGrid__getRowGroupEl = function(_, $) {
     if ($ == 1 && !this.isFrozen()) return null;
     var B = this.l11OoGroupId(_, $),
-        A = lO0O(B, this.el);
+        A = mini.byId(B, this.el);
     return A
 };
 mini_DataGrid__getRowGroupRowsEl = function(_, $) {
     if ($ == 1 && !this.isFrozen()) return null;
     var B = this.l11OoGroupRowsId(_, $),
-        A = lO0O(B, this.el);
+        A = mini.byId(B, this.el);
     return A
 };
 mini_DataGrid_OOl0 = function(_, $) {
     if ($ == 1 && !this.isFrozen()) return null;
     _ = this.getRecord(_);
     var B = this.lOo100(_, $),
-        A = lO0O(B, this.el);
+        A = mini.byId(B, this.el);
     return A
 };
 mini_DataGrid_lOOlOl = function(A, $) {
     if ($ == 1 && !this.isFrozen()) return null;
     A = this.getColumn(A);
     var B = this.Ooo0Id(A, $),
-        _ = lO0O(B, this.el);
+        _ = mini.byId(B, this.el);
     return _
 };
 
@@ -7245,7 +7245,7 @@ mini_DataGrid_oOOO1O = function($, A) {
     A = this.getColumn(A);
     if (!$ || !A) return null;
     var B = this.loOloo($, A),
-        _ = lO0O(B, this.el);
+        _ = mini.byId(B, this.el);
     return _
 };
 mini_DataGrid_getCellEl = function($, _) {
@@ -7301,8 +7301,8 @@ mini_TreeSelect_findItems = function(value) {
 mini_DataGrid_addRowCls = function($, A) {
     var _ = this.OOl0($, 1),
         B = this.OOl0($, 2);
-    if (_) olO0(_, A);
-    if (B) olO0(B, A);
+    if (_) mini.addClass(_, A);
+    if (B) mini.addClass(B, A);
     if ($) {
         var C = this.llO1ooHash[$._id];
         if (!C) C = this.llO1ooHash[$._id] = [];
@@ -7313,8 +7313,8 @@ mini_DataGrid_addRowCls = function($, A) {
 mini_DataGrid_removeRowCls = function($, A) {
     var _ = this.OOl0($, 1),
         B = this.OOl0($, 2);
-    if (_) l0OO(_, A);
-    if (B) l0OO(B, A);
+    if (_) mini.removeClass(_, A);
+    if (B) mini.removeClass(B, A);
     if ($) {
         var C = this.llO1ooHash[$._id];
         if (C) {
@@ -7329,7 +7329,7 @@ mini_DataGrid_getCellBox = function(_, A) {
     if (!_ || !A) return null;
     var $ = this.oOOO1O(_, A);
     if (!$) return null;
-    return O1loO1($)
+    return mini.getBox($)
 };
 mini_DataGrid_getColumnBox = function(A) {
     var B = this.Ooo0Id(A, 2),
@@ -7339,7 +7339,7 @@ mini_DataGrid_getColumnBox = function(A) {
         _ = document.getElementById(B)
     }
     if (_) {
-        var $ = O1loO1(_);
+        var $ = mini.getBox(_);
         $.x -= 1;
         $.left = $.x;
         $.right = $.x + $.width;
@@ -7350,9 +7350,9 @@ mini_DataGrid_getRowBox = function(_) {
     var $ = this.OOl0(_, 1),
         A = this.OOl0(_, 2);
     if (!A) return null;
-    var B = O1loO1(A);
+    var B = mini.getBox(A);
     if ($) {
-        var C = O1loO1($);
+        var C = mini.getBox($);
         B.x = B.left = C.left;
         B.width = B.right - B.x
     }
@@ -7385,7 +7385,7 @@ mini_DataGrid__tryFocus = function(A) {
     try {
         var _ = A.target.tagName.toLowerCase();
         if (_ == "input" || _ == "textarea" || _ == "select") return;
-        if (o00ol(A.target, "mini-placeholder-label")) return;
+        if (mini.hasClass(A.target, "mini-placeholder-label")) return;
         if (oOlO(A.target, "mini-grid-rows-content")) {
             mini.setXY(this._focusEl, A.pageX, A.pageY);
             this.focus(false)
@@ -7405,7 +7405,7 @@ mini_DataGrid_focus = function(B) {
             var $ = this.OOl0(A, 2);
             if ($) {
                 if (B !== false) {
-                    var E = O1loO1($);
+                    var E = mini.getBox($);
                     mini.setY(_._focusEl, E.top)
                 }
                 if (mini.isIE || mini.isIE11 || mini.isChrome) _._focusEl.focus();
@@ -7512,8 +7512,8 @@ mini_DataGrid_getAllowCellValid = function() {
 };
 mini_DataGrid_setAllowResizeColumn = function($) {
     this.allowResizeColumn = $;
-    l0OO(this.el, "mini-grid-resizeColumns-no");
-    if (!$) olO0(this.el, "mini-grid-resizeColumns-no")
+    mini.removeClass(this.el, "mini-grid-resizeColumns-no");
+    if (!$) mini.addClass(this.el, "mini-grid-resizeColumns-no")
 };
 mini_DataGrid_getAllowResizeColumn = function() {
 
@@ -7572,8 +7572,8 @@ mini_DataGrid_Ooll0o = function(B) {
             A = this.oloo[1],
             _ = this.oOOO1O($, A);
         if (_)
-            if (B) olO0(_, this.lo01O);
-            else l0OO(_, this.lo01O)
+            if (B) mini.addClass(_, this.lo01O);
+            else mini.removeClass(_, this.lo01O)
     }
 };
 mini_DataGrid_setCurrentCell = function(A) {
@@ -7823,7 +7823,7 @@ mini_DataGrid_Ool0 = function(_, B) {
         var A = this.oo0000($, D);
         this.Oo00l.style.zIndex = mini.getMaxZIndex();
         this._setEdiorBox(D, $);
-        O1Oo(document, "mousedown", this.lO00Oo, this);
+        mini.on(document, "mousedown", this.lO00Oo, this);
         if (B.autoShowPopup && D.showPopup) D.showPopup()
     }
     if (D) D.keyNavEnabled = !this.navEditMode
@@ -7859,7 +7859,7 @@ mini_DataGrid_lO00Oo = function(C) {
         else _ = Oolo(this.Oo00l, C.target);
         if (_ == false) {
             var B = this;
-            if (Oolo(this.l10ll1, C.target) == false) setTimeout(function() {
+            if (Oolo(this._bodyEl, C.target) == false) setTimeout(function() {
                 B.commitEdit()
             }, 1);
             else {
@@ -7869,7 +7869,7 @@ mini_DataGrid_lO00Oo = function(C) {
                     if ($ == _) B.commitEdit()
                 }, 70)
             }
-            OoOo(document, "mousedown", this.lO00Oo, this)
+            mini.un(document, "mousedown", this.lO00Oo, this)
         }
     }
 };
@@ -7880,7 +7880,7 @@ mini_DataGrid_getEditWrap = function() {
 mini_DataGrid_oo0000 = function($, C) {
     if (!this.Oo00l) {
         this.Oo00l = mini.append(document.body, "<div class=\"mini-grid-editwrap\" style=\"position:absolute;\"></div>");
-        O1Oo(this.Oo00l, "keydown", this.l0o00, this)
+        mini.on(this.Oo00l, "keydown", this.l0o00, this)
     }
     this.Oo00l.style.zIndex = 1000000000;
     this.Oo00l.style.display = "block";
@@ -7905,7 +7905,7 @@ mini_DataGrid_oo0000 = function($, C) {
         _ = $.y;
     if (B < $.height) _ = Math.round($.y + $.height / 2 - B / 2);
     mini.setXY(this.Oo00l, $.x, _);
-    o0l0(this.Oo00l, $.width);
+    mini.setWidth(this.Oo00l, $.width);
     var A = document.body.scrollWidth;
     if ($.x > A) mini.setX(this.Oo00l, -1000);
     return this.Oo00l
@@ -8113,7 +8113,7 @@ mini_DataGrid_beginEditRow = function(row) {
         row._editing = true;
         this.l1111OEl(row);
         rowEl = this.OOl0(row, 2);
-        olO0(rowEl, "mini-grid-rowEdit");
+        mini.addClass(rowEl, "mini-grid-rowEdit");
         var columns = this.getVisibleColumns();
         for (var i = 0, l = columns.length; i < l; i++) {
             var column = columns[i],
@@ -8126,10 +8126,10 @@ mini_DataGrid_beginEditRow = function(row) {
             var editor = mini.create(editorConfig);
             if (this.O1o000(row, column, editor))
                 if (editor) {
-                    olO0(cellEl, "mini-grid-cellEdit");
+                    mini.addClass(cellEl, "mini-grid-cellEdit");
                     cellEl.innerHTML = "";
                     cellEl.appendChild(editor.el);
-                    olO0(editor.el, "mini-grid-editor")
+                    mini.addClass(editor.el, "mini-grid-editor")
                 }
         }
         this.doLayout()
@@ -8284,8 +8284,8 @@ mini_DataGrid_collapseRowGroup = function($) {
         A = this._getRowGroupRowsEl($, 2);
     if (_) _.style.display = "none";
     if (A) A.style.display = "none";
-    if (C) olO0(C, "mini-grid-group-collapse");
-    if (B) olO0(B, "mini-grid-group-collapse");
+    if (C) mini.addClass(C, "mini-grid-group-collapse");
+    if (B) mini.addClass(B, "mini-grid-group-collapse");
     this.doLayout()
 };
 mini_DataGrid_expandRowGroup = function($) {
@@ -8298,8 +8298,8 @@ mini_DataGrid_expandRowGroup = function($) {
         A = this._getRowGroupRowsEl($, 2);
     if (_) _.style.display = "";
     if (A) A.style.display = "";
-    if (C) l0OO(C, "mini-grid-group-collapse");
-    if (B) l0OO(B, "mini-grid-group-collapse");
+    if (C) mini.removeClass(C, "mini-grid-group-collapse");
+    if (B) mini.removeClass(B, "mini-grid-group-collapse");
     this.doLayout()
 };
 mini_DataGrid_showAllRowDetail = function() {
@@ -8343,8 +8343,8 @@ mini_DataGrid_showRowDetail = function(_) {
     if (C) C.style.display = "";
     var $ = this.OOl0(_, 1),
         A = this.OOl0(_, 2);
-    if ($) olO0($, "mini-grid-expandRow");
-    if (A) olO0(A, "mini-grid-expandRow");
+    if ($) mini.addClass($, "mini-grid-expandRow");
+    if (A) mini.addClass(A, "mini-grid-expandRow");
     this.fire("showrowdetail", {
         record: _
     });
@@ -8364,8 +8364,8 @@ mini_DataGrid_hideRowDetail = function(_) {
     if (B) B.style.display = "none";
     var $ = this.OOl0(_, 1),
         A = this.OOl0(_, 2);
-    if ($) l0OO($, "mini-grid-expandRow");
-    if (A) l0OO(A, "mini-grid-expandRow");
+    if ($) mini.removeClass($, "mini-grid-expandRow");
+    if (A) mini.removeClass(A, "mini-grid-expandRow");
     this.fire("hiderowdetail", {
         record: _
     });
@@ -8916,11 +8916,11 @@ mini_DataGrid_getShowTotalCount = function() {
 mini_DataGrid_setPagerStyle = function($) {
 
     this.pagerStyle = $;
-    l1O1l(this._bottomPager.el, $)
+    mini.setStyle(this._bottomPager.el, $)
 };
 mini_DataGrid_setPagerCls = function($) {
     this.pagerCls = $;
-    olO0(this._bottomPager.el, $)
+    mini.addClass(this._bottomPager.el, $)
 };
 mini_DataGrid_setDropAction = function($) {
 
@@ -8936,7 +8936,7 @@ mini_DataGrid_getGroupTitleCollapsible = function() {
     return this.groupTitleCollapsible
 };
 mini_DataGrid__beforeOpenContentMenu = function(_, A) {
-    var $ = Oolo(this.l10ll1, A.htmlEvent.target);
+    var $ = Oolo(this._bodyEl, A.htmlEvent.target);
     if ($) _.fire("BeforeOpen", A);
     else A.cancel = true
 };
@@ -8977,7 +8977,7 @@ mini_DataGrid_setHeaderContextMenu = function($) {
     if (this.headerContextMenu !== _) {
         this.headerContextMenu = _;
         this.headerContextMenu.owner = this;
-        O1Oo(this.el, "contextmenu", this.Ol0l10, this)
+        mini.on(this.el, "contextmenu", this.Ol0l10, this)
     }
 };
 mini_DataGrid_getHeaderContextMenu = function() {
@@ -8991,10 +8991,10 @@ mini_DataGrid_getSelectOnRightClick = function() {
 };
 mini_DataGrid__getlOOoO = function() {
 
-    return this._dataSource.lOOoO
+    return this._dataSource._originals
 };
 mini_DataGrid__setlOOoO = function($) {
-    this._dataSource.lOOoO = $
+    this._dataSource._originals = $
 };
 mini_DataGrid__setOlo0 = function($) {
     this._dataSource.Olo0 = $
@@ -9027,7 +9027,7 @@ mini_DataGrid_getAttrs = function(el) {
     if (typeof attrs.ajaxOptions == "string") attrs.ajaxOptions = eval("(" + attrs.ajaxOptions + ")");
     if (typeof attrs.sizeList == "string") attrs.sizeList = eval("(" + attrs.sizeList + ")");
     if (!attrs.idField && attrs.valueField) attrs.idField = attrs.valueField;
-    if (attrs.pagerButtons) attrs.pagerButtons = lO0O(attrs.pagerButtons);
+    if (attrs.pagerButtons) attrs.pagerButtons = mini.byId(attrs.pagerButtons);
     return attrs
 };
 mini_Password_getValue = function() {
@@ -9051,16 +9051,16 @@ mini_MenuItem__create = function() {
 };
 mini_MenuItem__initEvents = function() {
 
-    l0o11(function() {
-        OooO(this.el, "mouseover", this.O1l1lo, this)
+    mini._BindEvents(function() {
+        OooO(this.el, "mouseover", this.__OnMouseOver, this)
     }, this)
 };
 mini_MenuItem_o0oO = function() {
     if (this.l0l1O1) return;
     this.l0l1O1 = true;
-    OooO(this.el, "click", this.Ol1o1, this);
+    OooO(this.el, "click", this.__OnClick, this);
     OooO(this.el, "mouseup", this.oOlo0, this);
-    OooO(this.el, "mouseout", this.O11O11, this)
+    OooO(this.el, "mouseout", this.__OnMouseOut, this)
 };
 mini_MenuItem_destroy = function($) {
     if (this.menu) this.menu.destroy();
@@ -9079,19 +9079,19 @@ mini_MenuItem__doUpdateIcon = function() {
     var _ = this._getIconImg(),
         $ = !!(this.iconStyle || this.iconCls || this.checkOnClick || _);
     if (this.o01O0) {
-        l1O1l(this.o01O0, this.iconStyle);
-        olO0(this.o01O0, this.iconCls);
+        mini.setStyle(this.o01O0, this.iconStyle);
+        mini.addClass(this.o01O0, this.iconCls);
         if (_ && !this.checked) {
             var A = "background-image:url(" + _ + ")";
-            l1O1l(this.o01O0, A)
+            mini.setStyle(this.o01O0, A)
         }
         if (this.checked) jQuery(this.o01O0).css({
             "background-image": ""
         });
         this.o01O0.style.display = $ ? "block" : "none"
     }
-    if (this.iconPosition == "top") olO0(this.el, "mini-menuitem-icontop");
-    else l0OO(this.el, "mini-menuitem-icontop")
+    if (this.iconPosition == "top") mini.addClass(this.el, "mini-menuitem-icontop");
+    else mini.removeClass(this.el, "mini-menuitem-icontop")
 };
 mini_MenuItem__hasChildMenu = function() {
     return this.menu && this.menu.items.length > 0
@@ -9101,11 +9101,11 @@ mini_MenuItem_doUpdate = function() {
     if (this._textEl) this._textEl.innerHTML = this.text;
     this._doUpdateIcon();
     if (this.checked) {
-        olO0(this.el, this.ll0O1o);
+        mini.addClass(this.el, this.ll0O1o);
         jQuery(this.o01O0).css({
             "background-image": ""
         })
-    } else l0OO(this.el, this.ll0O1o);
+    } else mini.removeClass(this.el, this.ll0O1o);
     if (this.allowEl)
         if (this._hasChildMenu()) this.allowEl.style.display = "block";
         else this.allowEl.style.display = "none"
@@ -9120,7 +9120,7 @@ mini_MenuItem_getText = function() {
 };
 mini_MenuItem_setIconCls = function($) {
 
-    l0OO(this.o01O0, this.iconCls);
+    mini.removeClass(this.o01O0, this.iconCls);
     this.iconCls = $;
     this._doUpdateIcon()
 };
@@ -9151,8 +9151,8 @@ mini_MenuItem_getIconPosition = function() {
 };
 mini_MenuItem_setCheckOnClick = function($) {
     this.checkOnClick = $;
-    if ($) olO0(this.el, "mini-menuitem-showcheck");
-    else l0OO(this.el, "mini-menuitem-showcheck");
+    if ($) mini.addClass(this.el, "mini-menuitem-showcheck");
+    else mini.removeClass(this.el, "mini-menuitem-showcheck");
     this.doUpdate()
 };
 mini_MenuItem_getCheckOnClick = function() {
@@ -9264,7 +9264,7 @@ mini_MenuItem_oOlo0 = function(_) {
 mini_MenuItem_O1l1lo = function($) {
     if (this.isReadOnly()) return;
     this.o0oO();
-    olO0(this.el, this._hoverCls);
+    mini.addClass(this.el, this._hoverCls);
     this.el.title = this.text;
     if (this._textEl.scrollWidth > this._textEl.clientWidth) this.el.title = this.text;
     else this.el.title = "";
@@ -9273,7 +9273,7 @@ mini_MenuItem_O1l1lo = function($) {
         else if (this.ownerMenu.hasShowItemMenu()) this.ownerMenu.showItemMenu(this)
 };
 mini_MenuItem_O11O11 = function($) {
-    l0OO(this.el, this._hoverCls)
+    mini.removeClass(this.el, this._hoverCls)
 };
 mini_MenuItem_onClick = function(_, $) {
     this.on("click", _, $)
@@ -9292,8 +9292,8 @@ mini_MenuItem_getAttrs = function($) {
 mini_TextArea_doLayout = function() {
     if (!this.canLayout()) return;
     mini.TextArea.superclass.doLayout.call(this);
-    var $ = Olol(this.el);
-    if (mini.isIE6) l11o(this._borderEl, $);
+    var $ = mini.getHeight(this.el);
+    if (mini.isIE6) mini.setHeight(this._borderEl, $);
     $ -= 2;
     if ($ < 0) $ = 0;
     this._textEl.style.height = $ + "px"
@@ -9308,9 +9308,9 @@ mini_Splitter__create = function() {
     this.o0l01l = this._borderEl.lastChild
 };
 mini_Splitter__initEvents = function() {
-    l0o11(function() {
-        O1Oo(this.el, "click", this.Ol1o1, this);
-        O1Oo(this.el, "mousedown", this.olol, this)
+    mini._BindEvents(function() {
+        mini.on(this.el, "click", this.__OnClick, this);
+        mini.on(this.el, "mousedown", this.__OnMouseDown, this)
     }, this)
 };
 mini_Splitter_O10O0 = function() {
@@ -9335,20 +9335,20 @@ mini_Splitter_doUpdate = function() {
 mini_Splitter_doLayout = function() {
     if (!this.canLayout()) return;
     this.o0l01l.style.cursor = this.allowResize ? "" : "default";
-    l0OO(this.el, "mini-splitter-vertical");
-    if (this.vertical) olO0(this.el, "mini-splitter-vertical");
-    l0OO(this.O0lO, "mini-splitter-pane1-vertical");
-    l0OO(this.o11Oo1, "mini-splitter-pane2-vertical");
+    mini.removeClass(this.el, "mini-splitter-vertical");
+    if (this.vertical) mini.addClass(this.el, "mini-splitter-vertical");
+    mini.removeClass(this.O0lO, "mini-splitter-pane1-vertical");
+    mini.removeClass(this.o11Oo1, "mini-splitter-pane2-vertical");
     if (this.vertical) {
-        olO0(this.O0lO, "mini-splitter-pane1-vertical");
-        olO0(this.o11Oo1, "mini-splitter-pane2-vertical")
+        mini.addClass(this.O0lO, "mini-splitter-pane1-vertical");
+        mini.addClass(this.o11Oo1, "mini-splitter-pane2-vertical")
     }
-    l0OO(this.o0l01l, "mini-splitter-handler-vertical");
-    if (this.vertical) olO0(this.o0l01l, "mini-splitter-handler-vertical");
+    mini.removeClass(this.o0l01l, "mini-splitter-handler-vertical");
+    if (this.vertical) mini.addClass(this.o0l01l, "mini-splitter-handler-vertical");
     var B = this.getHeight(true),
         _ = this.getWidth(true);
     if (!jQuery.boxModel) {
-        var Q = l00OO(this._borderEl);
+        var Q = mini.getBorders(this._borderEl);
         B = B + Q.top + Q.bottom;
         _ = _ + Q.left + Q.right
     }
@@ -9439,27 +9439,27 @@ mini_Splitter_doLayout = function() {
         this.o0l01l.style.display = "none"
     }
     if (this.vertical) {
-        o0l0($, _);
-        o0l0(C, _);
-        l11o($, K);
-        l11o(C, p2Size);
+        mini.setWidth($, _);
+        mini.setWidth(C, _);
+        mini.setHeight($, K);
+        mini.setHeight(C, p2Size);
         C.style.top = (K + D) + "px";
         this.o0l01l.style.left = "0px";
         this.o0l01l.style.top = K + "px";
-        o0l0(this.o0l01l, _);
-        l11o(this.o0l01l, this.handlerSize);
+        mini.setWidth(this.o0l01l, _);
+        mini.setHeight(this.o0l01l, this.handlerSize);
         $.style.left = "0px";
         C.style.left = "0px"
     } else {
-        o0l0($, K);
-        o0l0(C, p2Size);
-        l11o($, B);
-        l11o(C, B);
+        mini.setWidth($, K);
+        mini.setWidth(C, p2Size);
+        mini.setHeight($, B);
+        mini.setHeight(C, B);
         C.style.left = (K + D) + "px";
         this.o0l01l.style.top = "0px";
         this.o0l01l.style.left = K + "px";
-        o0l0(this.o0l01l, this.handlerSize);
-        l11o(this.o0l01l, B);
+        mini.setWidth(this.o0l01l, this.handlerSize);
+        mini.setHeight(this.o0l01l, B);
         $.style.top = "0px";
         C.style.top = "0px"
     }
@@ -9478,18 +9478,18 @@ mini_Splitter_doLayout = function() {
     this.o0l01l.innerHTML = S;
     var E = this.o0l01l.firstChild;
     E.style.display = this.showHandleButton ? "" : "none";
-    var A = O1loO1(E);
+    var A = mini.getBox(E);
     if (this.vertical) E.style.marginLeft = -A.width / 2 + "px";
     else E.style.marginTop = -A.height / 2 + "px";
-    if (!this.pane1.visible || !this.pane2.visible || !this.pane1.expanded || !this.pane2.expanded) olO0(this.o0l01l, "mini-splitter-nodrag");
-    else l0OO(this.o0l01l, "mini-splitter-nodrag");
+    if (!this.pane1.visible || !this.pane2.visible || !this.pane1.expanded || !this.pane2.expanded) mini.addClass(this.o0l01l, "mini-splitter-nodrag");
+    else mini.removeClass(this.o0l01l, "mini-splitter-nodrag");
     mini.layout(this._borderEl);
     this.fire("layout")
 };
 mini_Splitter_getPaneBox = function($) {
     var _ = this.getPaneEl($);
     if (!_) return null;
-    return O1loO1(_)
+    return mini.getBox(_)
 };
 mini_Splitter_getPane = function($) {
     if ($ == 1) return this.pane1;
@@ -9530,9 +9530,9 @@ mini_Splitter_updatePane = function(_, F) {
     }
     delete $.bodyParent;
     B.id = $.id;
-    l1O1l(B, $.style);
-    olO0(B, $["class"]);
-    if ($.cls) olO0(B, $.cls);
+    mini.setStyle(B, $.style);
+    mini.addClass(B, $["class"]);
+    if ($.cls) mini.addClass(B, $.cls);
     if ($.controls) {
         var _ = $ == this.pane1 ? 1 : 2;
         this.setPaneControls(_, $.controls);
@@ -9674,16 +9674,16 @@ mini_Splitter_l11o10 = function() {
     return this.drag
 };
 mini_Splitter_O0oo = function($) {
-    this.handlerBox = O1loO1(this.o0l01l);
+    this.handlerBox = mini.getBox(this.o0l01l);
     this.Oool0o = mini.append(document.body, "<div class=\"mini-resizer-mask\"></div>");
     this.O0Ool = mini.append(document.body, "<div class=\"mini-proxy\"></div>");
     this.O0Ool.style.cursor = this.vertical ? "n-resize" : "w-resize";
-    this.elBox = O1loO1(this._borderEl, true);
-    looO(this.O0Ool, this.handlerBox)
+    this.elBox = mini.getBox(this._borderEl, true);
+    mini.setBox(this.O0Ool, this.handlerBox)
 };
 mini_Splitter_l1olo = function(C) {
     if (!this.handlerBox) return;
-    if (!this.elBox) this.elBox = O1loO1(this._borderEl, true);
+    if (!this.elBox) this.elBox = mini.getBox(this._borderEl, true);
     var B = this.elBox.width,
         D = this.elBox.height,
         E = this.handlerSize,
@@ -9723,7 +9723,7 @@ mini_Splitter_lO1011 = function(_) {
         G = !I && !J,
         K = !N && !M,
         L = this.vertical ? B - this.handlerSize : $ - this.handlerSize,
-        A = O1loO1(this.O0Ool),
+        A = mini.getBox(this.O0Ool),
         H = A.x - this.elBox.x,
         F = L - H;
     if (this.vertical) {
@@ -10329,8 +10329,8 @@ mini_ComboBox_getAttrs = function(G) {
 mini_HtmlFile__create = function() {
     mini.HtmlFile.superclass._create.call(this);
     this.llOl1 = mini.append(this.el, "<input type=\"file\" hideFocus class=\"mini-htmlfile-file\" name=\"" + this.name + "\" ContentEditable=false/>");
-    O1Oo(this._borderEl, "mousemove", this.ol1o0, this);
-    O1Oo(this.llOl1, "change", this.o11lO, this)
+    mini.on(this._borderEl, "mousemove", this.ol1o0, this);
+    mini.on(this.llOl1, "change", this.o11lO, this)
 };
 mini_HtmlFile_destroy = function($) {
     if (!this.destroyed) {
@@ -10340,7 +10340,7 @@ mini_HtmlFile_destroy = function($) {
     mini.HtmlFile.superclass.destroy.call(this, $)
 };
 mini_HtmlFile_loOOoOHtml = function() {
-    var $ = "onmouseover=\"olO0(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
     return "<span class=\"mini-buttonedit-button\" " + $ + ">" + this.buttonText + "</span>"
 };
 mini_HtmlFile_o11lO = function($) {
@@ -10354,7 +10354,7 @@ mini_HtmlFile_o11lO = function($) {
 mini_HtmlFile_ol1o0 = function(B) {
     var A = B.pageX,
         _ = B.pageY,
-        $ = O1loO1(this.el);
+        $ = mini.getBox(this.el);
     A = (A - $.x - 5);
     _ = (_ - $.y - 5);
     if (this.enabled == false) {
@@ -10468,10 +10468,10 @@ mini_Calendar_destroy = function($) {
 };
 mini_Calendar__initEvents = function() {
     if (this.timeSpinner) this.timeSpinner.on("valuechanged", this.O0OoO, this);
-    l0o11(function() {
-        O1Oo(this.el, "click", this.Ol1o1, this);
-        O1Oo(this.el, "mousedown", this.olol, this);
-        O1Oo(this.el, "keydown", this.l001l, this)
+    mini._BindEvents(function() {
+        mini.on(this.el, "click", this.__OnClick, this);
+        mini.on(this.el, "mousedown", this.__OnMouseDown, this);
+        mini.on(this.el, "keydown", this.l001l, this)
     }, this)
 };
 mini_Calendar_getDateEl = function($) {
@@ -10576,11 +10576,11 @@ mini_Calendar_setSelectedDate = function($) {
     if (!mini.isDate($)) $ = "";
     else $ = new Date($.getTime());
     var _ = this.getDateEl(this.Ol00O);
-    if (_) l0OO(_, this.l0Oo);
+    if (_) mini.removeClass(_, this.l0Oo);
     this.Ol00O = $;
     if (this.Ol00O) this.Ol00O = mini.cloneDate(this.Ol00O);
     _ = this.getDateEl(this.Ol00O);
-    if (_) olO0(_, this.l0Oo);
+    if (_) mini.addClass(_, this.l0Oo);
     this.fire("datechanged")
 };
 mini_Calendar_setSelectedDates = function($) {
@@ -10836,15 +10836,15 @@ mini_Calendar_showMenu = function() {
     this.updateMenu(this.viewDate);
     var $ = this.getBox();
     if (this.el.style.borderWidth == "0px") this.menuEl.style.border = "0";
-    looO(this.menuEl, $);
-    O1Oo(this.menuEl, "click", this.l00oo0, this);
-    O1Oo(this.menuEl, "dblclick", this.__OnMenuDblClick, this);
-    O1Oo(document, "mousedown", this.Ooo0lO, this)
+    mini.setBox(this.menuEl, $);
+    mini.on(this.menuEl, "click", this.l00oo0, this);
+    mini.on(this.menuEl, "dblclick", this.__OnMenuDblClick, this);
+    mini.on(document, "mousedown", this.Ooo0lO, this)
 };
 mini_Calendar_hideMenu = function() {
     if (this.menuEl) {
-        OoOo(this.menuEl, "click", this.l00oo0, this);
-        OoOo(document, "mousedown", this.Ooo0lO, this);
+        mini.un(this.menuEl, "click", this.l00oo0, this);
+        mini.un(document, "mousedown", this.Ooo0lO, this);
         jQuery(this.menuEl).remove();
         this.menuEl = null
     }
@@ -10966,7 +10966,7 @@ mini_Calendar_Ol1o1 = function(I) {
     } else if (oOlO(C, "mini-calendar-okButton")) this.olOol0(null, "ok");
     else if (G) this.showMenu();
     var E = oOlO(I.target, "mini-calendar-date");
-    if (E && !o00ol(E, "mini-calendar-disabled")) {
+    if (E && !mini.hasClass(E, "mini-calendar-disabled")) {
         var A = E.id.split("$"),
             B = parseInt(A[A.length - 1]);
         if (B == -1) return;
@@ -10977,7 +10977,7 @@ mini_Calendar_Ol1o1 = function(I) {
 mini_Calendar_olol = function(C) {
     if (this.enabled == false) return;
     var B = oOlO(C.target, "mini-calendar-date");
-    if (B && !o00ol(B, "mini-calendar-disabled")) {
+    if (B && !mini.hasClass(B, "mini-calendar-disabled")) {
         var $ = B.id.split("$"),
             _ = parseInt($[$.length - 1]);
         if (_ == -1) return;
@@ -11022,7 +11022,7 @@ mini_Calendar_l001l = function(B) {
         $.focus()
     }
     var A = this.getDateEl(_);
-    if (A && o00ol(A, "mini-calendar-disabled")) return;
+    if (A && mini.hasClass(A, "mini-calendar-disabled")) return;
     $.setSelectedDate(_);
     if (B.keyCode == 37 || B.keyCode == 38 || B.keyCode == 39 || B.keyCode == 40) B.preventDefault()
 };
@@ -11156,9 +11156,9 @@ mini_PopupEdit_destroy = function($) {
 };
 mini_PopupEdit__initEvents = function() {
     mini.PopupEdit.superclass._initEvents.call(this);
-    l0o11(function() {
-        OooO(this.el, "mouseover", this.O1l1lo, this);
-        OooO(this.el, "mouseout", this.O11O11, this)
+    mini._BindEvents(function() {
+        OooO(this.el, "mouseover", this.__OnMouseOver, this);
+        OooO(this.el, "mouseout", this.__OnMouseOut, this)
     }, this)
 };
 mini_PopupEdit_Ol0O1 = function($) {
@@ -11181,10 +11181,10 @@ mini_PopupEdit_O11O11 = function($) {
 };
 mini_PopupEdit_olol = function($) {
     if (this.isReadOnly()) return;
-    mini.PopupEdit.superclass.olol.call(this, $);
+    mini.PopupEdit.superclass.__OnMouseDown.call(this, $);
     if (this.allowInput == false && oOlO($.target, "mini-buttonedit-border")) {
-        olO0(this.el, this.oll001);
-        O1Oo(document, "mouseup", this.lo010o, this)
+        mini.addClass(this.el, this.oll001);
+        mini.on(document, "mouseup", this.lo010o, this)
     }
 };
 mini_PopupEdit_O10l1 = function($) {
@@ -11232,7 +11232,7 @@ mini_PopupEdit__createPopup = function() {
     this.popup.setPopupEl(this.el);
     this.popup.on("BeforeClose", this.loOo, this);
     this.popup.on("close", this.__OnPopupClose, this);
-    O1Oo(this.popup.el, "keydown", this.O1Ol10, this)
+    mini.on(this.popup.el, "keydown", this.O1Ol10, this)
 };
 mini_PopupEdit___OnPopupClose = function($) {};
 mini_PopupEdit_loOo = function($) {
@@ -11255,13 +11255,13 @@ mini_PopupEdit_showPopup = function() {
     this.fire("showpopup")
 };
 mini_PopupEdit__unDocumentMousewheel = function() {
-    OoOo(document, "mousewheel", this.__OnDocumentMousewheel, this);
+    mini.un(document, "mousewheel", this.__OnDocumentMousewheel, this);
     this._mousewheelXY = null
 };
 mini_PopupEdit__onDocumentMousewheel = function() {
     this._unDocumentMousewheel();
     this._mousewheelXY = mini.getXY(this.el);
-    O1Oo(document, "mousewheel", this.__OnDocumentMousewheel, this)
+    mini.on(document, "mousewheel", this.__OnDocumentMousewheel, this)
 };
 mini_PopupEdit___OnDocumentMousewheel = function(A) {
     var $ = this;
@@ -11281,7 +11281,7 @@ mini_PopupEdit__syncShowPopup = function() {
         this.popup._contentEl.appendChild(this._popupInner.el);
         this._popupInner.setVisible(true)
     }
-    var B = O1loO1(this._borderEl),
+    var B = mini.getBox(this._borderEl),
         $ = this.popupWidth;
     if (this.popupWidth == "100%") $ = B.width;
     _.show();
@@ -11428,7 +11428,7 @@ mini_MenuButton_setMenu = function($) {
         items: $
     };
     if (typeof $ == "string") {
-        var _ = lO0O($);
+        var _ = mini.byId($);
         if (!_) return;
         mini.parse($);
         $ = mini.get($)
@@ -11473,8 +11473,8 @@ mini_OutlookBar__create = function() {
     this._borderEl = this.el.firstChild
 };
 mini_OutlookBar__initEvents = function() {
-    l0o11(function() {
-        O1Oo(this.el, "click", this.Ol1o1, this)
+    mini._BindEvents(function() {
+        mini.on(this.el, "click", this.__OnClick, this)
     }, this);
     var $ = "mini-outlookbar-hover";
     jQuery(this.el).on("mouseenter", ".mini-outlookbar-groupHeader", function(_) {
@@ -11629,20 +11629,20 @@ mini_OutlookBar_doUpdate = function() {
         G.innerHTML = I;
         if (D) {
             var F = G.childNodes[1];
-            l1O1l(F, E)
+            mini.setStyle(F, E)
         }
-        if (A.enabled) l0OO(B, "mini-disabled");
-        else olO0(B, "mini-disabled");
-        olO0(B, A.cls);
-        l1O1l(B, A.style);
-        olO0(C, A.bodyCls);
-        l1O1l(C, A.bodyStyle);
-        olO0(G, A.headerCls);
-        l1O1l(G, A.headerStyle);
-        l0OO(B, "mini-outlookbar-firstGroup");
-        l0OO(B, "mini-outlookbar-lastGroup");
-        if (_ == 0) olO0(B, "mini-outlookbar-firstGroup");
-        if (_ == H - 1) olO0(B, "mini-outlookbar-lastGroup")
+        if (A.enabled) mini.removeClass(B, "mini-disabled");
+        else mini.addClass(B, "mini-disabled");
+        mini.addClass(B, A.cls);
+        mini.setStyle(B, A.style);
+        mini.addClass(C, A.bodyCls);
+        mini.setStyle(C, A.bodyStyle);
+        mini.addClass(G, A.headerCls);
+        mini.setStyle(G, A.headerStyle);
+        mini.removeClass(B, "mini-outlookbar-firstGroup");
+        mini.removeClass(B, "mini-outlookbar-lastGroup");
+        if (_ == 0) mini.addClass(B, "mini-outlookbar-firstGroup");
+        if (_ == H - 1) mini.addClass(B, "mini-outlookbar-lastGroup")
     }
     this.doLayout()
 };
@@ -11655,18 +11655,18 @@ mini_OutlookBar_doLayout = function() {
             B = _._el,
             D = B.lastChild;
         if (_.expanded) {
-            olO0(B, "mini-outlookbar-expand");
-            l0OO(B, "mini-outlookbar-collapse")
+            mini.addClass(B, "mini-outlookbar-expand");
+            mini.removeClass(B, "mini-outlookbar-collapse")
         } else {
-            l0OO(B, "mini-outlookbar-expand");
-            olO0(B, "mini-outlookbar-collapse")
+            mini.removeClass(B, "mini-outlookbar-expand");
+            mini.addClass(B, "mini-outlookbar-collapse")
         }
         D.style.height = "auto";
         D.style.display = _.expanded ? "block" : "none";
         B.style.display = _.visible ? "" : "none";
-        var A = oOo01O(B, true),
-            E = lol0(D),
-            G = l00OO(D);
+        var A = mini.getWidth(B, true),
+            E = mini.getPaddings(D),
+            G = mini.getBorders(D);
         if (jQuery.boxModel) A = A - E.left - E.right - G.left - G.right;
         D.style.width = A + "px"
     }
@@ -11683,7 +11683,7 @@ mini_OutlookBar_l1OO1 = function() {
     else {
         var $ = this.getHeight(true);
         if (!jQuery.boxModel) {
-            var _ = l00OO(this._borderEl);
+            var _ = mini.getBorders(this._borderEl);
             $ = $ + _.top + _.bottom
         }
         if ($ < 0) $ = 0;
@@ -11693,7 +11693,7 @@ mini_OutlookBar_l1OO1 = function() {
 mini_OutlookBar_ooo01 = function() {
 
     var C = jQuery(this.el).height(),
-        K = l00OO(this._borderEl);
+        K = mini.getBorders(this._borderEl);
     C = C - K.top - K.bottom;
     var A = this.getActiveGroup(),
         E = 0;
@@ -11705,7 +11705,7 @@ mini_OutlookBar_ooo01 = function() {
         G.lastChild.style.display = "none";
         var J = jQuery(G).outerHeight();
         G.lastChild.style.display = $;
-        var L = l0l1(G);
+        var L = mini.getMargins(G);
         J = J + L.top + L.bottom;
         E += J
     }
@@ -11714,11 +11714,11 @@ mini_OutlookBar_ooo01 = function() {
     if (!H) return 0;
     C = C - jQuery(H.firstChild).outerHeight();
     if (jQuery.boxModel) {
-        var B = lol0(H.lastChild),
-            I = l00OO(H.lastChild);
+        var B = mini.getPaddings(H.lastChild),
+            I = mini.getBorders(H.lastChild);
         C = C - B.top - B.bottom - I.top - I.bottom
     }
-    B = lol0(H), I = l00OO(H), L = l0l1(H);
+    B = lol0(H), I = mini.getBorders(H), L = l0l1(H);
     C = C - L.top - L.bottom;
     C = C - B.top - B.bottom - I.top - I.bottom;
     if (C < 0) C = 0;
@@ -11827,13 +11827,13 @@ mini_OutlookBar_collapseGroup = function(_) {
         var A = {
             height: "1px"
         };
-        olO0(C, "mini-outlookbar-overflow");
-        l0OO(this.getGroupEl(_), "mini-outlookbar-expand");
+        mini.addClass(C, "mini-outlookbar-overflow");
+        mini.removeClass(this.getGroupEl(_), "mini-outlookbar-expand");
         var B = this,
             H = jQuery(C);
         H.animate(A, 180, function() {
             B.O1lll0 = false;
-            l0OO(C, "mini-outlookbar-overflow");
+            mini.removeClass(C, "mini-outlookbar-overflow");
             B.doLayout()
         })
     } else this.doLayout();
@@ -11865,20 +11865,20 @@ mini_OutlookBar_expandGroup = function($) {
             var A = this.ooo01();
             G.style.height = (A) + "px"
         } else G.style.height = "auto";
-        var _ = Olol(G);
+        var _ = mini.getHeight(G);
         G.style.height = "1px";
         var E = {
                 height: _ + "px"
             },
             I = G.style.overflow;
         G.style.overflow = "hidden";
-        olO0(G, "mini-outlookbar-overflow");
-        olO0(this.getGroupEl($), "mini-outlookbar-expand");
+        mini.addClass(G, "mini-outlookbar-overflow");
+        mini.addClass(this.getGroupEl($), "mini-outlookbar-expand");
         var F = this,
             K = jQuery(G);
         K.animate(E, 180, function() {
             G.style.overflow = I;
-            l0OO(G, "mini-outlookbar-overflow");
+            mini.removeClass(G, "mini-outlookbar-overflow");
             F.O1lll0 = false;
             F.doLayout()
         })
@@ -11994,7 +11994,7 @@ mini_ButtonEdit__createButtonHtml = function(B, _, A) {
     B = B || "";
     _ = _ || "";
     A = A || "";
-    var $ = "onmouseover=\"olO0(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
     return "<span title=\"" + A + "\" name=\"" + B + "\" class=\"mini-buttonedit-button mini-buttonedit-" + B + "\" " + $ + "><span class=\"mini-buttonedit-icon " + _ + "\"></span></span>"
 };
 mini_ButtonEdit_loOOoOsHTML = function() {
@@ -12027,8 +12027,8 @@ mini_ButtonEdit_destroy = function($) {
     mini.ButtonEdit.superclass.destroy.call(this, $)
 };
 mini_ButtonEdit__initEvents = function() {
-    l0o11(function() {
-        OooO(this.el, "mousedown", this.olol, this);
+    mini._BindEvents(function() {
+        OooO(this.el, "mousedown", this.__OnMouseDown, this);
         OooO(this._textEl, "focus", this.ol00, this);
         OooO(this._textEl, "change", this.O00l10, this);
         var $ = this.text;
@@ -12040,11 +12040,11 @@ mini_ButtonEdit__initEvents = function() {
 mini_ButtonEdit_o0oO = function() {
     if (this.l0l1O1) return;
     this.l0l1O1 = true;
-    O1Oo(this.el, "click", this.Ol1o1, this);
-    O1Oo(this._textEl, "blur", this.Ol0O1, this);
-    O1Oo(this._textEl, "keydown", this.O10l1, this);
-    O1Oo(this._textEl, "keyup", this.OoOlO1, this);
-    O1Oo(this._textEl, "keypress", this.o1oO, this)
+    mini.on(this.el, "click", this.__OnClick, this);
+    mini.on(this._textEl, "blur", this.Ol0O1, this);
+    mini.on(this._textEl, "keydown", this.O10l1, this);
+    mini.on(this._textEl, "keyup", this.OoOlO1, this);
+    mini.on(this._textEl, "keypress", this.o1oO, this)
 };
 mini_ButtonEdit__doInputLayout = function(B) {
     this._buttonEl.style.display = this.showButton ? "inline-block" : "none";
@@ -12054,7 +12054,7 @@ mini_ButtonEdit__doInputLayout = function(B) {
         this._closeEl.title = this.closeToolTip
     }
     if (mini.isNull(mini.ButtonEdit._paddingOffset)) {
-        var A = lol0(this._borderEl);
+        var A = mini.getPaddings(this._borderEl);
         mini.ButtonEdit._paddingOffset = A.left
     }
     var _ = this._buttonsEl.offsetWidth,
@@ -12260,19 +12260,19 @@ mini_ButtonEdit_olol = function(C) {
             var _ = oOlO(C.target, "mini-buttonedit-up"),
                 B = oOlO(C.target, "mini-buttonedit-down");
             if (_) {
-                olO0(_, this.ll111);
+                mini.addClass(_, this.ll111);
                 this.O1Oo1(C, "up")
             } else if (B) {
-                olO0(B, this.ll111);
+                mini.addClass(B, this.ll111);
                 this.O1Oo1(C, "down")
             } else {
-                olO0(this._buttonEl, this.ll111);
+                mini.addClass(this._buttonEl, this.ll111);
                 this.O1Oo1(C)
             }
         }
-        O1Oo(document, "mouseup", this.lo010o, this);
+        mini.on(document, "mouseup", this.lo010o, this);
         var A = oOlO(C.target, "mini-buttonedit-button");
-        if (A) olO0(A, this.ll111)
+        if (A) mini.addClass(A, this.ll111)
     }
 };
 mini_ButtonEdit_lo010o = function(_) {
@@ -12280,12 +12280,12 @@ mini_ButtonEdit_lo010o = function(_) {
     var $ = this;
     setTimeout(function() {
         var A = $._buttonEl.getElementsByTagName("*");
-        for (var _ = 0, B = A.length; _ < B; _++) l0OO(A[_], $.ll111);
-        l0OO($._buttonEl, $.ll111);
-        l0OO($.el, $.oll001);
+        for (var _ = 0, B = A.length; _ < B; _++) mini.removeClass(A[_], $.ll111);
+        mini.removeClass($._buttonEl, $.ll111);
+        mini.removeClass($.el, $.oll001);
         jQuery(".mini-buttonedit-button", $._buttonsEl).removeClass($.ll111)
     }, 80);
-    OoOo(document, "mouseup", this.lo010o, this)
+    mini.un(document, "mouseup", this.lo010o, this)
 };
 mini_ButtonEdit_ol00 = function($) {
     this.doUpdate();
@@ -12420,7 +12420,7 @@ mini_ButtonEdit_getShowButton = function() {
 };
 mini_ButtonEdit_setInputStyle = function($) {
     this.inputStyle = $;
-    l1O1l(this._textEl, $)
+    mini.setStyle(this._textEl, $)
 };
 mini_ButtonEdit_getAttrs = function(el) {
     var attrs = mini.ButtonEdit.superclass.getAttrs.call(this, el),
@@ -12437,13 +12437,13 @@ mini_ButtonEdit_getAttrs = function(el) {
 };
 mini_FileUpload__create = function() {
     mini.FileUpload.superclass._create.call(this);
-    olO0(this.el, "mini-htmlfile");
+    mini.addClass(this.el, "mini-htmlfile");
     this._progressbarEl = mini.append(this._borderEl, "<div id=\"" + this._id + "$progressbar\"  class=\"mini-fileupload-progressbar\"><div id=\"" + this._id + "$complete\" class=\"mini-fileupload-complete\"></div></div>");
     this._completeEl = this._progressbarEl.firstChild;
     this._uploadId = this._id + "$button_placeholder";
     this.llOl1 = mini.append(this.el, "<span id=\"" + this._uploadId + "\"></span>");
     this.uploadEl = this.llOl1;
-    O1Oo(this._borderEl, "mousemove", this.ol1o0, this)
+    mini.on(this._borderEl, "mousemove", this.ol1o0, this)
 };
 
 mini_DatePicker_getShowOkButton = function() {
@@ -12451,7 +12451,7 @@ mini_DatePicker_getShowOkButton = function() {
 };
 mini_FileUpload_loOOoOHtml = function() {
 
-    var $ = "onmouseover=\"olO0(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
     return "<span class=\"mini-buttonedit-button\" " + $ + ">" + this.buttonText + "</span>"
 };
 mini_FileUpload_destroy = function($) {
@@ -12586,9 +12586,9 @@ mini_FileUpload_clear = function() {
 };
 mini_FileUpload___on_upload_progress = function(A, C, $) {
     if (this.showUploadProgress) {
-        var B = oOo01O(this._progressbarEl),
+        var B = mini.getWidth(this._progressbarEl),
             _ = B * C / $;
-        o0l0(this._completeEl, _)
+        mini.setWidth(this._completeEl, _)
     }
     this._progressbarEl.style.display = this.showUploadProgress ? "block" : "none";
     var D = {
@@ -13335,7 +13335,7 @@ mini_DataBinding_bindField = function(A, D, C, B, $) {
 };
 mini_DataBinding_bindForm = function(B, F, D, A) {
 
-    B = lO0O(B);
+    B = mini.byId(B);
     F = mini.get(F);
     if (!B || !F) return;
     var B = new mini.Form(B),
@@ -13426,14 +13426,14 @@ mini_ListControl__create = function() {
 };
 mini_ListControl__initEvents = function() {
 
-    l0o11(function() {
-        OooO(this.el, "click", this.Ol1o1, this);
-        OooO(this.el, "dblclick", this.o1oo11, this);
-        OooO(this.el, "mousedown", this.olol, this);
+    mini._BindEvents(function() {
+        OooO(this.el, "click", this.__OnClick, this);
+        OooO(this.el, "dblclick", this.__OnDblClick, this);
+        OooO(this.el, "mousedown", this.__OnMouseDown, this);
         OooO(this.el, "mouseup", this.oOlo0, this);
         OooO(this.el, "mousemove", this.ol1o0, this);
-        OooO(this.el, "mouseover", this.O1l1lo, this);
-        OooO(this.el, "mouseout", this.O11O11, this);
+        OooO(this.el, "mouseover", this.__OnMouseOver, this);
+        OooO(this.el, "mouseout", this.__OnMouseOut, this);
         OooO(this.el, "keydown", this.l001l, this);
         OooO(this.el, "keyup", this.l0o0lO, this);
         OooO(this.el, "contextmenu", this.O00O, this)
@@ -13455,11 +13455,11 @@ mini_ListControl_o11o1o = function(_) {
 };
 mini_ListControl_addItemCls = function(_, A) {
     var $ = this.getItemEl(_);
-    if ($) olO0($, A)
+    if ($) mini.addClass($, A)
 };
 mini_ListControl_removeItemCls = function(_, A) {
     var $ = this.getItemEl(_);
-    if ($) l0OO($, A)
+    if ($) mini.removeClass($, A)
 };
 mini_ListControl_getItemEl = function(_) {
     _ = this.getItem(_);
@@ -13473,17 +13473,17 @@ mini_ListControl_l1O000 = function(_, $) {
     var A = this.getItemEl(_);
     if ($ && A) this.scrollIntoView(_);
     if (this.OO0OlItem == _) {
-        if (A) olO0(A, this.o1Ol);
+        if (A) mini.addClass(A, this.o1Ol);
         return
     }
     this.o11l();
     this.OO0OlItem = _;
-    if (A) olO0(A, this.o1Ol)
+    if (A) mini.addClass(A, this.o1Ol)
 };
 mini_ListControl_o11l = function() {
     if (!this.OO0OlItem) return;
     var $ = this.getItemEl(this.OO0OlItem);
-    if ($) l0OO($, this.o1Ol);
+    if ($) mini.removeClass($, this.o1Ol);
     this.OO0OlItem = null
 };
 mini_ListControl_getFocusedItem = function() {
@@ -13862,7 +13862,7 @@ mini_ListControl_O0oo0O = function() {
         else this.removeItemCls(_, this._llOO1O);
         var $ = this.data.indexOf(_),
             E = this.lo1ol($),
-            B = lO0O(E, this.el);
+            B = mini.byId(E, this.el);
         if (B) B.checked = !!F
     }
 };
@@ -14387,15 +14387,15 @@ mini_OutlookTree__Ol0O1l = function($) {
     this.fire("drawnode", $)
 };
 mini_TimeSpinner_loOOoOHtml = function() {
-    var $ = "onmouseover=\"olO0(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
     return "<span class=\"mini-buttonedit-button\" " + $ + "><span class=\"mini-buttonedit-up\"><span></span></span><span class=\"mini-buttonedit-down\"><span></span></span></span>"
 };
 mini_TimeSpinner__initEvents = function() {
     mini.TimeSpinner.superclass._initEvents.call(this);
-    l0o11(function() {
+    mini._BindEvents(function() {
         this.on("buttonmousedown", this.ll0Ol0, this);
-        O1Oo(this.el, "mousewheel", this.l1ll1, this);
-        O1Oo(this._textEl, "keydown", this.l001l, this)
+        mini.on(this.el, "mousewheel", this.l1ll1, this);
+        mini.on(this._textEl, "keydown", this.l001l, this)
     }, this)
 };
 mini_TimeSpinner_setFormat = function($) {
@@ -14468,7 +14468,7 @@ mini_TimeSpinner_O0l11 = function(D, B, C) {
         if (E - $ > 500) A.oooO();
         $ = E
     }, B);
-    O1Oo(document, "mouseup", this.O1ol01, this)
+    mini.on(document, "mouseup", this.O1ol01, this)
 };
 mini_TimeSpinner_oooO = function() {
     clearInterval(this.ol0lo1);
@@ -14482,7 +14482,7 @@ mini_TimeSpinner_ll0Ol0 = function($) {
 };
 mini_TimeSpinner_O1ol01 = function($) {
     this.oooO();
-    OoOo(document, "mouseup", this.O1ol01, this);
+    mini.un(document, "mouseup", this.O1ol01, this);
     if (this._DownValue != this.getFormValue()) this.Ol11o()
 };
 mini_TimeSpinner_O00l10 = function(_) {
@@ -14813,17 +14813,17 @@ mini_TextBoxList_destroy = function($) {
         this.o0ll0o.onfocus = null;
         this.o0ll0o.onblur = null
     }
-    OoOo(document, "mousedown", this.oll01, this);
+    mini.un(document, "mousedown", this.oll01, this);
     mini.TextBoxList.superclass.destroy.call(this, $)
 };
 mini_TextBoxList__initEvents = function() {
     mini.TextBoxList.superclass._initEvents.call(this);
-    O1Oo(this.el, "mousemove", this.ol1o0, this);
-    O1Oo(this.el, "mouseout", this.O11O11, this);
-    O1Oo(this.el, "mousedown", this.olol, this);
-    O1Oo(this.el, "click", this.Ol1o1, this);
-    O1Oo(this.el, "keydown", this.l001l, this);
-    O1Oo(document, "mousedown", this.oll01, this)
+    mini.on(this.el, "mousemove", this.ol1o0, this);
+    mini.on(this.el, "mouseout", this.__OnMouseOut, this);
+    mini.on(this.el, "mousedown", this.__OnMouseDown, this);
+    mini.on(this.el, "click", this.__OnClick, this);
+    mini.on(this.el, "keydown", this.l001l, this);
+    mini.on(document, "mousedown", this.oll01, this)
 };
 mini_TextBoxList_oll01 = function(_) {
     if (this.isReadOnly()) return;
@@ -14867,7 +14867,7 @@ mini_TextBoxList_doReadOnly = function() {
 };
 mini_TextBoxList_doUpdate = function() {
     if (this.o1lo0l) clearInterval(this.o1lo0l);
-    if (this.o0ll0o) OoOo(this.o0ll0o, "keydown", this.O10l1, this);
+    if (this.o0ll0o) mini.un(this.o0ll0o, "keydown", this.O10l1, this);
     var G = [],
         F = this.uid;
     for (var A = 0, E = this.selecteds.length; A < E; A++) {
@@ -14886,7 +14886,7 @@ mini_TextBoxList_doUpdate = function() {
     if (this.editIndex < 0) this.editIndex = 0;
     this.inputLi = this.ulEl.lastChild;
     this.o0ll0o = this.inputLi.firstChild;
-    O1Oo(this.o0ll0o, "keydown", this.O10l1, this);
+    mini.on(this.o0ll0o, "keydown", this.O10l1, this);
     var D = this;
     this.o0ll0o.onkeyup = function() {
         D.O1oO()
@@ -14943,8 +14943,8 @@ mini_TextBoxList_hoverItem = function($, A) {
     if (this.isReadOnly() || this.enabled == false) return;
     this.blurItem();
     var _ = this.getItemEl($);
-    olO0(_, this.OOOll);
-    if (A && o00ol(A.target, "mini-textboxlist-close")) olO0(A.target, this.l10OOl)
+    mini.addClass(_, this.OOOll);
+    if (A && o00ol(A.target, "mini-textboxlist-close")) mini.addClass(A.target, this.l10OOl)
 };
 mini_TextBoxList_blurItem = function() {
     var _ = this.selecteds.length;
@@ -14952,8 +14952,8 @@ mini_TextBoxList_blurItem = function() {
         var $ = this.selecteds[A],
             B = this.getItemEl($);
         if (B) {
-            l0OO(B, this.OOOll);
-            l0OO(B.lastChild, this.l10OOl)
+            mini.removeClass(B, this.OOOll);
+            mini.removeClass(B.lastChild, this.l10OOl)
         }
     }
 };
@@ -14986,12 +14986,12 @@ mini_TextBoxList_select = function(_) {
     _ = this.getItem(_);
     if (this.O1l0l1) {
         var $ = this.getItemEl(this.O1l0l1);
-        l0OO($, this.oOoo)
+        mini.removeClass($, this.oOoo)
     }
     this.O1l0l1 = _;
     if (this.O1l0l1) {
         $ = this.getItemEl(this.O1l0l1);
-        olO0($, this.oOoo)
+        mini.addClass($, this.oOoo)
     }
     var A = this;
     if (this.O1l0l1) {
@@ -15183,7 +15183,7 @@ mini_TextBoxList_O1oO = function() {
     var _ = this.getInputText(),
         B = mini.measureText(this.o0ll0o, _),
         $ = B.width > 20 ? B.width + 4 : 20,
-        A = oOo01O(this.el, true);
+        A = mini.getWidth(this.el, true);
     if ($ > A - 15) $ = A - 15;
     this.o0ll0o.style.width = $ + "px"
 };
@@ -15414,7 +15414,7 @@ mini_TextBoxList_Ol1o1 = function(_) {
     }
     this.focusEl.focus();
     this.select($);
-    if (_ && o00ol(_.target, "mini-textboxlist-close")) this.removeItem($)
+    if (_ && mini.hasClass(_.target, "mini-textboxlist-close")) this.removeItem($)
 };
 mini_TextBoxList_l001l = function(B) {
     if (this.isReadOnly() || this.allowInput == false) return false;
@@ -16175,11 +16175,11 @@ mini_ValidatorBase_setLabelField = function($) {
         if (!this.lo1ooO) {
             this.lo1ooO = mini.append(this.el, "<label class=\"mini-labelfield-label\"></label>");
             this.lo1ooO.innerHTML = this.label;
-            l1O1l(this.lo1ooO, this.labelStyle)
+            mini.setStyle(this.lo1ooO, this.labelStyle)
         }
         this.lo1ooO.style.display = $ ? "block" : "none";
-        if ($) olO0(this.el, this._labelFieldCls);
-        else l0OO(this.el, this._labelFieldCls);
+        if ($) mini.addClass(this.el, this._labelFieldCls);
+        else mini.removeClass(this.el, this._labelFieldCls);
         this._labelLayout()
     }
 };
@@ -16199,7 +16199,7 @@ mini_ValidatorBase_getLabel = function() {
 mini_ValidatorBase_setLabelStyle = function($) {
     if (this.labelStyle != $) {
         this.labelStyle = $;
-        if (this.lo1ooO) l1O1l(this.lo1ooO, $);
+        if (this.lo1ooO) mini.setStyle(this.lo1ooO, $);
         this._labelLayout()
     }
 };
@@ -16239,7 +16239,7 @@ mini = {
      */
     byClass: function (cls, el) {
         if (typeof el == "string") {
-            el = lO0O(el);
+            el = mini.byId(el);
         }
         return jQuery("." + cls, el)[0];
     },
@@ -16375,7 +16375,7 @@ mini = {
                 parentControl = parentNode;
         if (parentNode && isControl)
             parentNode = parentNode.el;
-        parentNode = lO0O(parentNode);
+        parentNode = mini.byId(parentNode);
         parentNode = parentNode || document.body;
         var controls = mini.findControls(function (control) {
             if (!control.el)
@@ -16697,7 +16697,7 @@ mini.namespace = function(A) {
     }
 };
 l1oo = [];
-l0o11 = function(_, $) {
+mini._BindEvents = function(_, $) {
     l1oo.push([_, $]);
     if (!mini._EventTimer) mini._EventTimer = setTimeout(function() {
         lolloo()
@@ -16949,7 +16949,7 @@ __mini_setControls = function($, B, C) {
     for (var _ = 0, D = $.length; _ < D; _++) {
         var A = $[_];
         if (typeof A == "string") {
-            if (A.indexOf("#") == 0) A = lO0O(A)
+            if (A.indexOf("#") == 0) A = mini.byId(A)
         } else if (mini.isElement(A));
         else {
             A = mini.getAndCreate(A);
@@ -17092,13 +17092,13 @@ mini_ListControl.o00lol = mini_ListControl_o00lol;
 mini_ListControl.O00O = mini_ListControl_O00O;
 mini_ListControl.l0o0lO = mini_ListControl_l0o0lO;
 mini_ListControl.l001l = mini_ListControl_l001l;
-mini_ListControl.O11O11 = mini_ListControl_O11O11;
-mini_ListControl.O1l1lo = mini_ListControl_O1l1lo;
+mini_ListControl.__OnMouseOut = mini_ListControl_O11O11;
+mini_ListControl.__OnMouseOver = mini_ListControl_O1l1lo;
 mini_ListControl.ol1o0 = mini_ListControl_ol1o0;
 mini_ListControl.oOlo0 = mini_ListControl_oOlo0;
-mini_ListControl.olol = mini_ListControl_olol;
-mini_ListControl.o1oo11 = mini_ListControl_o1oo11;
-mini_ListControl.Ol1o1 = mini_ListControl_Ol1o1;
+mini_ListControl.__OnMouseDown = mini_ListControl_olol;
+mini_ListControl.__OnDblClick = mini_ListControl_o1oo11;
+mini_ListControl.__OnClick = mini_ListControl_Ol1o1;
 mini_ListControl.O0OO01 = mini_ListControl_O0OO01;
 mini_ListControl.lo1ol = mini_ListControl_lo1ol;
 mini_ListControl._OnSelectionChanged = mini_ListControl__OnSelectionChanged;
@@ -17197,7 +17197,7 @@ mini.layout = function($, _) {
     if ($ == document.body) mini.layoutIFrames()
 };
 mini.applyTo = function(_) {
-    _ = lO0O(_);
+    _ = mini.byId(_);
     if (!_) return this;
     if (mini.get(_)) throw new Error("not applyTo a mini control");
     var $ = this.getAttrs(_);
@@ -17224,7 +17224,7 @@ mini.l111Ol = function(G) {
                 var A = H[E],
                     I = mini.getClassByUICls(A);
                 if (I) {
-                    l0OO(G, A);
+                    mini.removeClass(G, A);
                     var D = new I();
                     mini.applyTo.call(D, G);
                     G = D.el;
@@ -17233,7 +17233,7 @@ mini.l111Ol = function(G) {
             }
         }
     }
-    if (F == "select" || o00ol(G, "mini-menu") || o00ol(G, "mini-datagrid") || o00ol(G, "mini-treegrid") || o00ol(G, "mini-tree") || o00ol(G, "mini-button") || o00ol(G, "mini-textbox") || o00ol(G, "mini-buttonedit")) return;
+    if (F == "select" || mini.hasClass(G, "mini-menu") || mini.hasClass(G, "mini-datagrid") || mini.hasClass(G, "mini-treegrid") || mini.hasClass(G, "mini-tree") || mini.hasClass(G, "mini-button") || mini.hasClass(G, "mini-textbox") || mini.hasClass(G, "mini-buttonedit")) return;
     var J = mini.getChildNodes(G, true);
     for (E = 0, C = J.length; E < C; E++) {
         var _ = J[E];
@@ -17284,7 +17284,7 @@ mini.parse = function(D, C) {
     }
     if (typeof D == "string") {
         var I = D;
-        D = lO0O(I);
+        D = mini.byId(I);
         if (!D) D = document.body
     }
     if (D && !mini.isElement(D)) D = D.el;
@@ -17483,23 +17483,23 @@ mini.CheckColumn = function(_) {
                 A = document.getElementById(D);
             if (A) {
                 var B = "mini-grid-checkbox-checked",
-                    C = !o00ol(A, B);
+                    C = !mini.hasClass(A, B);
                 this._checkedAll = C;
                 if (_.getMultiSelect()) {
                     if (C) {
                         var $ = _.getDataView();
                         _.selects($);
-                        olO0(A, B)
+                        mini.addClass(A, B)
                     } else {
                         $ = _.getDataView();
                         _.deselects($);
-                        l0OO(A, B)
+                        mini.removeClass(A, B)
                     }
                 } else {
                     _.deselectAll();
                     if (C) {
                         _.select(0);
-                        olO0(A, B)
+                        mini.addClass(A, B)
                     }
                 }
                 _.fire("checkall")
@@ -17643,7 +17643,7 @@ l010OoColumn = function(_) {
                 }
             }
             _.on("cellclick", B, this);
-            O1Oo(this.grid.el, "keydown", function(C) {
+            mini.on(this.grid.el, "keydown", function(C) {
                 if (C.keyCode == 32 && _.allowCellEdit) {
                     var $ = _.getCurrentCell();
                     if (!$) return;
@@ -17749,7 +17749,7 @@ mini.RadioButtonColumn = function($) {
                 }
             }
             $.on("cellclick", A, this);
-            O1Oo(this.grid.el, "keydown", function(C) {
+            mini.on(this.grid.el, "keydown", function(C) {
                 if (C.keyCode == 32 && $.allowCellEdit) {
                     var A = $.getCurrentCell();
                     if (!A) return;
@@ -17832,11 +17832,11 @@ lo0lo1Column = function($) {
 mini.o11O1["treeselectcolumn"] = lo0lo1Column;
 l1l0oo = function($) {
     this.owner = $;
-    O1Oo(this.owner.el, "mousedown", this.olol, this)
+    mini.on(this.owner.el, "mousedown", this.__OnMouseDown, this)
 };
 l1l0oo.prototype = {
-    olol: function(A) {
-        var $ = o00ol(A.target, "mini-resizer-trigger");
+    __OnMouseDown: function(A) {
+        var $ = mini.hasClass(A.target, "mini-resizer-trigger");
         if ($ && this.owner.allowResize) {
             var _ = this.l11O();
             _.start(A)
@@ -17857,8 +17857,8 @@ l1l0oo.prototype = {
         this.proxy.style.cursor = "se-resize";
         var _ = this.owner.el;
         _.offsetWidth;
-        this.elBox = O1loO1(_);
-        looO(this.proxy, this.elBox)
+        this.elBox = mini.getBox(_);
+        mini.setBox(this.proxy, this.elBox)
     },
     l1olo: function(B) {
         var $ = this.owner,
@@ -17874,7 +17874,7 @@ l1l0oo.prototype = {
     },
     lO1011: function($, A) {
         if (!this.proxy) return;
-        var _ = O1loO1(this.proxy);
+        var _ = mini.getBox(this.proxy);
         jQuery(this.mask).remove();
         jQuery(this.proxy).remove();
         this.proxy = null;
@@ -18441,10 +18441,10 @@ mini.Drag.prototype = {
         if (_) this.event = _;
         this.now = this.init = [this.event.pageX, this.event.pageY];
         var $ = document;
-        O1Oo($, "mousemove", this.move, this);
-        O1Oo($, "mouseup", this.stop, this);
-        O1Oo($, "contextmenu", this.contextmenu, this);
-        if (this.context) O1Oo(this.context, "contextmenu", this.contextmenu, this);
+        mini.on($, "mousemove", this.move, this);
+        mini.on($, "mouseup", this.stop, this);
+        mini.on($, "contextmenu", this.contextmenu, this);
+        if (this.context) mini.on(this.context, "contextmenu", this.contextmenu, this);
         this.trigger = _.target;
         mini.selectable(this.trigger, false);
         mini.selectable($.body, false);
@@ -18455,8 +18455,8 @@ mini.Drag.prototype = {
         this.startTime = new Date()
     },
     contextmenu: function($) {
-        if (this.context) OoOo(this.context, "contextmenu", this.contextmenu, this);
-        OoOo(document, "contextmenu", this.contextmenu, this);
+        if (this.context) mini.un(this.context, "contextmenu", this.contextmenu, this);
+        mini.un(document, "contextmenu", this.contextmenu, this);
         $.preventDefault();
         $.stopPropagation()
     },
@@ -18491,12 +18491,12 @@ mini.Drag.prototype = {
         }
         var _ = mini.MouseButton.Right != B.button;
         if (_ == false) B.preventDefault();
-        OoOo(A, "mousemove", this.move, this);
-        OoOo(A, "mouseup", this.stop, this);
+        mini.un(A, "mousemove", this.move, this);
+        mini.un(A, "mouseup", this.stop, this);
         var $ = this;
         setTimeout(function() {
-            OoOo(document, "contextmenu", $.contextmenu, $);
-            if ($.context) OoOo($.context, "contextmenu", $.contextmenu, $)
+            mini.un(document, "contextmenu", $.contextmenu, $);
+            if ($.context) mini.un($.context, "contextmenu", $.contextmenu, $)
         }, 1);
         if (this.started) this.onStop(this, _)
     }
@@ -19026,38 +19026,38 @@ mini.parseTime = function(F, G) {
     return $
 };
 mini.dateInfo = {
-    monthsLong: ["\u4e00\u6708", "\u4e8c\u6708", "\u4e09\u6708", "\u56db\u6708", "\u4e94\u6708", "\u516d\u6708", "\u4e03\u6708", "\u516b\u6708", "\u4e5d\u6708", "\u5341\u6708", "\u5341\u4e00\u6708", "\u5341\u4e8c\u6708"],
-    monthsShort: ["1\u6708", "2\u6708", "3\u6708", "4\u6708", "5\u6708", "6\u6708", "7\u6708", "8\u6708", "9\u6708", "10\u6708", "11\u6708", "12\u6708"],
-    daysLong: ["\u661f\u671f\u65e5", "\u661f\u671f\u4e00", "\u661f\u671f\u4e8c", "\u661f\u671f\u4e09", "\u661f\u671f\u56db", "\u661f\u671f\u4e94", "\u661f\u671f\u516d"],
-    daysShort: ["\u65e5", "\u4e00", "\u4e8c", "\u4e09", "\u56db", "\u4e94", "\u516d"],
-    quarterLong: ["\u4e00\u5b63\u5ea6", "\u4e8c\u5b63\u5ea6", "\u4e09\u5b63\u5ea6", "\u56db\u5b63\u5ea6"],
-    quarterShort: ["Q1", "Q2", "Q2", "Q4"],
-    halfYearLong: ["\u4e0a\u534a\u5e74", "\u4e0b\u534a\u5e74"],
+    monthsLong: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+    monthsShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+    daysLong: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+    daysShort: ["日", "一", "二", "三", "四", "五", "六"],
+    quarterLong: ['一季度', '二季度', '三季度', '四季度'],
+    quarterShort: ['Q1', 'Q2', 'Q2', 'Q4'],
+    halfYearLong: ['上半年', '下半年'],
     patterns: {
         "d": "yyyy-M-d",
-        "D": "yyyy\u5e74M\u6708d\u65e5",
-        "f": "yyyy\u5e74M\u6708d\u65e5 H:mm",
-        "F": "yyyy\u5e74M\u6708d\u65e5 H:mm:ss",
+        "D": "yyyy年M月d日",
+        "f": "yyyy年M月d日 H:mm",
+        "F": "yyyy年M月d日 H:mm:ss",
         "g": "yyyy-M-d H:mm",
         "G": "yyyy-M-d H:mm:ss",
-        "m": "MMMd\u65e5",
+        "m": "MMMd日",
         "o": "yyyy-MM-ddTHH:mm:ss.fff",
         "s": "yyyy-MM-ddTHH:mm:ss",
         "t": "H:mm",
         "T": "H:mm:ss",
-        "U": "yyyy\u5e74M\u6708d\u65e5 HH:mm:ss",
-        "y": "yyyy\u5e74MM\u6708"
+        "U": "yyyy年M月d日 HH:mm:ss",
+        "y": "yyyy年MM月"
     },
     tt: {
-        "AM": "\u4e0a\u5348",
-        "PM": "\u4e0b\u5348"
+        "AM": "上午",
+        "PM": "下午"
     },
     ten: {
-        "Early": "\u4e0a\u65ec",
-        "Mid": "\u4e2d\u65ec",
-        "Late": "\u4e0b\u65ec"
+        "Early": "上旬",
+        "Mid": "中旬",
+        "Late": "下旬"
     },
-    today: "\u4eca\u5929",
+    today: '今天',
     clockType: 24
 };
 (function(Q) {
@@ -19435,11 +19435,11 @@ if (isIE && !isIE9 && !isIE10) mini.MouseButton = {
     Right: 2
 };
 mini.append = function(_, A) {
-    _ = lO0O(_);
+    _ = mini.byId(_);
     if (!A || !_) return;
     if (typeof A == "string") {
         if (A.charAt(0) == "#") {
-            A = lO0O(A);
+            A = mini.byId(A);
             if (!A) return;
             _.appendChild(A);
             return A
@@ -19461,7 +19461,7 @@ mini.append = function(_, A) {
 };
 mini.prepend = function(_, A) {
     if (typeof A == "string")
-        if (A.charAt(0) == "#") A = lO0O(A);
+        if (A.charAt(0) == "#") A = mini.byId(A);
         else {
             var $ = document.createElement("div");
             $.innerHTML = A;
@@ -19471,7 +19471,7 @@ mini.prepend = function(_, A) {
 };
 mini.after = function(_, A) {
     if (typeof A == "string")
-        if (A.charAt(0) == "#") A = lO0O(A);
+        if (A.charAt(0) == "#") A = mini.byId(A);
         else {
             var $ = document.createElement("div");
             $.innerHTML = A;
@@ -19483,7 +19483,7 @@ mini.after = function(_, A) {
 };
 mini.before = function(_, A) {
     if (typeof A == "string")
-        if (A.charAt(0) == "#") A = lO0O(A);
+        if (A.charAt(0) == "#") A = mini.byId(A);
         else {
             var $ = document.createElement("div");
             $.innerHTML = A;
@@ -19501,7 +19501,7 @@ mini.createElements = function($) {
     mini.__wrap.innerHTML = $;
     return _ ? mini.__wrap.firstChild.rows : mini.__wrap.childNodes
 };
-lO0O = function(D, A) {
+mini_byId = function(D, A) {
     if (typeof D == "string") {
         if (D.charAt(0) == "#") D = D.substr(1);
         var _ = document.getElementById(D);
@@ -19517,23 +19517,23 @@ lO0O = function(D, A) {
         return _
     } else return D
 };
-o00ol = function($, _) {
-    $ = lO0O($);
+mini_hasClass = function($, _) {
+    $ = mini.byId($);
     if (!$) return;
     if (!$.className) return false;
     var A = String($.className).split(" ");
     return A.indexOf(_) != -1
 };
-olO0 = function($, _) {
+mini_addClass = function($, _) {
     if (!_) return;
-    if (o00ol($, _) == false) jQuery($).addClass(_)
+    if (mini.hasClass($, _) == false) jQuery($).addClass(_)
 };
-l0OO = function($, _) {
+mini_removeClass = function($, _) {
     if (!_) return;
     jQuery($).removeClass(_)
 };
-l0l1 = function($) {
-    $ = lO0O($);
+mini_getMargins = function($) {
+    $ = mini.byId($);
     var _ = jQuery($);
     return {
         top: parseInt(_.css("margin-top"), 10) || 0,
@@ -19542,8 +19542,8 @@ l0l1 = function($) {
         right: parseInt(_.css("margin-right"), 10) || 0
     }
 };
-l00OO = function($) {
-    $ = lO0O($);
+mini_getBorders = function($) {
+    $ = mini.byId($);
     var _ = jQuery($);
     return {
         top: parseInt(_.css("border-top-width"), 10) || 0,
@@ -19552,8 +19552,8 @@ l00OO = function($) {
         right: parseInt(_.css("border-right-width"), 10) || 0
     }
 };
-lol0 = function($) {
-    $ = lO0O($);
+mini_getPaddings = function($) {
+    $ = mini.byId($);
     var _ = jQuery($);
     return {
         top: parseInt(_.css("padding-top"), 10) || 0,
@@ -19562,41 +19562,41 @@ lol0 = function($) {
         right: parseInt(_.css("padding-right"), 10) || 0
     }
 };
-o0l0 = function(_, $) {
-    _ = lO0O(_);
+mini_setWidth = function(_, $) {
+    _ = mini.byId(_);
     $ = parseInt($);
     if (isNaN($) || !_) return;
     if (jQuery.boxModel) {
-        var A = lol0(_),
-            B = l00OO(_);
+        var A = mini.getPaddings(_),
+            B = mini.getBorders(_);
         $ = $ - A.left - A.right - B.left - B.right
     }
     if ($ < 0) $ = 0;
     _.style.width = $ + "px"
 };
-l11o = function(_, $) {
-    _ = lO0O(_);
+mini_setHeight = function(_, $) {
+    _ = mini.byId(_);
     $ = parseInt($);
     if (isNaN($) || !_) return;
     if (jQuery.boxModel) {
-        var A = lol0(_),
-            B = l00OO(_);
+        var A = mini.getPaddings(_),
+            B = mini.getBorders(_);
         $ = $ - A.top - A.bottom - B.top - B.bottom
     }
     if ($ < 0) $ = 0;
     _.style.height = $ + "px"
 };
-oOo01O = function($, _) {
-    $ = lO0O($);
+mini_getWidth = function($, _) {
+    $ = mini.byId($);
     if ($.style.display == "none" || $.type == "text/javascript") return 0;
     return _ ? jQuery($).width() : jQuery($).outerWidth()
 };
-Olol = function($, _) {
-    $ = lO0O($);
+mini_getHeight = function($, _) {
+    $ = mini.byId($);
     if ($.style.display == "none" || $.type == "text/javascript") return 0;
     return _ ? jQuery($).height() : jQuery($).outerHeight()
 };
-looO = function(A, C, B, $, _) {
+mini_setBox = function(A, C, B, $, _) {
     if (B === undefined) {
         B = C.y;
         $ = C.width;
@@ -19604,16 +19604,16 @@ looO = function(A, C, B, $, _) {
         C = C.x
     }
     mini.setXY(A, C, B);
-    o0l0(A, $);
-    l11o(A, _)
+    mini.setWidth(A, $);
+    mini.setHeight(A, _)
 };
-O1loO1 = function(A) {
+mini_getBox = function(A) {
     var $ = mini.getXY(A),
         _ = {
             x: $[0],
             y: $[1],
-            width: oOo01O(A),
-            height: Olol(A)
+            width: mini.getWidth(A),
+            height: mini.getHeight(A)
         };
     _.left = _.x;
     _.top = _.y;
@@ -19621,8 +19621,8 @@ O1loO1 = function(A) {
     _.bottom = _.y + _.height;
     return _
 };
-l1O1l = function(B, C) {
-    B = lO0O(B);
+mini_setStyle = function(B, C) {
+    B = mini.byId(B);
     if (!B || typeof C != "string") return;
     var H = jQuery(B),
         _ = C.toLowerCase().split(";");
@@ -19638,14 +19638,14 @@ l1O1l = function(B, C) {
             } else H.css(F[0].trim(), F[1].trim())
     }
 };
-lO00 = function() {
+mini_getStyle = function() {
     var $ = document.defaultView;
     return new Function("el", "style", ["style.indexOf('-')>-1 && (style=style.replace(/-(\\w)/g,function(m,a){return a.toUpperCase()}));", "style=='float' && (style='", $ ? "cssFloat" : "styleFloat", "');return el.style[style] || ", $ ? "window.getComputedStyle(el,null)[style]" : "el.currentStyle[style]", " || null;"].join(""))
 }();
 Oolo = function(A, $) {
     var _ = false;
-    A = lO0O(A);
-    $ = lO0O($);
+    A = mini.byId(A);
+    $ = mini.byId($);
     if (A === $) return true;
     if (A && $)
         if (A.contains) {
@@ -19660,54 +19660,54 @@ Oolo = function(A, $) {
     return _
 };
 oOlO = function(B, A, $) {
-    B = lO0O(B);
+    B = mini.byId(B);
     var C = document.body,
         _ = 0,
         D;
     $ = $ || 50;
     if (typeof $ != "number") {
-        D = lO0O($);
+        D = mini.byId($);
         $ = 10
     }
     while (B && B.nodeType == 1 && _ < $ && B != C && B != D) {
-        if (o00ol(B, A)) return B;
+        if (mini.hasClass(B, A)) return B;
         _++;
         B = B.parentNode
     }
     return null
 };
 mini.copyTo(mini, {
-    byId: lO0O,
-    hasClass: o00ol,
-    addClass: olO0,
-    removeClass: l0OO,
-    getMargins: l0l1,
-    getBorders: l00OO,
-    getPaddings: lol0,
-    setWidth: o0l0,
-    setHeight: l11o,
-    getWidth: oOo01O,
-    getHeight: Olol,
-    setBox: looO,
-    getBox: O1loO1,
-    setStyle: l1O1l,
-    getStyle: lO00,
+    byId: mini_byId,
+    hasClass: mini_hasClass,
+    addClass: mini_addClass,
+    removeClass: mini_removeClass,
+    getMargins: mini_getMargins,
+    getBorders: mini_getBorders,
+    getPaddings: mini_getPaddings,
+    setWidth: mini_setWidth,
+    setHeight: mini_setHeight,
+    getWidth: mini_getWidth,
+    getHeight: mini_getHeight,
+    setBox: mini_setBox,
+    getBox: mini_getBox,
+    setStyle: mini_setStyle,
+    getStyle: mini_getStyle,
     repaint: function($) {
         if (!$) $ = document.body;
-        olO0($, "mini-repaint");
+        mini.addClass($, "mini-repaint");
         setTimeout(function() {
-            l0OO($, "mini-repaint")
+            mini.removeClass($, "mini-repaint")
         }, 1)
     },
     getSize: function($, _) {
         return {
-            width: oOo01O($, _),
-            height: Olol($, _)
+            width: mini.getWidth($, _),
+            height: mini.getHeight($, _)
         }
     },
     setSize: function(A, $, _) {
-        o0l0(A, $);
-        l11o(A, _)
+        mini.setWidth(A, $);
+        mini.setHeight(A, _)
     },
     setX: function(_, B) {
         B = parseInt(B);
@@ -19778,11 +19778,11 @@ mini.copyTo(mini, {
             if (E.timeoutHandler) E.timeoutHandler()
         }, E.timeout);
         var J = ";position:absolute;display:block;left:auto;top:auto;right:auto;bottom:auto;margin:0;z-index:" + B + ";";
-        l1O1l(F, J);
+        mini.setStyle(F, J);
         J = "";
         if (E && mini.isNumber(E.x) && mini.isNumber(E.y)) {
             if (E.fixed && !mini.isIE6) J += ";position:fixed;";
-            l1O1l(F, J);
+            mini.setStyle(F, J);
             mini.setXY(E.el, E.x, E.y);
             return
         }
@@ -19799,10 +19799,10 @@ mini.copyTo(mini, {
             J += "top:50%;margin-top:" + (-H.height * 0.5) + "px;"
         }
         if (A && !mini.isIE6) J += "position:fixed";
-        l1O1l(F, J)
+        mini.setStyle(F, J)
     },
     getChildNodes: function(A, C) {
-        A = lO0O(A);
+        A = mini.byId(A);
         if (!A) return;
         var E = A.childNodes,
             B = [];
@@ -19825,7 +19825,7 @@ mini.copyTo(mini, {
         if ($ && $.parentNode && $.tagName != "BODY") $.parentNode.removeChild($)
     },
     removeChilds: function(B, _) {
-        B = lO0O(B);
+        B = mini.byId(B);
         if (!B) return;
         var C = mini.getChildNodes(B, true);
         for (var $ = 0, D = C.length; $ < D; $++) {
@@ -19837,17 +19837,17 @@ mini.copyTo(mini, {
     isAncestor: Oolo,
     findParent: oOlO,
     findChild: function(_, A) {
-        _ = lO0O(_);
+        _ = mini.byId(_);
         var B = _.getElementsByTagName("*");
         for (var $ = 0, C = B.length; $ < C; $++) {
             var _ = B[$];
-            if (o00ol(_, A)) return _
+            if (mini.hasClass(_, A)) return _
         }
     },
     isAncestor: function(A, $) {
         var _ = false;
-        A = lO0O(A);
-        $ = lO0O($);
+        A = mini.byId(A);
+        $ = mini.byId($);
         if (A === $) return true;
         if (A && $)
             if (A.contains) {
@@ -19867,7 +19867,7 @@ mini.copyTo(mini, {
         return [$[0] - B[0], $[1] - B[1]]
     },
     scrollIntoView: function(I, H, F) {
-        var B = lO0O(H) || document.body,
+        var B = mini.byId(H) || document.body,
             $ = this.getOffsetsTo(I, B),
             C = $[0] + B.scrollLeft,
             J = $[1] + B.scrollTop,
@@ -19904,7 +19904,7 @@ mini.copyTo(mini, {
         })
     },
     selectable: function(_, $) {
-        _ = lO0O(_);
+        _ = mini.byId(_);
         if (!!$) {
             jQuery(_).removeClass("mini-unselectable");
             if (isIE) _.unselectable = "off";
@@ -19935,7 +19935,7 @@ mini.copyTo(mini, {
         } catch (C) {}
     },
     getSelectRange: function(A) {
-        A = lO0O(A);
+        A = mini.byId(A);
         if (!A) return;
         try {
             A.focus()
@@ -20014,8 +20014,8 @@ OooO = function(_, $, C, A) {
         if ($ === false) return false
     }
 };
-O1Oo = function(_, $, D, A) {
-    _ = lO0O(_);
+mini_on = function(_, $, D, A) {
+    _ = mini.byId(_);
     A = A || _;
     if (!_ || !$ || !D || !A) return false;
     var B = mini.findListener(_, $, D, A);
@@ -20025,8 +20025,8 @@ O1Oo = function(_, $, D, A) {
     if (mini.isFirefox && $ == "mousewheel") $ = "DOMMouseScroll";
     jQuery(_).bind($, C)
 };
-OoOo = function(_, $, C, A) {
-    _ = lO0O(_);
+mini_un = function(_, $, C, A) {
+    _ = mini.byId(_);
     A = A || _;
     if (!_ || !$ || !C || !A) return false;
     var B = mini.findListener(_, $, C, A);
@@ -20037,14 +20037,14 @@ OoOo = function(_, $, C, A) {
 };
 mini.copyTo(mini, {
     listeners: [],
-    on: O1Oo,
-    un: OoOo,
+    on: mini_on,
+    un: mini_un,
     _getListeners: function() {
         var $ = mini.listeners;
         return $
     },
     findListener: function(A, _, F, B) {
-        A = lO0O(A);
+        A = mini.byId(A);
         B = B || A;
         if (!A || !_ || !F || !B) return false;
         var D = mini._getListeners();
@@ -20056,7 +20056,7 @@ mini.copyTo(mini, {
         }
     },
     clearEvent: function(A, _) {
-        A = lO0O(A);
+        A = mini.byId(A);
         if (!A) return false;
         if (mini._destroying) {
             jQuery(A).unbind();
@@ -20066,7 +20066,7 @@ mini.copyTo(mini, {
         for (var $ = C.length - 1; $ >= 0; $--) {
             var B = C[$];
             if (B[0] == A)
-                if (!_ || _ == B[1]) OoOo(A, B[1], B[2], B[3])
+                if (!_ || _ == B[1]) mini.un(A, B[1], B[2], B[3])
         }
         A.onmouseover = A.onmousedown = null
     }
@@ -20075,7 +20075,7 @@ mini.__windowResizes = [];
 mini.onWindowResize = function(_, $) {
     mini.__windowResizes.push([_, $])
 };
-O1Oo(window, "resize", function(C) {
+mini.on(window, "resize", function(C) {
     var _ = mini.__windowResizes;
     for (var $ = 0, B = _.length; $ < B; $++) {
         var A = _[$];
@@ -20173,7 +20173,7 @@ mini.copyTo(Array.prototype, {
 mini._MaskID = 1;
 mini._MaskObjects = {};
 mini.mask = function(C) {
-    var _ = lO0O(C);
+    var _ = mini.byId(C);
     if (mini.isElement(_)) C = {
         el: _
     };
@@ -20186,14 +20186,14 @@ mini.mask = function(C) {
         style: "",
         backStyle: ""
     }, C);
-    C.el = lO0O(C.el);
+    C.el = mini.byId(C.el);
     if (!C.el) C.el = document.body;
     _ = C.el;
     mini["unmask"](C.el);
     _._maskid = mini._MaskID++;
     mini._MaskObjects[_._maskid] = C;
     var $ = mini.append(_, "<div class=\"mini-mask\">" + "<div class=\"mini-mask-background\" style=\"" + C.backStyle + "\"></div>" + "<div class=\"mini-mask-msg " + C.cls + "\" style=\"" + C.style + "\">" + C.html + "</div>" + "</div>");
-    if (_ == document.body) olO0($, "mini-fixed");
+    if (_ == document.body) mini.addClass($, "mini-fixed");
     C.maskEl = $;
     if (!mini.isNull(C.opacity)) mini.setOpacity($.firstChild, C.opacity);
 
@@ -20211,7 +20211,7 @@ mini.mask = function(C) {
     }, 0)
 };
 mini["unmask"] = function(_) {
-    _ = lO0O(_);
+    _ = mini.byId(_);
     if (!_) _ = document.body;
     var A = mini._MaskObjects[_._maskid];
     if (!A) return;
@@ -20337,7 +20337,7 @@ mini.copyTo(mini, {
                 A.css(D, G.css(D))
             }
         }
-        if (C) l1O1l(this.measureEl, C);
+        if (C) mini.setStyle(this.measureEl, C);
         this.measureEl.innerHTML = _;
         return mini.getSize(this.measureEl)
     }
@@ -20348,7 +20348,7 @@ jQuery(function() {
     mini.updateDevice();
     setTimeout(function() {
         var $ = document.documentElement;
-        if ((isIE6 || isIE7) && (lO00(document.body, "overflow") == "hidden" || ($ && lO00($, "overflow") == "hidden"))) {
+        if ((isIE6 || isIE7) && (mini.getStyle(document.body, "overflow") == "hidden" || ($ && mini.getStyle($, "overflow") == "hidden"))) {
             jQuery(document.body).css("overflow", "visible");
             if ($) jQuery($).css("overflow", "visible")
         }
@@ -20361,9 +20361,9 @@ jQuery(function() {
     }, 1)
 });
 mini_onload = function($) {
-    O1Oo(window, "resize", mini_onresize)
+    mini.on(window, "resize", mini_onresize)
 };
-O1Oo(window, "load", mini_onload);
+mini.on(window, "load", mini_onload);
 mini.__LastWindowWidth = document.documentElement.clientWidth;
 mini.__LastWindowHeight = document.documentElement.clientHeight;
 mini.doWindowResizeTimer = null;
@@ -20499,9 +20499,9 @@ mini_unload = function(H) {
     A = null;
     mini.clearEvent(window);
     mini.clearEvent(document);
-    OoOo(window, "unload", mini_unload);
-    OoOo(window, "load", mini_onload);
-    OoOo(window, "resize", mini_onresize);
+    mini.un(window, "unload", mini_unload);
+    mini.un(window, "load", mini_onload);
+    mini.un(window, "resize", mini_onresize);
     mini.components = {};
     mini.classes = {};
     mini.uiClasses = {};
@@ -20512,7 +20512,7 @@ mini_unload = function(H) {
     window.Owner = null;
     window.CloseOwnerWindow = null
 };
-O1Oo(window, "unload", mini_unload);
+mini.on(window, "unload", mini_unload);
 
 function _l1o0ol() {}
 mini.zIndex = 1000;
@@ -20544,7 +20544,7 @@ function l1l11(A) {
     }
 }
 O011 = function(A) {
-    A = lO0O(A);
+    A = mini.byId(A);
     if (!A || !isIE || isIE10 || isIE11) return;
 
     function $() {
@@ -20576,10 +20576,10 @@ O011 = function(A) {
         if (_.propertyName == "value") $()
     };
     $();
-    O1Oo(A, "focus", function($) {
+    mini.on(A, "focus", function($) {
         if (!A.readOnly) _.style.display = "none"
     });
-    O1Oo(A, "blur", function(_) {
+    mini.on(A, "blur", function(_) {
         $()
     })
 };
@@ -20829,15 +20829,15 @@ OOooo1_prototype = {
     allowResize: false,
     Ol0l: function() {
         if (!this.popupEl) return;
-        OoOo(this.popupEl, "click", this.Ol0110, this);
-        OoOo(this.popupEl, "contextmenu", this.llo1, this);
-        OoOo(this.popupEl, "mouseover", this.O1l1lo, this)
+        mini.un(this.popupEl, "click", this.Ol0110, this);
+        mini.un(this.popupEl, "contextmenu", this.llo1, this);
+        mini.un(this.popupEl, "mouseover", this.__OnMouseOver, this)
     },
     O01lo: function() {
         if (!this.popupEl) return;
-        O1Oo(this.popupEl, "click", this.Ol0110, this);
-        O1Oo(this.popupEl, "contextmenu", this.llo1, this);
-        O1Oo(this.popupEl, "mouseover", this.O1l1lo, this)
+        mini.on(this.popupEl, "click", this.Ol0110, this);
+        mini.on(this.popupEl, "contextmenu", this.llo1, this);
+        mini.on(this.popupEl, "mouseover", this.__OnMouseOver, this)
     },
     doShow: function(A) {
         var $ = {
@@ -20879,7 +20879,7 @@ OOooo1_prototype = {
         this.el.style.display = "";
         this.O0oOoo();
         var _ = mini.getViewportBox(),
-            $ = O1loO1(this.el);
+            $ = mini.getBox(this.el);
         if (B == "left") B = 0;
         if (B == "center") B = _.width / 2 - $.width / 2;
         if (B == "right") B = _.width - $.width;
@@ -20905,8 +20905,8 @@ OOooo1_prototype = {
         this.Ooo1 = mini.append(document.body, "<div class=\"mini-modal\"></div>");
         this.Ooo1.style.height = B + "px";
         this.Ooo1.style.width = _ + "px";
-        this.Ooo1.style.zIndex = lO00(this.el, "zIndex") - 1;
-        l1O1l(this.Ooo1, this.modalStyle)
+        this.Ooo1.style.zIndex = mini.getStyle(this.el, "zIndex") - 1;
+        mini.setStyle(this.Ooo1, this.modalStyle)
     },
     _doShim: function() {
         if (!mini.isIE || !mini_useShims) return;
@@ -20917,13 +20917,13 @@ OOooo1_prototype = {
 
         function A() {
             this._shimEl.style.display = "";
-            var $ = O1loO1(this.el),
+            var $ = mini.getBox(this.el),
                 A = this._shimEl.style;
             A.width = $.width + "px";
             A.height = $.height + "px";
             A.left = $.x + "px";
             A.top = $.y + "px";
-            var _ = lO00(this.el, "zIndex");
+            var _ = mini.getStyle(this.el, "zIndex");
             if (!isNaN(_)) this._shimEl.style.zIndex = _ - 3
         }
         this._shimEl.style.display = "none";
@@ -20943,13 +20943,13 @@ OOooo1_prototype = {
         if (this.showShadow) {
             function $() {
                 this.shadowEl.style.display = "";
-                var $ = O1loO1(this.el),
+                var $ = mini.getBox(this.el),
                     A = this.shadowEl.style;
                 A.width = $.width + "px";
                 A.height = $.height + "px";
                 A.left = $.x + "px";
                 A.top = $.y + "px";
-                var _ = lO00(this.el, "zIndex");
+                var _ = mini.getStyle(this.el, "zIndex");
                 if (!isNaN(_)) this.shadowEl.style.zIndex = _ - 2
             }
             this.shadowEl.style.display = "none";
@@ -20966,29 +20966,29 @@ OOooo1_prototype = {
     },
     O0oOoo: function() {
         this.el.style.display = "";
-        var $ = O1loO1(this.el);
+        var $ = mini.getBox(this.el);
         if ($.width > this.maxWidth) {
-            o0l0(this.el, this.maxWidth);
-            $ = O1loO1(this.el)
+            mini.setWidth(this.el, this.maxWidth);
+            $ = mini.getBox(this.el)
         }
         if ($.height > this.maxHeight) {
-            l11o(this.el, this.maxHeight);
-            $ = O1loO1(this.el)
+            mini.setHeight(this.el, this.maxHeight);
+            $ = mini.getBox(this.el)
         }
         if ($.width < this.minWidth) {
-            o0l0(this.el, this.minWidth);
-            $ = O1loO1(this.el)
+            mini.setWidth(this.el, this.minWidth);
+            $ = mini.getBox(this.el)
         }
         if ($.height < this.minHeight) {
-            l11o(this.el, this.minHeight);
-            $ = O1loO1(this.el)
+            mini.setHeight(this.el, this.minHeight);
+            $ = mini.getBox(this.el)
         }
     },
     _getWindowOffset: function($) {
         return [0, 0]
     },
     showAtEl: function(I, E) {
-        I = lO0O(I);
+        I = mini.byId(I);
         if (!I) return;
         if (!this.isRender() || this.el.parentNode != document.body) this.render(document.body);
         var B = {
@@ -21001,7 +21001,7 @@ OOooo1_prototype = {
             popupCls: this.popupCls
         };
         mini.copyTo(B, E);
-        olO0(I, B.popupCls);
+        mini.addClass(I, B.popupCls);
         I.popupCls = B.popupCls;
         this._popupEl = I;
         this.el.style.position = "absolute";
@@ -21011,8 +21011,8 @@ OOooo1_prototype = {
         this.doLayout();
         this.O0oOoo();
         var K = mini.getViewportBox(),
-            C = O1loO1(this.el),
-            M = O1loO1(I),
+            C = mini.getBox(this.el),
+            M = mini.getBox(I),
             G = B.xy,
             D = B.xAlign,
             F = B.yAlign,
@@ -21096,15 +21096,15 @@ OOooo1_prototype = {
         mini.setX(this.el, A);
         mini.setY(this.el, _);
         this.setVisible(true);
-        if (this.hideAction == "mouseout") O1Oo(document, "mousemove", this.oOolll, this);
+        if (this.hideAction == "mouseout") mini.on(document, "mousemove", this.oOolll, this);
         var $ = this;
         this.Olol0();
         this.oll01l();
         this._doShim();
         mini.layoutIFrames(this.el);
         this.isPopup = true;
-        O1Oo(document, "mousedown", this.lO00Oo, this);
-        O1Oo(window, "resize", this.l10Ol, this);
+        mini.on(document, "mousedown", this.lO00Oo, this);
+        mini.on(window, "resize", this.l10Ol, this);
         this.fire("Open")
     },
     open: function() {
@@ -21115,21 +21115,21 @@ OOooo1_prototype = {
     },
     hide: function() {
         if (!this.el) return;
-        if (this.popupEl) l0OO(this.popupEl, this.popupEl.popupCls);
-        if (this._popupEl) l0OO(this._popupEl, this._popupEl.popupCls);
+        if (this.popupEl) mini.removeClass(this.popupEl, this.popupEl.popupCls);
+        if (this._popupEl) mini.removeClass(this._popupEl, this._popupEl.popupCls);
         this._popupEl = null;
         jQuery(this.Ooo1).remove();
         if (this.shadowEl) this.shadowEl.style.display = "none";
         if (this._shimEl) this._shimEl.style.display = "none";
-        OoOo(document, "mousemove", this.oOolll, this);
-        OoOo(document, "mousedown", this.lO00Oo, this);
-        OoOo(window, "resize", this.l10Ol, this);
+        mini.un(document, "mousemove", this.oOolll, this);
+        mini.un(document, "mousedown", this.lO00Oo, this);
+        mini.un(window, "resize", this.l10Ol, this);
         this.setVisible(false);
         this.isPopup = false;
         this.fire("Close")
     },
     setPopupEl: function($) {
-        $ = lO0O($);
+        $ = mini.byId($);
         if (!$) return;
         this.Ol0l();
         this.popupEl = $;
@@ -21190,13 +21190,13 @@ OOooo1_prototype = {
     },
     setAllowDrag: function($) {
         this.allowDrag = $;
-        l0OO(this.el, this.OO00oO);
-        if ($) olO0(this.el, this.OO00oO)
+        mini.removeClass(this.el, this.OO00oO);
+        if ($) mini.addClass(this.el, this.OO00oO)
     },
     setAllowResize: function($) {
         this.allowResize = $;
-        l0OO(this.el, this.Ol1OlO);
-        if ($) olO0(this.el, this.Ol1OlO)
+        mini.removeClass(this.el, this.Ol1OlO);
+        if ($) mini.addClass(this.el, this.Ol1OlO)
     },
     Ol0110: function(_) {
         if (this.O1lll0) return;
@@ -21213,7 +21213,7 @@ OOooo1_prototype = {
         _.preventDefault();
         this.doShow(_)
     },
-    O1l1lo: function(A) {
+    __OnMouseOver: function(A) {
         if (this.O1lll0) return;
         if (this.showAction != "mouseover") return;
         var _ = jQuery(this.popupEl).attr("allowPopup");
@@ -21289,8 +21289,8 @@ mini_Button = mini.Button.prototype;
 mini_Button.getAttrs = mini_Button_getAttrs;
 mini_Button.onClick = mini_Button_onClick;
 mini_Button.lo010o = mini_Button_lo010o;
-mini_Button.olol = mini_Button_olol;
-mini_Button.Ol1o1 = mini_Button_Ol1o1;
+mini_Button.__OnMouseDown = mini_Button_olol;
+mini_Button.__OnClick = mini_Button_Ol1o1;
 mini_Button.doClick = mini_Button_doClick;
 mini_Button.getChecked = mini_Button_getChecked;
 mini_Button.setChecked = mini_Button_setChecked;
@@ -21437,8 +21437,8 @@ mini_TextBox.OoOlO1 = mini_TextBox_OoOlO1;
 mini_TextBox.O10l1 = mini_TextBox_O10l1;
 mini_TextBox.lOOo = mini_TextBox_lOOo;
 mini_TextBox.O00l10 = mini_TextBox_O00l10;
-mini_TextBox.olol = mini_TextBox_olol;
-mini_TextBox.Ol1o1 = mini_TextBox_Ol1o1;
+mini_TextBox.__OnMouseDown = mini_TextBox_olol;
+mini_TextBox.__OnClick = mini_TextBox_Ol1o1;
 mini_TextBox.Olll1 = mini_TextBox_Olll1;
 mini_TextBox.getErrorIconEl = mini_TextBox_getErrorIconEl;
 mini_TextBox.getSelectOnFocus = mini_TextBox_getSelectOnFocus;
@@ -21564,9 +21564,9 @@ mini_ButtonEdit.__fireBlur = mini_ButtonEdit___fireBlur;
 mini_ButtonEdit.__doFocusCls = mini_ButtonEdit___doFocusCls;
 mini_ButtonEdit.ol00 = mini_ButtonEdit_ol00;
 mini_ButtonEdit.lo010o = mini_ButtonEdit_lo010o;
-mini_ButtonEdit.olol = mini_ButtonEdit_olol;
+mini_ButtonEdit.__OnMouseDown = mini_ButtonEdit_olol;
 mini_ButtonEdit._handlerButtonElClick = mini_ButtonEdit__handlerButtonElClick;
-mini_ButtonEdit.Ol1o1 = mini_ButtonEdit_Ol1o1;
+mini_ButtonEdit.__OnClick = mini_ButtonEdit_Ol1o1;
 mini_ButtonEdit.Olll1 = mini_ButtonEdit_Olll1;
 mini_ButtonEdit.getErrorIconEl = mini_ButtonEdit_getErrorIconEl;
 mini_ButtonEdit.getButtonToolTip = mini_ButtonEdit_getButtonToolTip;
@@ -21635,7 +21635,7 @@ mini.extend(mini.PopupEdit, mini.ButtonEdit, {
 mini_PopupEdit = mini.PopupEdit.prototype;
 mini_PopupEdit.getAttrs = mini_PopupEdit_getAttrs;
 mini_PopupEdit.l1OO1O = mini_PopupEdit_l1OO1O;
-mini_PopupEdit.Ol1o1 = mini_PopupEdit_Ol1o1;
+mini_PopupEdit.__OnClick = mini_PopupEdit_Ol1o1;
 mini_PopupEdit.getShowPopupOnClick = mini_PopupEdit_getShowPopupOnClick;
 mini_PopupEdit.setShowPopupOnClick = mini_PopupEdit_setShowPopupOnClick;
 mini_PopupEdit.getPopupMinHeight = mini_PopupEdit_getPopupMinHeight;
@@ -21669,9 +21669,9 @@ mini_PopupEdit.getPopup = mini_PopupEdit_getPopup;
 mini_PopupEdit.setPopup = mini_PopupEdit_setPopup;
 mini_PopupEdit.within = mini_PopupEdit_within;
 mini_PopupEdit.O10l1 = mini_PopupEdit_O10l1;
-mini_PopupEdit.olol = mini_PopupEdit_olol;
-mini_PopupEdit.O11O11 = mini_PopupEdit_O11O11;
-mini_PopupEdit.O1l1lo = mini_PopupEdit_O1l1lo;
+mini_PopupEdit.__OnMouseDown = mini_PopupEdit_olol;
+mini_PopupEdit.__OnMouseOut = mini_PopupEdit_O11O11;
+mini_PopupEdit.__OnMouseOver = mini_PopupEdit_O1l1lo;
 mini_PopupEdit.Ol0O1 = mini_PopupEdit_Ol0O1;
 mini_PopupEdit._initEvents = mini_PopupEdit__initEvents;
 mini_PopupEdit.destroy = mini_PopupEdit_destroy;
@@ -21767,7 +21767,7 @@ mini_ComboBox._initInput = mini_ComboBox__initInput;
 mini.regClass(mini.ComboBox, "combobox");
 mini.DatePicker = function() {
     mini.DatePicker.superclass.constructor.apply(this, arguments);
-    olO0(this.el, "mini-datepicker");
+    mini.addClass(this.el, "mini-datepicker");
     this.on("validation", this.O0OO, this)
 };
 mini.extend(mini.DatePicker, mini.PopupEdit, {
@@ -21905,8 +21905,8 @@ mini_Calendar.getAttrs = mini_Calendar_getAttrs;
 mini_Calendar.Ol11o = mini_Calendar_Ol11o;
 mini_Calendar.l001l = mini_Calendar_l001l;
 mini_Calendar.O0OoO = mini_Calendar_O0OoO;
-mini_Calendar.olol = mini_Calendar_olol;
-mini_Calendar.Ol1o1 = mini_Calendar_Ol1o1;
+mini_Calendar.__OnMouseDown = mini_Calendar_olol;
+mini_Calendar.__OnClick = mini_Calendar_Ol1o1;
 mini_Calendar.Ooo0lO = mini_Calendar_Ooo0lO;
 mini_Calendar.__getMonthYear = mini_Calendar___getMonthYear;
 mini_Calendar.__OnMenuDblClick = mini_Calendar___OnMenuDblClick;
@@ -21995,7 +21995,7 @@ mini_ListBox.getAttrs = mini_ListBox_getAttrs;
 mini_ListBox.Ol11o = mini_ListBox_Ol11o;
 mini_ListBox._doCheckState = mini_ListBox__doCheckState;
 mini_ListBox.setValue = mini_ListBox_setValue;
-mini_ListBox.Ol1o1 = mini_ListBox_Ol1o1;
+mini_ListBox.__OnClick = mini_ListBox_Ol1o1;
 mini_ListBox.l0ol1 = mini_ListBox_l0ol1;
 mini_ListBox._OnDrawCell = mini_ListBox__OnDrawCell;
 mini_ListBox.Oo01o0 = mini_ListBox_Oo01o0;
@@ -22377,7 +22377,7 @@ mini.regClass(mini.FilterEdit, "filteredit");
 mini.Lookup = function() {
     this.data = [];
     mini.Lookup.superclass.constructor.apply(this, arguments);
-    O1Oo(this._textEl, "mouseup", this.oOlo0, this);
+    mini.on(this._textEl, "mouseup", this.oOlo0, this);
     this.on("showpopup", this.__OnShowPopup, this)
 };
 mini.extend(mini.Lookup, mini.PopupEdit, {
@@ -22468,8 +22468,8 @@ mini_TextBoxList.focus = mini_TextBoxList_focus;
 mini_TextBoxList.O10l1 = mini_TextBoxList_O10l1;
 mini_TextBoxList.__doSelectValue = mini_TextBoxList___doSelectValue;
 mini_TextBoxList.l001l = mini_TextBoxList_l001l;
-mini_TextBoxList.Ol1o1 = mini_TextBoxList_Ol1o1;
-mini_TextBoxList.O11O11 = mini_TextBoxList_O11O11;
+mini_TextBoxList.__OnClick = mini_TextBoxList_Ol1o1;
+mini_TextBoxList.__OnMouseOut = mini_TextBoxList_O11O11;
 mini_TextBoxList.ol1o0 = mini_TextBoxList_ol1o0;
 mini_TextBoxList.hidePopup = mini_TextBoxList_hidePopup;
 mini_TextBoxList.showPopup = mini_TextBoxList_showPopup;
@@ -22739,12 +22739,12 @@ mini.extend(mini.ToolTip, mini.Control, {
         function _($) {
             F.offset($)
         }
-        var D = O1loO1(E),
+        var D = mini.getBox(E),
             K = mini.getViewportBox(),
             I = D.top - K.top,
             A = K.bottom - D.bottom;
         H(G);
-        var L = O1loO1(F[0]),
+        var L = mini.getBox(F[0]),
             J = mini.getCalculatedOffset(G, D, L.width, L.height);
         if (G == "left");
         else if (G == "right");
@@ -22940,7 +22940,7 @@ mini.extend(mini.ProgressBar, mini.Control, {
 });
 mini.regClass(mini.ProgressBar, "progressbar");
 mini.Form = function($) {
-    this.el = lO0O($);
+    this.el = mini.byId($);
     if (!this.el) throw new Error("form element not null");
     mini.Form.superclass.constructor.apply(this, arguments)
 };
@@ -23037,7 +23037,7 @@ mini.extend(mini.Form, mini.Component, {
     getValidateFields: function(C) {
         function A($) {
             return $.isDisplay(function($) {
-                if (o00ol($, "mini-tabs-body")) return true
+                if (mini.hasClass($, "mini-tabs-body")) return true
             })
         }
         var D = [],
@@ -23154,7 +23154,7 @@ mini.Panel = function() {
     this.ol110();
     mini.Panel.superclass.constructor.apply(this, arguments);
     if (this.url) this.setUrl(this.url);
-    this._contentEl = this.l10ll1;
+    this._contentEl = this._bodyEl;
     this._doVisibleEls();
     this.lo000o = new l1l0oo(this);
     this._doTools()
@@ -23238,7 +23238,7 @@ mini_Panel.createButton = mini_Panel_createButton;
 mini_Panel.ol110 = mini_Panel_ol110;
 mini_Panel.onButtonClick = mini_Panel_onButtonClick;
 mini_Panel.lo101 = mini_Panel_lo101;
-mini_Panel.Ol1o1 = mini_Panel_Ol1o1;
+mini_Panel.__OnClick = mini_Panel_Ol1o1;
 mini_Panel.getShowFooter = mini_Panel_getShowFooter;
 mini_Panel.setShowFooter = mini_Panel_setShowFooter;
 mini_Panel.getShowToolbar = mini_Panel_getShowToolbar;
@@ -23414,14 +23414,14 @@ mini.MessageBox = {
             M = "<div class=\"" + F.iconCls + "\" style=\"" + F.iconStyle + "\"></div>",
             R = "<table class=\"mini-messagebox-table\" id=\"" + J + "\" style=\"\" cellspacing=\"0\" cellpadding=\"0\"><tr><td>" + M + "</td><td id=\"" + O + "\" class=\"mini-messagebox-content-text\">" + (F.message || "") + "</td></tr></table>",
             _ = "<div class=\"mini-messagebox-content\"></div>" + "<div class=\"mini-messagebox-buttons\"></div>";
-        C.l10ll1.innerHTML = _;
-        var N = C.l10ll1.firstChild;
+        C._bodyEl.innerHTML = _;
+        var N = C._bodyEl.firstChild;
         if (F.html) {
             if (typeof F.html == "string") N.innerHTML = F.html;
             else if (mini.isElement(F.html)) N.appendChild(F.html)
         } else N.innerHTML = R;
         C._Buttons = [];
-        var Q = C.l10ll1.lastChild;
+        var Q = C._bodyEl.lastChild;
         if (F.buttons && F.buttons.length > 0) {
             for (var H = 0, D = F.buttons.length; H < D; H++) {
                 var E = F.buttons[H],
@@ -23467,7 +23467,7 @@ mini.MessageBox = {
             $.cancel = true;
             mini.MessageBox.hide(C)
         });
-        O1Oo(C.el, "keydown", function($) {
+        mini.on(C.el, "keydown", function($) {
             if ($.keyCode == 27) {
                 if (I) I("close");
                 mini.MessageBox.hide(C)
@@ -23592,10 +23592,10 @@ mini_Splitter.lO1011 = mini_Splitter_lO1011;
 mini_Splitter.l1olo = mini_Splitter_l1olo;
 mini_Splitter.O0oo = mini_Splitter_O0oo;
 mini_Splitter.l11o10 = mini_Splitter_l11o10;
-mini_Splitter.olol = mini_Splitter_olol;
+mini_Splitter.__OnMouseDown = mini_Splitter_olol;
 mini_Splitter.onButtonClick = mini_Splitter_onButtonClick;
 mini_Splitter.lo101 = mini_Splitter_lo101;
-mini_Splitter.Ol1o1 = mini_Splitter_Ol1o1;
+mini_Splitter.__OnClick = mini_Splitter_Ol1o1;
 mini_Splitter.getHandlerSize = mini_Splitter_getHandlerSize;
 mini_Splitter.setHandlerSize = mini_Splitter_setHandlerSize;
 mini_Splitter.getAllowResize = mini_Splitter_getAllowResize;
@@ -23645,11 +23645,11 @@ mini.extend(mini.Layout, mini.Control, {
 mini_Layout = mini.Layout.prototype;
 mini_Layout.onButtonMouseDown = mini_Layout_onButtonMouseDown;
 mini_Layout.onButtonClick = mini_Layout_onButtonClick;
-mini_Layout.O11O11 = mini_Layout_O11O11;
-mini_Layout.O1l1lo = mini_Layout_O1l1lo;
+mini_Layout.__OnMouseOut = mini_Layout_O11O11;
+mini_Layout.__OnMouseOver = mini_Layout_O1l1lo;
 mini_Layout.O1Oo1 = mini_Layout_O1Oo1;
 mini_Layout.lo101 = mini_Layout_lo101;
-mini_Layout.Ol1o1 = mini_Layout_Ol1o1;
+mini_Layout.__OnClick = mini_Layout_Ol1o1;
 mini_Layout.l0o1l = mini_Layout_l0o1l;
 mini_Layout.llooOl = mini_Layout_llooOl;
 mini_Layout.o0o0 = mini_Layout_o0o0;
@@ -23701,8 +23701,8 @@ mini.copyTo(mini.Layout.prototype, {
                 B = C._el,
                 E = C._split,
                 D = C._proxy;
-            if (C.cls) olO0(B, C.cls);
-            if (C.headerCls) olO0(B.firstChild, C.headerCls);
+            if (C.cls) mini.addClass(B, C.cls);
+            if (C.headerCls) mini.addClass(B.firstChild, C.headerCls);
             C._header.style.display = C.showHeader ? "" : "none";
             C._header.innerHTML = this.l01O1(C);
             if (C._proxy) {
@@ -23712,8 +23712,8 @@ mini.copyTo(mini.Layout.prototype, {
                 C._proxy.innerHTML = _
             }
             if (E) {
-                l0OO(E, "mini-layout-split-nodrag");
-                if (C.expanded == false || !C.allowResize) olO0(E, "mini-layout-split-nodrag")
+                mini.removeClass(E, "mini-layout-split-nodrag");
+                if (C.expanded == false || !C.allowResize) mini.addClass(E, "mini-layout-split-nodrag")
             }
         }
         this.doLayout()
@@ -23721,15 +23721,15 @@ mini.copyTo(mini.Layout.prototype, {
     doLayout: function() {
         if (!this.canLayout()) return;
         if (this.O1lll0) return;
-        var C = Olol(this.el, true),
-            _ = oOo01O(this.el, true),
+        var C = mini.getHeight(this.el, true),
+            _ = mini.getWidth(this.el, true),
             D = {
                 x: 0,
                 y: 0,
                 width: _,
                 height: C
             };
-        l11o(this._borderEl, C);
+        mini.setHeight(this._borderEl, C);
         var I = this.regions.clone(),
             P = this.getRegion("center");
         I.remove(P);
@@ -23737,7 +23737,7 @@ mini.copyTo(mini.Layout.prototype, {
         for (var K = 0, H = I.length; K < H; K++) {
             var E = I[K];
             E._Expanded = false;
-            l0OO(E._el, "mini-layout-popup");
+            mini.removeClass(E._el, "mini-layout-popup");
             var A = E.region,
                 L = E._el,
                 F = E._split,
@@ -23760,11 +23760,11 @@ mini.copyTo(mini.Layout.prototype, {
                 J = E.height;
             if (!E.expanded)
                 if (A == "west" || A == "east") {
-                    B = oOo01O(G);
-                    o0l0(L, E.width)
+                    B = mini.getWidth(G);
+                    mini.setWidth(L, E.width)
                 } else if (A == "north" || A == "south") {
-                J = Olol(G);
-                l11o(L, E.height)
+                J = mini.getHeight(G);
+                mini.setHeight(L, E.height)
             }
             switch (A) {
                 case "north":
@@ -23794,8 +23794,8 @@ mini.copyTo(mini.Layout.prototype, {
             }
             if (_ < 0) _ = 0;
             if (C < 0) C = 0;
-            if (A == "west" || A == "east") l11o(L, C);
-            if (A == "north" || A == "south") o0l0(L, _);
+            if (A == "west" || A == "east") mini.setHeight(L, C);
+            if (A == "north" || A == "south") mini.setWidth(L, _);
             var N = "left:" + R + "px;top:" + O + "px;",
                 $ = L;
             if (!E.expanded) {
@@ -23809,15 +23809,15 @@ mini.copyTo(mini.Layout.prototype, {
             $.style.left = R + "px";
             $.style.top = O + "px";
             if ($ == G) {
-                if (A == "west" || A == "east") l11o($, C);
-                if (A == "north" || A == "south") o0l0($, _)
+                if (A == "west" || A == "east") mini.setHeight($, C);
+                if (A == "north" || A == "south") mini.setWidth($, _)
             } else {
-                o0l0($, _);
-                l11o($, C)
+                mini.setWidth($, _);
+                mini.setHeight($, C)
             }
             var M = jQuery(E._el).height(),
                 Q = E.showHeader ? jQuery(E._header).outerHeight() : 0;
-            l11o(E._body, M - Q);
+            mini.setHeight(E._body, M - Q);
             if (A == "center") continue;
             B = J = E.splitSize;
             R = D.x, O = D.y, _ = D.width, C = D.height;
@@ -23849,18 +23849,18 @@ mini.copyTo(mini.Layout.prototype, {
             if (C < 0) C = 0;
             F.style.left = R + "px";
             F.style.top = O + "px";
-            o0l0(F, _);
-            l11o(F, C);
-            if (E.showSplit && E.expanded && E.allowResize == true) l0OO(F, "mini-layout-split-nodrag");
-            else olO0(F, "mini-layout-split-nodrag");
+            mini.setWidth(F, _);
+            mini.setHeight(F, C);
+            if (E.showSplit && E.expanded && E.allowResize == true) mini.removeClass(F, "mini-layout-split-nodrag");
+            else mini.addClass(F, "mini-layout-split-nodrag");
             F.firstChild.style.display = E.showSplitIcon ? "block" : "none";
-            if (E.expanded) l0OO(F.firstChild, "mini-layout-spliticon-collapse");
-            else olO0(F.firstChild, "mini-layout-spliticon-collapse")
+            if (E.expanded) mini.removeClass(F.firstChild, "mini-layout-spliticon-collapse");
+            else mini.addClass(F.firstChild, "mini-layout-spliticon-collapse")
         }
         mini.layout(this._borderEl);
         this.fire("layout")
     },
-    olol: function(B) {
+    __OnMouseDown: function(B) {
         if (this.O1lll0) return;
         if (oOlO(B.target, "mini-layout-split")) {
             var A = jQuery(B.target).attr("uid");
@@ -23886,9 +23886,9 @@ mini.copyTo(mini.Layout.prototype, {
         this.O0Ool = mini.append(document.body, "<div class=\"mini-proxy\"></div>");
         this.O0Ool.style.cursor = "n-resize";
         if (this.dragRegion.region == "west" || this.dragRegion.region == "east") this.O0Ool.style.cursor = "w-resize";
-        this.splitBox = O1loO1(this.dragRegion._split);
-        looO(this.O0Ool, this.splitBox);
-        this.elBox = O1loO1(this.el, true)
+        this.splitBox = mini.getBox(this.dragRegion._split);
+        mini.setBox(this.O0Ool, this.splitBox);
+        this.elBox = mini.getBox(this.el, true)
     },
     l1olo: function(C) {
         var I = C.now[0] - C.init[0],
@@ -23906,10 +23906,10 @@ mini.copyTo(mini.Layout.prototype, {
             Q = L && L.visible ? L.width : 0,
             R = F && F.visible ? F.height : 0,
             J = D && D.visible ? D.height : 0,
-            P = G && G.showSplit ? oOo01O(G._split) : 0,
-            $ = L && L.showSplit ? oOo01O(L._split) : 0,
-            B = F && F.showSplit ? Olol(F._split) : 0,
-            S = D && D.showSplit ? Olol(D._split) : 0,
+            P = G && G.showSplit ? mini.getWidth(G._split) : 0,
+            $ = L && L.showSplit ? mini.getWidth(L._split) : 0,
+            B = F && F.showSplit ? mini.getHeight(F._split) : 0,
+            S = D && D.showSplit ? mini.getHeight(D._split) : 0,
             E = this.dragRegion,
             N = E.region;
         if (N == "west") {
@@ -23939,7 +23939,7 @@ mini.copyTo(mini.Layout.prototype, {
         }
     },
     lO1011: function(B) {
-        var C = O1loO1(this.O0Ool),
+        var C = mini.getBox(this.O0Ool),
             D = this.dragRegion,
             A = D.region;
         if (A == "west") {
@@ -23981,15 +23981,15 @@ mini.copyTo(mini.Layout.prototype, {
         var A = D.region,
             H = D._el;
         D._Expanded = true;
-        olO0(H, "mini-layout-popup");
-        var E = O1loO1(D._proxy),
-            B = O1loO1(D._el),
+        mini.addClass(H, "mini-layout-popup");
+        var E = mini.getBox(D._proxy),
+            B = mini.getBox(D._el),
             F = {};
         if (A == "east") {
             var K = E.x,
                 J = E.y,
                 C = E.height;
-            l11o(H, C);
+            mini.setHeight(H, C);
             mini.setX(H, K);
             H.style.top = D._proxy.style.top;
             var I = parseInt(H.style.left);
@@ -23998,7 +23998,7 @@ mini.copyTo(mini.Layout.prototype, {
             }
         } else if (A == "west") {
             K = E.right - B.width, J = E.y, C = E.height;
-            l11o(H, C);
+            mini.setHeight(H, C);
             mini.setX(H, K);
             H.style.top = D._proxy.style.top;
             I = parseInt(H.style.left);
@@ -24009,7 +24009,7 @@ mini.copyTo(mini.Layout.prototype, {
             var K = E.x,
                 J = E.bottom - B.height,
                 _ = E.width;
-            o0l0(H, _);
+            mini.setWidth(H, _);
             mini.setXY(H, K, J);
             var $ = parseInt(H.style.top);
             F = {
@@ -24017,19 +24017,19 @@ mini.copyTo(mini.Layout.prototype, {
             }
         } else if (A == "south") {
             K = E.x, J = E.y, _ = E.width;
-            o0l0(H, _);
+            mini.setWidth(H, _);
             mini.setXY(H, K, J);
             $ = parseInt(H.style.top);
             F = {
                 top: $ - B.height
             }
         }
-        olO0(D._proxy, "mini-layout-maxZIndex");
+        mini.addClass(D._proxy, "mini-layout-maxZIndex");
         this.O1lll0 = true;
         var G = this,
             L = jQuery(H);
         L.animate(F, 250, function() {
-            l0OO(D._proxy, "mini-layout-maxZIndex");
+            mini.removeClass(D._proxy, "mini-layout-maxZIndex");
             G.O1lll0 = false
         })
     },
@@ -24038,7 +24038,7 @@ mini.copyTo(mini.Layout.prototype, {
         F._Expanded = false;
         var B = F.region,
             E = F._el,
-            D = O1loO1(E),
+            D = mini.getBox(E),
             _ = {};
         if (B == "east") {
             var C = parseInt(E.style.left);
@@ -24061,12 +24061,12 @@ mini.copyTo(mini.Layout.prototype, {
                 top: $ + D.height
             }
         }
-        olO0(F._proxy, "mini-layout-maxZIndex");
+        mini.addClass(F._proxy, "mini-layout-maxZIndex");
         this.O1lll0 = true;
         var A = this,
             G = jQuery(E);
         G.animate(_, 250, function() {
-            l0OO(F._proxy, "mini-layout-maxZIndex");
+            mini.removeClass(F._proxy, "mini-layout-maxZIndex");
             A.O1lll0 = false;
             A.doLayout()
         })
@@ -24177,11 +24177,11 @@ mini_Tabs.O0ll00 = mini_Tabs_O0ll00;
 mini_Tabs.oO00 = mini_Tabs_oO00;
 mini_Tabs.OOO11l = mini_Tabs_OOO11l;
 mini_Tabs.lo010o = mini_Tabs_lo010o;
-mini_Tabs.olol = mini_Tabs_olol;
-mini_Tabs.O11O11 = mini_Tabs_O11O11;
-mini_Tabs.O1l1lo = mini_Tabs_O1l1lo;
-mini_Tabs.Ol1o1 = mini_Tabs_Ol1o1;
-mini_Tabs.o1oo11 = mini_Tabs_o1oo11;
+mini_Tabs.__OnMouseDown = mini_Tabs_olol;
+mini_Tabs.__OnMouseOut = mini_Tabs_O11O11;
+mini_Tabs.__OnMouseOver = mini_Tabs_O1l1lo;
+mini_Tabs.__OnClick = mini_Tabs_Ol1o1;
+mini_Tabs.__OnDblClick = mini_Tabs_o1oo11;
 mini_Tabs.oO101O = mini_Tabs_oO101O;
 mini_Tabs.getTabByEvent = mini_Tabs_getTabByEvent;
 mini_Tabs.getClearTimeStamp = mini_Tabs_getClearTimeStamp;
@@ -24366,17 +24366,17 @@ mini_Menu._create = mini_Menu__create;
 mini_Menu.set = mini_Menu_set;
 mini_Menu.getbyName = mini_Menu_getbyName;
 mini.regClass(mini.Menu, "menu");
-oo0100Bar = function() {
-    oo0100Bar.superclass.constructor.apply(this, arguments)
+mini.menubar = function() {
+    mini.menubar.superclass.constructor.apply(this, arguments)
 };
-mini.extend(oo0100Bar, mini.Menu, {
+mini.extend(mini.menubar, mini.Menu, {
     uiCls: "mini-menubar",
     vertical: false,
     setVertical: function($) {
         this.vertical = false
     }
 });
-mini.regClass(oo0100Bar, "menubar");
+mini.regClass(mini.menubar, "menubar");
 mini.ContextMenu = function() {
     mini.ContextMenu.superclass.constructor.apply(this, arguments)
 };
@@ -24416,10 +24416,10 @@ mini_MenuItem = mini.MenuItem.prototype;
 mini_MenuItem.getAttrs = mini_MenuItem_getAttrs;
 mini_MenuItem.onCheckedChanged = mini_MenuItem_onCheckedChanged;
 mini_MenuItem.onClick = mini_MenuItem_onClick;
-mini_MenuItem.O11O11 = mini_MenuItem_O11O11;
-mini_MenuItem.O1l1lo = mini_MenuItem_O1l1lo;
+mini_MenuItem.__OnMouseOut = mini_MenuItem_O11O11;
+mini_MenuItem.__OnMouseOver = mini_MenuItem_O1l1lo;
 mini_MenuItem.oOlo0 = mini_MenuItem_oOlo0;
-mini_MenuItem.Ol1o1 = mini_MenuItem_Ol1o1;
+mini_MenuItem.__OnClick = mini_MenuItem_Ol1o1;
 mini_MenuItem.getTopMenu = mini_MenuItem_getTopMenu;
 mini_MenuItem.l1O100 = mini_MenuItem_l1O100;
 mini_MenuItem.hide = mini_MenuItem_hide;
@@ -24492,7 +24492,7 @@ mini.extend(mini.OutlookBar, mini.Control, {
 mini_OutlookBar = mini.OutlookBar.prototype;
 mini_OutlookBar.getAttrs = mini_OutlookBar_getAttrs;
 mini_OutlookBar.parseGroups = mini_OutlookBar_parseGroups;
-mini_OutlookBar.Ol1o1 = mini_OutlookBar_Ol1o1;
+mini_OutlookBar.__OnClick = mini_OutlookBar_Ol1o1;
 mini_OutlookBar.llO1Oo = mini_OutlookBar_llO1Oo;
 mini_OutlookBar.lOOO0l = mini_OutlookBar_lOOO0l;
 mini_OutlookBar.expandGroup = mini_OutlookBar_expandGroup;
@@ -24816,18 +24816,18 @@ mini.DataSet = function() {
     this._sources = {};
     this._data = {};
     this._links = [];
-    this.lOOoO = {};
+    this._originals = {};
     mini.DataSet.superclass.constructor.apply(this, arguments)
 };
 mini.extend(mini.DataSet, mini.Component, {});
 mini_DataSet = mini.DataSet.prototype;
 mini_DataSet.__OnDataSelectionChanged = mini_DataSet___OnDataSelectionChanged;
-mini_DataSet.loloOl = mini_DataSet_loloOl;
-mini_DataSet.l1lo = mini_DataSet_l1lo;
-mini_DataSet.Oo1l = mini_DataSet_Oo1l;
-mini_DataSet.l0l00 = mini_DataSet_l0l00;
-mini_DataSet.l110O0 = mini_DataSet_l110O0;
-mini_DataSet.l001 = mini_DataSet_l001;
+mini_DataSet._getLinks = mini_DataSet_loloOl;
+mini_DataSet._getParentSource = mini_DataSet_l1lo;
+mini_DataSet.__OnDataSelectionChanged = mini_DataSet_Oo1l;
+mini_DataSet.__OnRowChanged = mini_DataSet_l0l00;
+mini_DataSet._getRecord = mini_DataSet_l110O0;
+mini_DataSet._getNameByListControl = mini_DataSet_l001;
 mini_DataSet.getData = mini_DataSet_getData;
 mini_DataSet.clearData = mini_DataSet_clearData;
 mini_DataSet.addLink = mini_DataSet_addLink;
@@ -24852,7 +24852,7 @@ mini.extend(mini.DataSource, mini.Component, {
         this.list = null;
         this._ids = {};
         this._removeds = [];
-        if (this.Olo0) this.lOOoO = {};
+        if (this.Olo0) this._originals = {};
         this._errors = {};
         this.O1l0l1 = null;
         this.Oo1l1o = [];
@@ -25011,7 +25011,7 @@ mini.extend(mini.DataSource, mini.Component, {
         return mini.isNull(_) ? "" : String(_)
     },
     isModified: function(A, _) {
-        var $ = this.lOOoO[A[this.Oo0o]];
+        var $ = this._originals[A[this.Oo0o]];
         if (!$) return false;
         if (mini.isNull(_)) return false;
         return $.hasOwnProperty(_)
@@ -25077,7 +25077,7 @@ mini.extend(mini.DataSource, mini.Component, {
         $._uid = $._id;
         $._state = "added";
         this._ids[$._id] = $;
-        delete this.lOOoO[$[this.Oo0o]]
+        delete this._originals[$[this.Oo0o]]
     },
     _setModified: function($, A, B) {
         if ($._state != "added" && $._state != "deleted" && $._state != "removed") {
@@ -25093,14 +25093,14 @@ mini.extend(mini.DataSource, mini.Component, {
         delete this._ids[$._id];
         if ($._state != "added" && $._state != "removed") {
             $._state = "removed";
-            delete this.lOOoO[$[this.Oo0o]];
+            delete this._originals[$[this.Oo0o]];
             this._removeds.push($)
         }
     },
     l1Oo10: function($) {
         var A = $[this.Oo0o],
-            _ = this.lOOoO[A];
-        if (!_) _ = this.lOOoO[A] = {};
+            _ = this._originals[A];
+        if (!_) _ = this._originals[A] = {};
         return _
     },
     O1l0l1: null,
@@ -25928,7 +25928,7 @@ mini.extend(mini.DataTable, mini.DataSource, {
             this.acceptRecord($)
         }
         this._removeds = [];
-        this.lOOoO = {};
+        this._originals = {};
         this.endChange()
     },
     reject: function() {
@@ -25938,16 +25938,16 @@ mini.extend(mini.DataTable, mini.DataSource, {
             this.rejectRecord($)
         }
         this._removeds = [];
-        this.lOOoO = {};
+        this._originals = {};
         this.endChange()
     },
     acceptRecord: function($) {
         if (!$._state) return;
-        delete this.lOOoO[$[this.Oo0o]];
+        delete this._originals[$[this.Oo0o]];
         if ($._state == "deleted") this.remove($);
         else {
             delete $._state;
-            delete this.lOOoO[$[this.Oo0o]];
+            delete this._originals[$[this.Oo0o]];
             this.l1oolO()
         }
         this.fire("update", {
@@ -25964,7 +25964,7 @@ mini.extend(mini.DataTable, mini.DataSource, {
                 mini._setMap(B, $, A)
             }
             delete A._state;
-            delete this.lOOoO[A[this.Oo0o]];
+            delete this._originals[A[this.Oo0o]];
             this.l1oolO();
             this.fire("update", {
                 record: A
@@ -26133,7 +26133,7 @@ mini.extend(mini.DataTree, mini.DataSource, {
         _._level = $._level + 1;
         _._state = "added";
         this._ids[_._id] = _;
-        delete this.lOOoO[_[this.Oo0o]]
+        delete this._originals[_[this.Oo0o]]
     },
     l0l0ol: function($) {
         var _ = $[this.nodesField];
@@ -26756,7 +26756,7 @@ mini.extend(mini.DataTree, mini.DataSource, {
             this.acceptRecord($)
         }, this);
         this._removeds = [];
-        this.lOOoO = {};
+        this._originals = {};
         this.endChange()
     },
     reject: function($) {
@@ -26765,16 +26765,16 @@ mini.extend(mini.DataTree, mini.DataSource, {
             this.rejectRecord($)
         }, this);
         this._removeds = [];
-        this.lOOoO = {};
+        this._originals = {};
         this.endChange()
     },
     acceptRecord: function($) {
         if (!$._state) return;
-        delete this.lOOoO[$[this.Oo0o]];
+        delete this._originals[$[this.Oo0o]];
         if ($._state == "deleted") this.removeNode($);
         else {
             delete $._state;
-            delete this.lOOoO[$[this.Oo0o]];
+            delete this._originals[$[this.Oo0o]];
             this.l1oolO();
             this.fire("update", {
                 record: $
@@ -26788,7 +26788,7 @@ mini.extend(mini.DataTree, mini.DataSource, {
             var $ = this.l1Oo10(_);
             mini.copyTo(_, $);
             delete _._state;
-            delete this.lOOoO[_[this.Oo0o]];
+            delete this._originals[_[this.Oo0o]];
             this.l1oolO();
             this.fire("update", {
                 record: _
@@ -28079,7 +28079,7 @@ mini.GridView = function() {
     if (mini.isNull(this._paddingTop)) {
         if (mini.isNull(mini.GridView._paddingTop)) {
             var _ = $("<div class=\"mini-grid-cell-inner\" style=\"position:absolute;left:-1000px;top:-1000px;\"></div>").appendTo("body"),
-                A = lol0(_);
+                A = mini.getPaddings(_);
             mini.GridView._paddingTop = A.top;
             mini.GridView._paddingBottom = A.bottom
         }
@@ -28126,17 +28126,17 @@ mini.extend(mini.GridView, mini.Panel, {
     _create: function() {
         mini.GridView.superclass._create.call(this);
         var A = this.el;
-        olO0(A, "mini-grid");
-        olO0(this._borderEl, "mini-grid-border");
-        olO0(this.ololOO, "mini-grid-viewport");
+        mini.addClass(A, "mini-grid");
+        mini.addClass(this._borderEl, "mini-grid-border");
+        mini.addClass(this.ololOO, "mini-grid-viewport");
         var C = "<div class=\"mini-grid-pager\"></div>",
             $ = "<div class=\"mini-grid-filterRow\"><div class=\"mini-grid-filterRow-view\"></div><div class=\"mini-grid-scrollHeaderCell\"></div></div>",
             _ = "<div class=\"mini-grid-summaryRow\"><div class=\"mini-grid-summaryRow-view\"></div><div class=\"mini-grid-scrollHeaderCell\"></div></div>",
             B = "<div class=\"mini-grid-columns\"><div class=\"mini-grid-columns-view\"></div><div class=\"mini-grid-scrollHeaderCell\"></div></div>";
         this._columnsEl = mini.after(this.OO01O, B);
         this.O1OOol = mini.after(this._columnsEl, $);
-        this._rowsEl = this.l10ll1;
-        olO0(this._rowsEl, "mini-grid-rows");
+        this._rowsEl = this._bodyEl;
+        mini.addClass(this._rowsEl, "mini-grid-rows");
         this.o01o = mini.after(this._rowsEl, _);
         this._bottomPagerEl = mini.after(this.o01o, C);
         this._columnsViewEl = this._columnsEl.childNodes[0];
@@ -28178,14 +28178,14 @@ mini.extend(mini.GridView, mini.Panel, {
     },
     _initEvents: function() {
         mini.GridView.superclass._initEvents.call(this);
-        O1Oo(this._rowsViewEl, "scroll", this.__OnRowViewScroll, this)
+        mini.on(this._rowsViewEl, "scroll", this.__OnRowViewScroll, this)
     },
     _sizeChanged: function() {
         mini.GridView.superclass._sizeChanged.call(this);
         var $ = this.isAutoHeight();
         if (mini.isIE)
-            if ($) olO0(this._rowsViewEl, "mini-grid-hidden-y");
-            else l0OO(this._rowsViewEl, "mini-grid-hidden-y")
+            if ($) mini.addClass(this._rowsViewEl, "mini-grid-hidden-y");
+            else mini.removeClass(this._rowsViewEl, "mini-grid-hidden-y")
     },
     _setBodyWidth: false,
     doLayout: function() {
@@ -28217,12 +28217,12 @@ mini.extend(mini.GridView, mini.Panel, {
                     $.style.width = "100%";
                     $.parentNode.style.width = "auto";
                     if (C != $) $.parentNode.style["paddingRight"] = mini.getScrollOffset() + "px";
-                    if (mini.isIE8) l0OO(this._rowsViewEl, "mini-grid-hidden-y")
+                    if (mini.isIE8) mini.removeClass(this._rowsViewEl, "mini-grid-hidden-y")
                 } else {
                     $.style.width = "100%";
                     $.parentNode.style.width = "auto";
                     $.parentNode.style["paddingRight"] = "0px";
-                    if (mini.isIE8) olO0(this._rowsViewEl, "mini-grid-hidden-y")
+                    if (mini.isIE8) mini.addClass(this._rowsViewEl, "mini-grid-hidden-y")
                 }
             } else {
                 A.style.width = "0px";
@@ -28903,8 +28903,8 @@ mini.extend(mini.GridView, mini.Panel, {
     },
     setFitColumns: function($) {
         this.fitColumns = $;
-        l0OO(this.el, "mini-grid-fixwidth");
-        if (this.fitColumns == false) olO0(this.el, "mini-grid-fixwidth");
+        mini.removeClass(this.el, "mini-grid-fixwidth");
+        if (this.fitColumns == false) mini.addClass(this.el, "mini-grid-fixwidth");
         this.deferLayout()
     },
     getBodyHeight: function(_) {
@@ -28914,21 +28914,21 @@ mini.extend(mini.GridView, mini.Panel, {
     },
     getColumnsHeight: function() {
         if (!this.showColumns) return 0;
-        var $ = Olol(this._columnsEl);
+        var $ = mini.getHeight(this._columnsEl);
         return $
     },
     getFilterHeight: function() {
-        return this.showFilterRow ? Olol(this.O1OOol) : 0
+        return this.showFilterRow ? mini.getHeight(this.O1OOol) : 0
     },
     getSummaryHeight: function() {
-        return this.showSummaryRow ? Olol(this.o01o) : 0
+        return this.showSummaryRow ? mini.getHeight(this.o01o) : 0
     },
     getPagerHeight: function() {
-        return this.showPager ? Olol(this._bottomPagerEl) : 0
+        return this.showPager ? mini.getHeight(this._bottomPagerEl) : 0
     },
     getGridViewBox: function(_) {
-        var $ = O1loO1(this._columnsEl),
-            A = O1loO1(this.l10ll1);
+        var $ = mini.getBox(this._columnsEl),
+            A = mini.getBox(this._bodyEl);
         $.height = A.bottom - $.top;
         $.bottom = $.top + $.height;
         return $
@@ -29328,7 +29328,7 @@ mini.extend(mini.FrozenGridView, mini.GridView, {
     },
     _initEvents: function() {
         mini.FrozenGridView.superclass._initEvents.call(this);
-        O1Oo(this._rowsEl, "mousewheel", this.__OnMouseWheel, this)
+        mini.on(this._rowsEl, "mousewheel", this.__OnMouseWheel, this)
     },
     l01O1Text: function(_, $) {
         var A = _.header;
@@ -29506,7 +29506,7 @@ mini.extend(mini.FrozenGridView, mini.GridView, {
                 var _ = C[A],
                     E = parseInt(_.rowSpan) > 1;
                 if (E);
-                else l11o(_, B)
+                else mini.setHeight(_, B)
             }
         }
 
@@ -29516,7 +29516,7 @@ mini.extend(mini.FrozenGridView, mini.GridView, {
             for (var A = 0, F = C.length; A < F; A++) {
                 var _ = C[A],
                     E = parseInt(_.rowSpan) > 1;
-                if (E) l11o(_, B)
+                if (E) mini.setHeight(_, B)
             }
         }
         I();
@@ -29535,8 +29535,8 @@ mini.extend(mini.FrozenGridView, mini.GridView, {
             }
         }
         B = A(J), G = A(E);
-        if (B < G) l11o(J, G);
-        else if (B > G) l11o(E, B)
+        if (B < G) mini.setHeight(J, G);
+        else if (B > G) mini.setHeight(E, B)
     },
     doLayout: function() {
         if (this.canLayout() == false) return;
@@ -29564,10 +29564,10 @@ mini.extend(mini.FrozenGridView, mini.GridView, {
                 this._columnsViewEl.style["width"] = "auto"
             }
             if (mini.isSafari || mini.isChrome || mini.isIE6) this._rowsViewEl.style["width"] = C + "px";
-            o0l0(this._filterLockEl, D);
-            o0l0(this._summaryLockEl, D);
-            o0l0(this._columnsLockEl, D);
-            o0l0(this._rowsLockEl, D);
+            mini.setWidth(this._filterLockEl, D);
+            mini.setWidth(this._summaryLockEl, D);
+            mini.setWidth(this._columnsLockEl, D);
+            mini.setWidth(this._rowsLockEl, D);
             this._filterLockEl.style[_] = "0px";
             this._summaryLockEl.style[_] = "0px";
             this._columnsLockEl.style[_] = "0px";
@@ -29878,7 +29878,7 @@ mini.extend(mini.ScrollGridView, mini.FrozenGridView, {
     _initEvents: function() {
         mini.ScrollGridView.superclass._initEvents.call(this);
         var $ = this;
-        O1Oo(this._vscrollEl, "scroll", this.__OnVScroll, this);
+        mini.on(this._vscrollEl, "scroll", this.__OnVScroll, this);
         mini._onScrollDownUp(this._vscrollEl, function(_) {
             $._VScrollMouseDown = true
         }, function(_) {
@@ -29966,31 +29966,31 @@ mini.extend(mini.ScrollGridView, mini.FrozenGridView, {
 mini.regClass(mini.ScrollGridView, "ScrollGridView");
 mini._onScrollDownUp = function($, B, A) {
     function D($) {
-        if (mini.isFirefox) O1Oo(document, "mouseup", _);
-        else O1Oo(document, "mousemove", C);
+        if (mini.isFirefox) mini.on(document, "mouseup", _);
+        else mini.on(document, "mousemove", C);
         B($)
     }
 
     function C($) {
-        OoOo(document, "mousemove", C);
+        mini.un(document, "mousemove", C);
         A($)
     }
 
     function _($) {
-        OoOo(document, "mouseup", _);
+        mini.un(document, "mouseup", _);
         A($)
     }
-    O1Oo($, "mousedown", D)
+    mini.on($, "mousedown", D)
 };
 mini._Gridooo0l = function($) {
     this.owner = $, el = $.el;
     $.on("rowmousemove", this.__OnRowMouseMove, this);
-    O1Oo($.ololOO, "mouseout", this.O11O11, this);
-    O1Oo($.ololOO, "mousewheel", this.__OnMouseWheel, this);
+    mini.on($.ololOO, "mouseout", this.__OnMouseOut, this);
+    mini.on($.ololOO, "mousewheel", this.__OnMouseWheel, this);
     $.on("cellmousedown", this.__OnCellMouseDown, this);
     $.on("cellmouseup", this.__OnGridCellClick, this);
     $.on("celldblclick", this.__OnGridCellClick, this);
-    O1Oo($.el, "keydown", this.o0l11, this);
+    mini.on($.el, "keydown", this.o0l11, this);
     jQuery($._columnsEl).on("mouseenter", ".mini-grid-headerCell", function($) {
         jQuery($.currentTarget).addClass("mini-grid-header-over")
     });
@@ -30122,7 +30122,7 @@ mini._Gridooo0l.prototype = {
         if (!$.enabled || $.enableHotTrack == false) return;
         $.focusRow(_)
     },
-    O11O11: function($) {
+    __OnMouseOut: function($) {
         if (this.owner.allowHotTrackOut) this.owner.focusRow(null)
     },
     __doSelect: function(E) {
@@ -30196,14 +30196,14 @@ mini._Gridooo0l.prototype = {
 };
 mini._Grid_RowGroup = function($) {
     this.owner = $, el = $.el;
-    O1Oo($.l10ll1, "click", this.Ol1o1, this)
+    mini.on($._bodyEl, "click", this.__OnClick, this)
 };
 mini._Grid_RowGroup.prototype = {
-    Ol1o1: function(B) {
+    __OnClick: function(B) {
         var $ = this.owner,
             _ = $._getRowGroupByEvent(B);
         if (_) {
-            if (!$.groupTitleCollapsible && !o00ol(B.target, "mini-grid-group-ecicon")) return;
+            if (!$.groupTitleCollapsible && !mini.hasClass(B.target, "mini-grid-group-ecicon")) return;
             var A = {
                 htmlEvent: B,
                 cancel: false,
@@ -30218,7 +30218,7 @@ mini._Grid_RowGroup.prototype = {
 mini._Grido11O1Menu = function($) {
     this.owner = $;
     this.menu = this.createMenu();
-    O1Oo($.el, "contextmenu", this.O00O, this);
+    mini.on($.el, "contextmenu", this.O00O, this);
     $.on("destroy", this.__OnGridDestroy, this)
 };
 mini._Grido11O1Menu.prototype = {
@@ -30284,12 +30284,12 @@ mini._Grido11O1Menu.prototype = {
 };
 mini._Grid_CellToolTip = function($) {
     this.owner = $;
-    O1Oo(this.owner.el, "mousemove", this.__OnGridMouseMove, this)
+    mini.on(this.owner.el, "mousemove", this.__OnGridMouseMove, this)
 };
 mini._Grid_CellToolTip.prototype = {
     __OnGridMouseMove: function(D) {
         var $ = this.owner;
-        if (o00ol(D.target, "mini-grid-headerCell-inner")) {
+        if (mini.hasClass(D.target, "mini-grid-headerCell-inner")) {
             var _ = D.target;
             if (_.scrollWidth > _.clientWidth) {
                 var C = _.innerText || _.textContent || "";
@@ -30310,8 +30310,8 @@ mini._Grid_CellToolTip.prototype = {
             setTimeout(function() {
                 var B = _;
                 if (_.firstChild) {
-                    if (o00ol(_.firstChild, "mini-grid-cell-inner")) B = _.firstChild;
-                    if (o00ol(_.firstChild, "mini-tree-nodetitle")) B = _.firstChild
+                    if (mini.hasClass(_.firstChild, "mini-grid-cell-inner")) B = _.firstChild;
+                    if (mini.hasClass(_.firstChild, "mini-tree-nodetitle")) B = _.firstChild
                 }
                 if (B.scrollWidth > B.clientWidth && $.getShowCellTip() && A[1].showCellTip) {
                     var C = B.innerText || B.textContent || "";
@@ -30324,23 +30324,23 @@ mini._Grid_CellToolTip.prototype = {
 mini._Grid_Sorter = function($) {
     this.owner = $;
     this.owner.on("headercellclick", this.__OnGridHeaderCellClick, this);
-    O1Oo($.o1oO0, "mousemove", this.__OnGridHeaderMouseMove, this);
-    O1Oo($.o1oO0, "mouseout", this.__OnGridHeaderMouseOut, this)
+    mini.on($.o1oO0, "mousemove", this.__OnGridHeaderMouseMove, this);
+    mini.on($.o1oO0, "mouseout", this.__OnGridHeaderMouseOut, this)
 };
 mini._Grid_Sorter.prototype = {
     __OnGridHeaderMouseOut: function($) {
-        if (this.OO0OlColumnEl) l0OO(this.OO0OlColumnEl, "mini-grid-headerCell-hover")
+        if (this.OO0OlColumnEl) mini.removeClass(this.OO0OlColumnEl, "mini-grid-headerCell-hover")
     },
     __OnGridHeaderMouseMove: function(_) {
         var $ = oOlO(_.target, "mini-grid-headerCell");
         if ($) {
-            olO0($, "mini-grid-headerCell-hover");
+            mini.addClass($, "mini-grid-headerCell-hover");
             this.OO0OlColumnEl = $
         }
     },
     __OnGridHeaderCellClick: function(C) {
         var $ = this.owner;
-        if (!o00ol(C.htmlEvent.target, "mini-grid-column-splitter"))
+        if (!mini.hasClass(C.htmlEvent.target, "mini-grid-column-splitter"))
             if ($.allowSortColumn && $.isEditing() == false) {
                 var _ = C.column;
                 if (!_.columns || _.columns.length == 0) {
@@ -30356,13 +30356,13 @@ mini._Grid_Sorter.prototype = {
 };
 mini._Grid_ColumnMove = function($) {
     this.owner = $;
-    O1Oo(this.owner.el, "mousedown", this.OO00Ol, this)
+    mini.on(this.owner.el, "mousedown", this.OO00Ol, this)
 };
 mini._Grid_ColumnMove.prototype = {
     OO00Ol: function(B) {
         var $ = this.owner;
         if ($.isEditing()) return;
-        if (o00ol(B.target, "mini-grid-column-splitter")) return;
+        if (mini.hasClass(B.target, "mini-grid-column-splitter")) return;
         if (B.button == mini.MouseButton.Right) return;
         var A = oOlO(B.target, $._headerCellCls);
         if (A) {
@@ -30395,7 +30395,7 @@ mini._Grid_ColumnMove.prototype = {
         this.O0Ool = mini.append(document.body, "<div class=\"mini-grid-columnproxy\"></div>");
         this.O0Ool.innerHTML = "<div class=\"mini-grid-columnproxy-inner\" style=\"height:26px;\">" + A(this.dragColumn) + "</div>";
         mini.setXY(this.O0Ool, _.now[0] + 15, _.now[1] + 18);
-        olO0(this.O0Ool, "mini-grid-no");
+        mini.addClass(this.O0Ool, "mini-grid-no");
         this.moveTop = mini.append(document.body, "<div class=\"mini-grid-movetop\"></div>");
         this.moveBottom = mini.append(document.body, "<div class=\"mini-grid-movebottom\"></div>")
     },
@@ -30419,8 +30419,8 @@ mini._Grid_ColumnMove.prototype = {
             }
         }
         if (this.targetColumn) {
-            olO0(this.O0Ool, "mini-grid-ok");
-            l0OO(this.O0Ool, "mini-grid-no");
+            mini.addClass(this.O0Ool, "mini-grid-ok");
+            mini.removeClass(this.O0Ool, "mini-grid-no");
             var B = $.getColumnBox(this.targetColumn);
             this.moveTop.style.display = "block";
             this.moveBottom.style.display = "block";
@@ -30432,8 +30432,8 @@ mini._Grid_ColumnMove.prototype = {
                 mini.setXY(this.moveBottom, B.right - 4, B.bottom)
             }
         } else {
-            l0OO(this.O0Ool, "mini-grid-ok");
-            olO0(this.O0Ool, "mini-grid-no");
+            mini.removeClass(this.O0Ool, "mini-grid-ok");
+            mini.addClass(this.O0Ool, "mini-grid-no");
             this.moveTop.style.display = "none";
             this.moveBottom.style.display = "none"
         }
@@ -30453,13 +30453,13 @@ mini._Grid_ColumnMove.prototype = {
 };
 mini._Grid_ColumnSplitter = function($) {
     this.owner = $;
-    O1Oo($.el, "mousedown", this.olol, this)
+    mini.on($.el, "mousedown", this.__OnMouseDown, this)
 };
 mini._Grid_ColumnSplitter.prototype = {
-    olol: function(B) {
+    __OnMouseDown: function(B) {
         var $ = this.owner,
             A = B.target;
-        if (o00ol(A, "mini-grid-column-splitter")) {
+        if (mini.hasClass(A, "mini-grid-column-splitter")) {
             var _ = $.olo1(A.id);
             if ($.isEditing()) return;
             if ($.allowResizeColumn && _ && _.allowResize) {
@@ -30486,7 +30486,7 @@ mini._Grid_ColumnSplitter.prototype = {
         A.x = B.x;
         A.width = B.width;
         A.right = B.right;
-        looO(this.O0Ool, A)
+        mini.setBox(this.O0Ool, A)
     },
     l1olo: function(A) {
         var $ = this.owner,
@@ -30494,11 +30494,11 @@ mini._Grid_ColumnSplitter.prototype = {
             _ = B.width + (A.now[0] - A.init[0]);
         if (_ < $.columnMinWidth) _ = $.columnMinWidth;
         if (_ > $.columnMaxWidth) _ = $.columnMaxWidth;
-        o0l0(this.O0Ool, _)
+        mini.setWidth(this.O0Ool, _)
     },
     lO1011: function(E) {
         var $ = this.owner,
-            F = O1loO1(this.O0Ool),
+            F = mini.getBox(this.O0Ool),
             D = this,
             C = $.allowSortColumn;
         $.allowSortColumn = false;
@@ -30659,7 +30659,7 @@ mini._Grid_DragDrop.prototype = {
                 if (F == "after") B += C.height;
                 mini.setXY(this.feedbackLine, D, B);
                 var A = E.getBox(true);
-                o0l0(this.feedbackLine, A.width)
+                mini.setWidth(this.feedbackLine, A.width)
             } else {
                 E.addRowCls(_, "mini-tree-feedback-add");
                 this.lastAddDomRow = _
@@ -30709,18 +30709,18 @@ mini._Grid_DragDrop.prototype = {
 };
 mini._Grid_Events = function($) {
     this.owner = $, el = $.el;
-    O1Oo(el, "click", this.Ol1o1, this);
-    O1Oo(el, "dblclick", this.o1oo11, this);
-    O1Oo(el, "mousedown", this.olol, this);
-    O1Oo(el, "mouseup", this.oOlo0, this);
-    O1Oo(el, "mousemove", this.ol1o0, this);
-    O1Oo(el, "mouseover", this.O1l1lo, this);
-    O1Oo(el, "mouseout", this.O11O11, this);
-    O1Oo(el, "keydown", this.l001l, this);
-    O1Oo(el, "keyup", this.l0o0lO, this);
-    O1Oo(el, "contextmenu", this.O00O, this);
+    mini.on(el, "click", this.__OnClick, this);
+    mini.on(el, "dblclick", this.__OnDblClick, this);
+    mini.on(el, "mousedown", this.__OnMouseDown, this);
+    mini.on(el, "mouseup", this.oOlo0, this);
+    mini.on(el, "mousemove", this.ol1o0, this);
+    mini.on(el, "mouseover", this.__OnMouseOver, this);
+    mini.on(el, "mouseout", this.__OnMouseOut, this);
+    mini.on(el, "keydown", this.l001l, this);
+    mini.on(el, "keyup", this.l0o0lO, this);
+    mini.on(el, "contextmenu", this.O00O, this);
     $.on("rowmousemove", this.__OnRowMouseMove, this);
-    O1Oo(window, "resize", this.__windowResize, this)
+    mini.on(window, "resize", this.__windowResize, this)
 };
 mini._Grid_Events.prototype = {
     __windowResize: function() {
@@ -30750,13 +30750,13 @@ mini._Grid_Events.prototype = {
         }
         this._row = _
     },
-    Ol1o1: function($) {
+    __OnClick: function($) {
         this.o00lol($, "Click")
     },
-    o1oo11: function($) {
+    __OnDblClick: function($) {
         this.o00lol($, "Dblclick")
     },
-    olol: function(A) {
+    __OnMouseDown: function(A) {
         var $ = this.owner;
         if (oOlO(A.target, "mini-tree-editinput")) return;
         if (oOlO(A.target, "mini-tree-node-ecicon")) return;
@@ -30780,10 +30780,10 @@ mini._Grid_Events.prototype = {
     ol1o0: function($) {
         this.o00lol($, "MouseMove")
     },
-    O1l1lo: function($) {
+    __OnMouseOver: function($) {
         this.o00lol($, "MouseOver")
     },
-    O11O11: function($) {
+    __OnMouseOut: function($) {
         this.o00lol($, "MouseOut")
     },
     l001l: function($) {
@@ -31290,7 +31290,7 @@ l1loOo_CellValidator_Prototype = {
         delete this._cellMapErrors[E];
         this._cellErrors.remove(C);
         if (B === true) {
-            if ($ && C) l0OO($, "mini-grid-cell-error")
+            if ($ && C) mini.removeClass($, "mini-grid-cell-error")
         } else {
             C = {
                 record: _,
@@ -31300,17 +31300,17 @@ l1loOo_CellValidator_Prototype = {
             };
             this._cellMapErrors[E] = C;
             this._cellErrors.add(C);
-            if ($) olO0($, "mini-grid-cell-error")
+            if ($) mini.addClass($, "mini-grid-cell-error")
         }
     }
 };
 mini.copyTo(mini.DataGrid.prototype, l1loOo_CellValidator_Prototype);
 mini.TreeGrid = function() {
     mini.TreeGrid.superclass.constructor.apply(this, arguments);
-    olO0(this.el, "mini-tree");
+    mini.addClass(this.el, "mini-tree");
     this.setAjaxAsync(false);
     this.setAutoLoad(true);
-    if (this.showTreeLines == true) olO0(this.el, "mini-tree-treeLine");
+    if (this.showTreeLines == true) mini.addClass(this.el, "mini-tree-treeLine");
     this._AsyncLoader = new mini._Tree_AsyncLoader(this);
     this._Expander = new mini._Tree_Expander(this);
     this.setShowArrow(this.showArrow)
@@ -31463,8 +31463,8 @@ mini.Tree = function() {
     }];
     this._columnModel.setColumns($);
     this._column = this._columnModel.getColumn("node");
-    l0OO(this.el, "mini-treegrid");
-    olO0(this.el, "mini-tree-nowrap");
+    mini.removeClass(this.el, "mini-treegrid");
+    mini.addClass(this.el, "mini-tree-nowrap");
     this.setBorderStyle("border:0")
 };
 mini.extend(mini.Tree, mini.TreeGrid, {
@@ -31504,14 +31504,14 @@ mini_Tree.setTextField = mini_Tree_setTextField;
 mini.regClass(mini.Tree, "Tree");
 mini._Tree_Expander = function($) {
     this.owner = $;
-    O1Oo($.el, "click", this.Ol1o1, this);
-    O1Oo($.el, "dblclick", this.o1oo11, this)
+    mini.on($.el, "click", this.__OnClick, this);
+    mini.on($.el, "dblclick", this.__OnDblClick, this)
 };
 mini._Tree_Expander.prototype = {
     _canToggle: function() {
         return !this.owner._dataSource._isNodeLoading()
     },
-    Ol1o1: function(B) {
+    __OnClick: function(B) {
         var _ = this.owner,
             $ = _.l110O0ByEvent(B, false);
         if (!$ || $.enabled === false) return;
@@ -31525,7 +31525,7 @@ mini._Tree_Expander.prototype = {
             _._tryToggleNode($)
         }
     },
-    o1oo11: function(B) {
+    __OnDblClick: function(B) {
         var _ = this.owner,
             $ = _.l110O0ByEvent(B, false);
         if (!$ || $.enabled === false) return;
