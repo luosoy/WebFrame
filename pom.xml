@@ -73,10 +73,17 @@
         </dependency>
         
         <!-- ojdbc --> 
-        <dependency>
+<!--        <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
             <version>11.1.0.7.0</version>
+        </dependency>-->
+        
+        <!-- mysql --> 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>6.0.5</version>
         </dependency>
         
         <!-- commons --> 
@@ -127,7 +134,7 @@
         
         <!-- aspectj -->
         <dependency>
-            <groupId>aspectj</groupId>
+            <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>${aspectj.version}</version>
         </dependency>
