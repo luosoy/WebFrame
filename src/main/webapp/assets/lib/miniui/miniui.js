@@ -1330,7 +1330,7 @@ mini_Tabs_OOO11l = function() {
             O += "<span class=\"mini-tab-text\">" + N.title + "</span>";
             if (N.showCloseButton) {
                 var _ = "";
-                if (N.enabled) _ = "onmouseover=\"mini.addClass(this,'mini-tab-close-hover')\" onmouseout=\"l0OO(this,'mini-tab-close-hover')\"";
+                if (N.enabled) _ = "onmouseover=\"mini.addClass(this,'mini-tab-close-hover')\" onmouseout=\"mini.removeClass(this,'mini-tab-close-hover')\"";
                 O += "<span class=\"mini-tab-close\" " + _ + " ></span>"
             }
             O += "</td>";
@@ -1411,7 +1411,7 @@ mini_Tabs_O0ll00 = function() {
             J += "<span class=\"mini-tab-text\">" + I.title + "</span>";
             if (I.showCloseButton) {
                 var _ = "";
-                if (I.enabled) _ = "onmouseover=\"mini.addClass(this,'mini-tab-close-hover')\" onmouseout=\"l0OO(this,'mini-tab-close-hover')\"";
+                if (I.enabled) _ = "onmouseover=\"mini.addClass(this,'mini-tab-close-hover')\" onmouseout=\"mini.removeClass(this,'mini-tab-close-hover')\"";
                 J += "<span class=\"mini-tab-close\" " + _ + "></span>"
             }
             J += "</td></tr>";
@@ -5687,7 +5687,7 @@ mini_Spinner_set = function(_) {
     return this
 };
 mini_Spinner_loOOoOHtml = function() {
-    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"mini.removeClass(this,'" + this.O1l0 + "');\"";
     return "<span name=\"trigger\" class=\"mini-buttonedit-button mini-buttonedit-trigger\" " + $ + "><span class=\"mini-buttonedit-up\"><span></span></span><span class=\"mini-buttonedit-down\"><span></span></span></span>"
 };
 mini_Spinner__initEvents = function() {
@@ -9059,7 +9059,7 @@ mini_MenuItem_o0oO = function() {
     if (this.l0l1O1) return;
     this.l0l1O1 = true;
     OooO(this.el, "click", this.__OnClick, this);
-    OooO(this.el, "mouseup", this.oOlo0, this);
+    OooO(this.el, "mouseup", this.__mouseup, this);
     OooO(this.el, "mouseout", this.__OnMouseOut, this)
 };
 mini_MenuItem_destroy = function($) {
@@ -10329,7 +10329,7 @@ mini_ComboBox_getAttrs = function(G) {
 mini_HtmlFile__create = function() {
     mini.HtmlFile.superclass._create.call(this);
     this.llOl1 = mini.append(this.el, "<input type=\"file\" hideFocus class=\"mini-htmlfile-file\" name=\"" + this.name + "\" ContentEditable=false/>");
-    mini.on(this._borderEl, "mousemove", this.ol1o0, this);
+    mini.on(this._borderEl, "mousemove", this.__mousemove, this);
     mini.on(this.llOl1, "change", this.o11lO, this)
 };
 mini_HtmlFile_destroy = function($) {
@@ -10340,7 +10340,7 @@ mini_HtmlFile_destroy = function($) {
     mini.HtmlFile.superclass.destroy.call(this, $)
 };
 mini_HtmlFile_loOOoOHtml = function() {
-    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"mini.removeClass(this,'" + this.O1l0 + "');\"";
     return "<span class=\"mini-buttonedit-button\" " + $ + ">" + this.buttonText + "</span>"
 };
 mini_HtmlFile_o11lO = function($) {
@@ -10471,7 +10471,7 @@ mini_Calendar__initEvents = function() {
     mini._BindEvents(function() {
         mini.on(this.el, "click", this.__OnClick, this);
         mini.on(this.el, "mousedown", this.__OnMouseDown, this);
-        mini.on(this.el, "keydown", this.l001l, this)
+        mini.on(this.el, "keydown", this.__keydown, this)
     }, this)
 };
 mini_Calendar_getDateEl = function($) {
@@ -11994,7 +11994,7 @@ mini_ButtonEdit__createButtonHtml = function(B, _, A) {
     B = B || "";
     _ = _ || "";
     A = A || "";
-    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"mini.removeClass(this,'" + this.O1l0 + "');\"";
     return "<span title=\"" + A + "\" name=\"" + B + "\" class=\"mini-buttonedit-button mini-buttonedit-" + B + "\" " + $ + "><span class=\"mini-buttonedit-icon " + _ + "\"></span></span>"
 };
 mini_ButtonEdit_loOOoOsHTML = function() {
@@ -12443,7 +12443,7 @@ mini_FileUpload__create = function() {
     this._uploadId = this._id + "$button_placeholder";
     this.llOl1 = mini.append(this.el, "<span id=\"" + this._uploadId + "\"></span>");
     this.uploadEl = this.llOl1;
-    mini.on(this._borderEl, "mousemove", this.ol1o0, this)
+    mini.on(this._borderEl, "mousemove", this.__mousemove, this)
 };
 
 mini_DatePicker_getShowOkButton = function() {
@@ -12451,7 +12451,7 @@ mini_DatePicker_getShowOkButton = function() {
 };
 mini_FileUpload_loOOoOHtml = function() {
 
-    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"mini.removeClass(this,'" + this.O1l0 + "');\"";
     return "<span class=\"mini-buttonedit-button\" " + $ + ">" + this.buttonText + "</span>"
 };
 mini_FileUpload_destroy = function($) {
@@ -13430,13 +13430,13 @@ mini_ListControl__initEvents = function() {
         OooO(this.el, "click", this.__OnClick, this);
         OooO(this.el, "dblclick", this.__OnDblClick, this);
         OooO(this.el, "mousedown", this.__OnMouseDown, this);
-        OooO(this.el, "mouseup", this.oOlo0, this);
-        OooO(this.el, "mousemove", this.ol1o0, this);
+        OooO(this.el, "mouseup", this.__mouseup, this);
+        OooO(this.el, "mousemove", this.__mousemove, this);
         OooO(this.el, "mouseover", this.__OnMouseOver, this);
         OooO(this.el, "mouseout", this.__OnMouseOut, this);
-        OooO(this.el, "keydown", this.l001l, this);
-        OooO(this.el, "keyup", this.l0o0lO, this);
-        OooO(this.el, "contextmenu", this.O00O, this)
+        OooO(this.el, "keydown", this.__keydown, this);
+        OooO(this.el, "keyup", this.__keyup, this);
+        OooO(this.el, "contextmenu", this.__contextmenu, this)
     }, this)
 };
 mini_ListControl_destroy = function($) {
@@ -14387,7 +14387,7 @@ mini_OutlookTree__Ol0O1l = function($) {
     this.fire("drawnode", $)
 };
 mini_TimeSpinner_loOOoOHtml = function() {
-    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"l0OO(this,'" + this.O1l0 + "');\"";
+    var $ = "onmouseover=\"mini.addClass(this,'" + this.O1l0 + "');\" " + "onmouseout=\"mini.removeClass(this,'" + this.O1l0 + "');\"";
     return "<span class=\"mini-buttonedit-button\" " + $ + "><span class=\"mini-buttonedit-up\"><span></span></span><span class=\"mini-buttonedit-down\"><span></span></span></span>"
 };
 mini_TimeSpinner__initEvents = function() {
@@ -14395,7 +14395,7 @@ mini_TimeSpinner__initEvents = function() {
     mini._BindEvents(function() {
         this.on("buttonmousedown", this.ll0Ol0, this);
         mini.on(this.el, "mousewheel", this.l1ll1, this);
-        mini.on(this._textEl, "keydown", this.l001l, this)
+        mini.on(this._textEl, "keydown", this.__keydown, this)
     }, this)
 };
 mini_TimeSpinner_setFormat = function($) {
@@ -14818,11 +14818,11 @@ mini_TextBoxList_destroy = function($) {
 };
 mini_TextBoxList__initEvents = function() {
     mini.TextBoxList.superclass._initEvents.call(this);
-    mini.on(this.el, "mousemove", this.ol1o0, this);
+    mini.on(this.el, "mousemove", this.__mousemove, this);
     mini.on(this.el, "mouseout", this.__OnMouseOut, this);
     mini.on(this.el, "mousedown", this.__OnMouseDown, this);
     mini.on(this.el, "click", this.__OnClick, this);
-    mini.on(this.el, "keydown", this.l001l, this);
+    mini.on(this.el, "keydown", this.__keydown, this);
     mini.on(document, "mousedown", this.oll01, this)
 };
 mini_TextBoxList_oll01 = function(_) {
@@ -17089,13 +17089,13 @@ mini_ListControl._OnItemMouseMove = mini_ListControl__OnItemMouseMove;
 mini_ListControl._OnItemMouseOut = mini_ListControl__OnItemMouseOut;
 mini_ListControl._OnItemClick = mini_ListControl__OnItemClick;
 mini_ListControl.o00lol = mini_ListControl_o00lol;
-mini_ListControl.O00O = mini_ListControl_O00O;
-mini_ListControl.l0o0lO = mini_ListControl_l0o0lO;
-mini_ListControl.l001l = mini_ListControl_l001l;
+mini_ListControl.__contextmenu = mini_ListControl_O00O;
+mini_ListControl.__keyup = mini_ListControl_l0o0lO;
+mini_ListControl.__keydown = mini_ListControl_l001l;
 mini_ListControl.__OnMouseOut = mini_ListControl_O11O11;
 mini_ListControl.__OnMouseOver = mini_ListControl_O1l1lo;
-mini_ListControl.ol1o0 = mini_ListControl_ol1o0;
-mini_ListControl.oOlo0 = mini_ListControl_oOlo0;
+mini_ListControl.__mousemove = mini_ListControl_ol1o0;
+mini_ListControl.__mouseup = mini_ListControl_oOlo0;
 mini_ListControl.__OnMouseDown = mini_ListControl_olol;
 mini_ListControl.__OnDblClick = mini_ListControl_o1oo11;
 mini_ListControl.__OnClick = mini_ListControl_Ol1o1;
@@ -21903,7 +21903,7 @@ mini.extend(mini.Calendar, mini.Control, {
 mini_Calendar = mini.Calendar.prototype;
 mini_Calendar.getAttrs = mini_Calendar_getAttrs;
 mini_Calendar.Ol11o = mini_Calendar_Ol11o;
-mini_Calendar.l001l = mini_Calendar_l001l;
+mini_Calendar.__keydown = mini_Calendar_l001l;
 mini_Calendar.O0OoO = mini_Calendar_O0OoO;
 mini_Calendar.__OnMouseDown = mini_Calendar_olol;
 mini_Calendar.__OnClick = mini_Calendar_Ol1o1;
@@ -22288,7 +22288,7 @@ mini_HtmlFile.clear = mini_HtmlFile_clear;
 mini_HtmlFile.getValue = mini_HtmlFile_getValue;
 mini_HtmlFile.setName = mini_HtmlFile_setName;
 mini_HtmlFile.O0OO = mini_HtmlFile_O0OO;
-mini_HtmlFile.ol1o0 = mini_HtmlFile_ol1o0;
+mini_HtmlFile.__mousemove = mini_HtmlFile_ol1o0;
 mini_HtmlFile.o11lO = mini_HtmlFile_o11lO;
 mini_HtmlFile.loOOoOHtml = mini_HtmlFile_loOOoOHtml;
 mini_HtmlFile.destroy = mini_HtmlFile_destroy;
@@ -22377,7 +22377,7 @@ mini.regClass(mini.FilterEdit, "filteredit");
 mini.Lookup = function() {
     this.data = [];
     mini.Lookup.superclass.constructor.apply(this, arguments);
-    mini.on(this._textEl, "mouseup", this.oOlo0, this);
+    mini.on(this._textEl, "mouseup", this.__mouseup, this);
     this.on("showpopup", this.__OnShowPopup, this)
 };
 mini.extend(mini.Lookup, mini.PopupEdit, {
@@ -22394,7 +22394,7 @@ mini.extend(mini.Lookup, mini.PopupEdit, {
 mini_Lookup = mini.Lookup.prototype;
 mini_Lookup.getAttrs = mini_Lookup_getAttrs;
 mini_Lookup.ll01 = mini_Lookup_ll01;
-mini_Lookup.oOlo0 = mini_Lookup_oOlo0;
+mini_Lookup.__mouseup = mini_Lookup_oOlo0;
 mini_Lookup.O10l1 = mini_Lookup_O10l1;
 mini_Lookup.doUpdate = mini_Lookup_doUpdate;
 mini_Lookup.__OnShowPopup = mini_Lookup___OnShowPopup;
@@ -22467,10 +22467,10 @@ mini_TextBoxList.blur = mini_TextBoxList_blur;
 mini_TextBoxList.focus = mini_TextBoxList_focus;
 mini_TextBoxList.O10l1 = mini_TextBoxList_O10l1;
 mini_TextBoxList.__doSelectValue = mini_TextBoxList___doSelectValue;
-mini_TextBoxList.l001l = mini_TextBoxList_l001l;
+mini_TextBoxList.__keydown = mini_TextBoxList_l001l;
 mini_TextBoxList.__OnClick = mini_TextBoxList_Ol1o1;
 mini_TextBoxList.__OnMouseOut = mini_TextBoxList_O11O11;
-mini_TextBoxList.ol1o0 = mini_TextBoxList_ol1o0;
+mini_TextBoxList.__mousemove = mini_TextBoxList_ol1o0;
 mini_TextBoxList.hidePopup = mini_TextBoxList_hidePopup;
 mini_TextBoxList.showPopup = mini_TextBoxList_showPopup;
 mini_TextBoxList._createPopup = mini_TextBoxList__createPopup;
@@ -22867,7 +22867,7 @@ mini_FileUpload.setLimitType = mini_FileUpload_setLimitType;
 mini_FileUpload.getPostParam = mini_FileUpload_getPostParam;
 mini_FileUpload.setPostParam = mini_FileUpload_setPostParam;
 mini_FileUpload.addPostParam = mini_FileUpload_addPostParam;
-mini_FileUpload.ol1o0 = mini_FileUpload_ol1o0;
+mini_FileUpload.__mousemove = mini_FileUpload_ol1o0;
 mini_FileUpload.destroy = mini_FileUpload_destroy;
 mini_FileUpload.loOOoOHtml = mini_FileUpload_loOOoOHtml;
 mini_FileUpload._create = mini_FileUpload__create;
@@ -24418,7 +24418,7 @@ mini_MenuItem.onCheckedChanged = mini_MenuItem_onCheckedChanged;
 mini_MenuItem.onClick = mini_MenuItem_onClick;
 mini_MenuItem.__OnMouseOut = mini_MenuItem_O11O11;
 mini_MenuItem.__OnMouseOver = mini_MenuItem_O1l1lo;
-mini_MenuItem.oOlo0 = mini_MenuItem_oOlo0;
+mini_MenuItem.__mouseup = mini_MenuItem_oOlo0;
 mini_MenuItem.__OnClick = mini_MenuItem_Ol1o1;
 mini_MenuItem.getTopMenu = mini_MenuItem_getTopMenu;
 mini_MenuItem.l1O100 = mini_MenuItem_l1O100;
@@ -30218,7 +30218,7 @@ mini._Grid_RowGroup.prototype = {
 mini._Grido11O1Menu = function($) {
     this.owner = $;
     this.menu = this.createMenu();
-    mini.on($.el, "contextmenu", this.O00O, this);
+    mini.on($.el, "contextmenu", this.__contextmenu, this);
     $.on("destroy", this.__OnGridDestroy, this)
 };
 mini._Grido11O1Menu.prototype = {
@@ -30256,7 +30256,7 @@ mini._Grido11O1Menu.prototype = {
         }
         F.setItems(B)
     },
-    O00O: function(_) {
+    __contextmenu: function(_) {
         var $ = this.owner;
         if ($.showColumnsMenu == false) return;
         if (Oolo($._columnsEl, _.target) == false) return;
@@ -30712,13 +30712,13 @@ mini._Grid_Events = function($) {
     mini.on(el, "click", this.__OnClick, this);
     mini.on(el, "dblclick", this.__OnDblClick, this);
     mini.on(el, "mousedown", this.__OnMouseDown, this);
-    mini.on(el, "mouseup", this.oOlo0, this);
-    mini.on(el, "mousemove", this.ol1o0, this);
+    mini.on(el, "mouseup", this.__mouseup, this);
+    mini.on(el, "mousemove", this.__mousemove, this);
     mini.on(el, "mouseover", this.__OnMouseOver, this);
     mini.on(el, "mouseout", this.__OnMouseOut, this);
-    mini.on(el, "keydown", this.l001l, this);
-    mini.on(el, "keyup", this.l0o0lO, this);
-    mini.on(el, "contextmenu", this.O00O, this);
+    mini.on(el, "keydown", this.__keydown, this);
+    mini.on(el, "keyup", this.__keyup, this);
+    mini.on(el, "contextmenu", this.__contextmenu, this);
     $.on("rowmousemove", this.__OnRowMouseMove, this);
     mini.on(window, "resize", this.__windowResize, this)
 };
@@ -30770,14 +30770,14 @@ mini._Grid_Events.prototype = {
             $._tryFocus(A)
         }, _)
     },
-    oOlo0: function(_) {
+    __mouseup: function(_) {
         if (oOlO(_.target, "mini-tree-editinput")) return;
         if (oOlO(_.target, "mini-tree-node-ecicon")) return;
         if (oOlO(_.target, "mini-tree-checkbox")) return;
         var $ = this.owner;
         if (Oolo($.el, _.target)) this.o00lol(_, "MouseUp")
     },
-    ol1o0: function($) {
+    __mousemove: function($) {
         this.o00lol($, "MouseMove")
     },
     __OnMouseOver: function($) {
@@ -30786,13 +30786,13 @@ mini._Grid_Events.prototype = {
     __OnMouseOut: function($) {
         this.o00lol($, "MouseOut")
     },
-    l001l: function($) {
+    __keydown: function($) {
         this.o00lol($, "KeyDown")
     },
-    l0o0lO: function($) {
+    __keyup: function($) {
         this.o00lol($, "KeyUp")
     },
-    O00O: function($) {
+    __contextmenu: function($) {
         this.o00lol($, "ContextMenu")
     },
     o00lol: function(G, E) {
