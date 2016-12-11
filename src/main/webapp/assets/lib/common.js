@@ -39,8 +39,10 @@ $.jqAjax = $.ajax;
 $.ajax = $.send = function (settings) {
     SysUtils.mask($(settings.mask));
     settings.url = settings.url || '';
+    
     var newst = $.extend(true, {}, settings, {
         url: (settings.url || '').indexOf('/') == 0 ? (SYS.ctx + settings.url) : (SYS.path + settings.url),
+        type : settings.ajaxType || settings.type || "get",
         success: function (data) {
             var args = arguments, ndata = data, func;
             ndata = mini.decode(ndata);
@@ -412,7 +414,6 @@ $.fn.mini = function (name, opts) {
             if (ui)
                 return this;
             ui = new name(); // 创建组件
-            ui._allowLayout = false;
             cfg = ui.getAttrs(el) || {};
             cfg.cls = cfg.cls ? cfg.cls.replace(/(?:ui-\w*|fn-hide)\s*/g, '') : '';
             opts = $.extend((cfg || {}), opts);
@@ -545,7 +546,7 @@ var View = {
     minis: {},
     _cmp: {
         config: {
-            autoLoad: true
+            autoLoad: false
         },
         render: $.noop
     },
@@ -567,14 +568,8 @@ var View = {
             }
         }
         this._initUI();
-        this._initEvent();
         this.render.apply(this);
         return this;
-    },
-    _initEvent: function () {
-        $('body').on('click', '.section.expand h3', function () {
-            $(this).closest('.section').toggleClass('hide');
-        });
     },
     _initUI: function () {
         var base = this, map = {}, __length = 0;

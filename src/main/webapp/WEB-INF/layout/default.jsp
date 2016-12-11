@@ -17,7 +17,7 @@
         <script type="text/javascript">
             var SYS = {
                 ctx: '${ctx}',
-                path: '${ctx}/web',
+                path: '${ctx}/web/',
                 stc: '${stc}'
             };
         </script>

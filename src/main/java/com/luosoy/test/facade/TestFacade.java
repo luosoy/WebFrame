@@ -7,6 +7,7 @@ package com.luosoy.test.facade;
 
 import com.luosoy.test.dto.TestDTO;
 import com.luosoy.test.service.TestService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,5 +25,10 @@ public class TestFacade {
     @Transactional(value = "testTransactionManager")
     public void save(TestDTO tdto) {
         ts.save(tdto);
+    }
+    
+    
+    public List<TestDTO> find(){
+        return ts.find();
     }
 }

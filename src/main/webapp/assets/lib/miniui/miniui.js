@@ -11069,7 +11069,7 @@ mini_Component_set = function(A) {
 mini_Component_fire = function(A, B) {
     if (this.O0oooo == false) return;
     A = A.toLowerCase();
-    var _ = this.Ol10l[A];
+    var _ = this._events[A];
     if (_) {
         if (!B) B = {};
         if (B && B != this) {
@@ -11084,36 +11084,36 @@ mini_Component_fire = function(A, B) {
 };
 mini_Component_on = function(type, fn, scope) {
     if (typeof fn == "string") {
-        var f = l1ooo(fn);
+        var f = mini._getFunctoin(fn);
         if (!f) {
             var id = mini.newId("__str_");
             window[id] = fn;
-            eval("fn = function(e){var s = " + id + ";var fn = l1ooo(s); if(fn) {fn.call(this,e)}else{eval(s);}}")
+            eval("fn = function(e){var s = " + id + ";var fn = mini._getFunctoin(s); if(fn) {fn.call(this,e)}else{eval(s);}}")
         } else fn = f
     }
     if (typeof fn != "function" || !type) return false;
     type = type.toLowerCase();
-    var event = this.Ol10l[type];
-    if (!event) event = this.Ol10l[type] = [];
+    var event = this._events[type];
+    if (!event) event = this._events[type] = [];
     scope = scope || this;
     if (!this.findListener(type, fn, scope)) event.push([fn, scope]);
     return this
 };
 mini_Component_un = function($, C, _) {
     $ = $.toLowerCase();
-    var A = this.Ol10l[$];
+    var A = this._events[$];
     if (A)
         if (C) {
             _ = _ || this;
             var B = this.findListener($, C, _);
             if (B) A.remove(B)
-        } else delete this.Ol10l[$];
+        } else delete this._events[$];
     return this
 };
 mini_Component_findListener = function(A, E, B) {
     A = A.toLowerCase();
     B = B || this;
-    var _ = this.Ol10l[A];
+    var _ = this._events[A];
     if (_)
         for (var $ = 0, D = _.length; $ < D; $++) {
             var C = _[$];
@@ -16711,7 +16711,7 @@ lolloo = function() {
     l1oo = [];
     mini._EventTimer = null
 };
-l1ooo = function(C) {
+mini._getFunctoin = function(C) {
     if (typeof C != "string") return null;
     var _ = C.split("."),
         D = null;
@@ -16797,7 +16797,7 @@ mini.create = function($) {
 };
 
 mini.Component = function() {
-    this.Ol10l = {};
+    this._events = {};
     this.uid = mini.newId(this.o0ooo);
     this._id = this.uid;
     if (!this.id) this.id = this.uid;
@@ -29125,7 +29125,7 @@ mini.extend(mini.GridView, mini.Panel, {
         if (G.autoEscape == true) G.cellHtml = mini.htmlEncode(G.cellHtml);
         var A = B.renderer;
         if (A) {
-            var E = typeof A == "function" ? A : l1ooo(A);
+            var E = typeof A == "function" ? A : mini._getFunctoin(A);
             if (E) G.cellHtml = E.call(B, G)
         }
         G.cellHtml = (G.cellHtml === 0 || G.cellHtml) ? String(G.cellHtml).trim() : "";

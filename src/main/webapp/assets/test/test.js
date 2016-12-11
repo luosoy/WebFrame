@@ -9,25 +9,40 @@ var view = View.extend({
                 height: '250px',
                 singleSelect: true,
                 collapsible: true,
-                url: '/assets/test/datagrid_data1.json',
-                method: 'get',
                 columns: [
-                    {field: 'itemid', header: 'Item ID', name: 'Item ID', width: 80},
-                    {field: 'productid', header: 'Product', width: 150},
-                    {field: 'listprice', header: 'List Price', width: 100, align: 'right'},
-                    {field: 'unitcost', header: 'Unit Cost', width: 100, align: 'right'},
-                    {field: 'attr1', header: 'Attribute', width: 100},
-                    {field: 'status', header: 'Status', width: 100}
+                    {field: 'name', header: '名称', name: 'name', width: 80},
+                    {field: 'age', header: '年龄', name: 'age', width: 150}
                 ]
+//                onbeforepagechanged: function (e) {
+//                    alert(1);
+//                    this.ui.loadTable();
+//                }
             },
             render: function () {
+                this.loadTable();
+            },
+            loadTable: function () {
+                var grid = this;
+                $.send({
+                    url: "test/findTest",
+                    isjson: true,
+                    ajaxType: "post",
+                    success: function (data) {
+                        grid.mui.setData(data.data);
+                        grid.mui.setTotalCount(data.data.length);
+                    }
+                });
             }
         },
         cc: {
             el: '#cc',
-            type: 'calendar',
+            type: 'ComboBox',
             config: {
-
+                url: "test/findTest",
+                isjson: true,
+                ajaxType: "post",
+                textField: "name",
+                valueField: "age"
             }
         }
     },

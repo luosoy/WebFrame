@@ -9,6 +9,7 @@ import com.luosoy.frame.beans.BeanConvertUtil;
 import com.luosoy.test.cmp.TestCMP;
 import com.luosoy.test.dto.TestDTO;
 import com.luosoy.test.repository.TestRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,10 @@ public class TestService {
     public void save(TestDTO tdto){
         TestCMP tcmp = BeanConvertUtil.convert(tdto, new TestCMP());
         repository.save(tcmp);
+    }
+    
+    public List<TestDTO> find(){
+        List<TestCMP> cMPs = repository.findAll();
+        return BeanConvertUtil.convertList(TestCMP.class, TestDTO.class, cMPs);
     }
 }
