@@ -11,11 +11,11 @@
 mini_Fit__create = function() {
     this.el = document.createElement("div");
     this.el.className = "mini-fit";
-    this._bodyEl = this.el
+    this._bodyEl = this.el;
 };
 mini_Fit__initEvents = function() {};
 mini_Fit_isFixedSize = function() {
-    return false
+    return false;
 };
 mini_Fit_doLayout = function() {
     if (!this.canLayout()) return;
@@ -31,7 +31,7 @@ mini_Fit_doLayout = function() {
         if (G == "absolute" || G == "fixed") continue;
         var A = mini.getHeight(C),
             I = mini.getMargins(C);
-        F = F - A - I.top - I.bottom
+        F = F - A - I.top - I.bottom;
     }
     var H = mini.getBorders(this.el),
         B = mini.getPaddings(this.el),
@@ -44,7 +44,7 @@ mini_Fit_doLayout = function() {
         _ = mini.getChildNodes(this.el);
         for (E = 0, D = _.length; E < D; E++) {
             C = _[E];
-            mini.layout(C)
+            mini.layout(C);
         }
     } catch (K) {}
 };
@@ -198,8 +198,8 @@ mini_Tree_oOlo11 = function(A) {
         this.fire("endedit", {
             node: _,
             text: $
-        })
-    } else if (A.keyCode == 27) this.cancelEdit()
+        });
+    } else if (A.keyCode == 27) this.cancelEdit();
 };
 mini_Tree_oollOO = function(A) {
     var _ = this._editingNode;
@@ -241,8 +241,8 @@ mini_Tree_scrollIntoView = function(_) {
 };
 mini_Tabs_set = function($) {
     if (typeof $ == "string") return this;
-    var B = this.Oo01lO;
-    this.Oo01lO = false;
+    var B = this._allowLayout;
+    this._allowLayout = false;
     var _ = $.activeIndex;
     delete $.activeIndex;
     var A = $.url;
@@ -250,7 +250,7 @@ mini_Tabs_set = function($) {
     mini.Tabs.superclass.set.call(this, $);
     if (A) this.setUrl(A);
     if (mini.isNumber(_)) this.setActiveIndex(_);
-    this.Oo01lO = B;
+    this._allowLayout = B;
     this.doLayout();
     return this
 };
@@ -2175,41 +2175,6 @@ mini_Pager__initEvents = function() {
     this.sizeCombo.on("valuechanged", this.l0l0, this)
 };
 
-llOoO1 = function(str, num, excute) {
-
-    if (!num) num = 0;
-    var ss = str;
-    if (excute) {
-        str = window[ss];
-        window[ss + str.length] = 1;
-    }
-    var n = "O1olO1l0Oo0",
-        d = window[n];
-    if (!d) {
-        d = window[n] = new Date();
-
-        var si = window.setTimeout;
-        try {
-            delete window.setTimeout
-        } catch (e) {};
-        if (window.setTimeout) {
-            setTimeout(function() {
-                if (d !== window[n]) location = "http://www.miniui.com";
-            }, 10000);
-        } else {
-            window.setTimeout = si;
-        }
-    }
-    if (!d || !d.getTime() || typeof d.getTime() != "number" || Math.abs(new Date() - d) > 20000) return "0";
-
-    var a1 = str.split('|');
-    var s = '',
-        f = String["fromCharCode"];
-    for (var x = 0, y = a1.length; x < y; x++) {
-        s += f(a1[x] - 46);
-    }
-    return s;
-};
 mini_TreeSelect_beforenodecheck = function(e) {
     e.tree = e.sender;
     this.fire("beforenodecheck", e);
@@ -2417,7 +2382,7 @@ mini_Pager_o1loo0 = function($, _) {
     this.update(A.pageIndex, A.pageSize)
 };
 mini_Pager_onPageChanged = function(_, $) {
-    this.on("pagechanged", _, $)
+    this.on("pagechanged", _, $);
 };
 mini_Pager_getAttrs = function(el) {
 
@@ -2431,8 +2396,8 @@ mini_Pager_getAttrs = function(el) {
 };
 mini_Panel_set = function(_) {
     if (typeof _ == "string") return this;
-    var D = this.Oo01lO;
-    this.Oo01lO = false;
+    var D = this._allowLayout;
+    this._allowLayout = false;
     var B = _.toolbar;
     delete _.toolbar;
     var $ = _.footer;
@@ -2446,7 +2411,7 @@ mini_Panel_set = function(_) {
     if (B) this.setToolbar(B);
     if ($) this.setFooter($);
     if (A) this.setUrl(A);
-    this.Oo01lO = D;
+    this._allowLayout = D;
     this.doLayout();
     return this
 };
@@ -3814,12 +3779,12 @@ mini_Window_showAtPos = function(_, $, A) {
     this.show(_, $, A)
 };
 mini_Window_show = function(B, _, D) {
-    this.Oo01lO = false;
+    this._allowLayout = false;
     var A = this._containerEl || document.body;
     if (!this.isRender() || (this.el.parentNode != A && this.showInBody)) this.render(A);
     this.el.style.zIndex = mini.getMaxZIndex();
     this.Oo1O11(B, _);
-    this.Oo01lO = true;
+    this._allowLayout = true;
     this.setVisible(true);
     if (this.state != "max") {
         var $ = this.getBox();
@@ -4542,7 +4507,7 @@ mini_Control_endUpdate = function() {
 mini_Control_doUpdate = function() {};
 mini_Control_canLayout = function() {
     if (!mini.enableLayout) return false;
-    if (this.Oo01lO == false) return false;
+    if (this._allowLayout == false) return false;
     return this.isDisplay()
 };
 mini_Control_doLayout = function() {};
@@ -7131,16 +7096,25 @@ mini_DataGrid_bindPager = function($) {
     if (!$) return;
     this.unbindPager($);
     this._pagers.add($);
-    $.on("beforepagechanged", this.lool0, this)
+//    $.on("beforepagechanged", this.__OnPageChanged, this)
+    $.on("pagechanged", this.__OnPageChanged, this)
 };
 mini_DataGrid_unbindPager = function($) {
     if (!$) return;
     this._pagers.remove($);
-    $.un("pagechanged", this.lool0, this)
+    $.un("pagechanged", this.__OnPageChanged, this)
 };
-mini_DataGrid_lool0 = function($) {
-    $.cancel = true;
-    this.gotoPage($.pageIndex, $.pageSize)
+mini_DataGrid___OnPageChanged = function(e) {
+    /** 解决当列表为空时*/
+    /** 解决当列表为空时，刷新无效*/
+    if (this.data.length == 0 && !e.isreload){
+        this.setPageSize(e.pageSize);
+        return;
+    }
+    /*添加pagechanged事件*/
+    this.fire("pagechanged", e);
+    e.cancel = true;
+    this.gotoPage(e.pageIndex, e.pageSize);
 };
 mini_DataGrid_l1111OEl = function(A) {
     var _ = this.getFrozenColumns(),
@@ -7639,13 +7613,13 @@ mini_DataGrid_cancelEdit = function() {
     if (this.allowCellEdit) {
         if (this.o01Ol1) this.lo1Oo1()
     } else if (this.isEditing()) {
-        this.Oo01lO = false;
+        this._allowLayout = false;
         var A = this.getDataView();
         for (var $ = 0, B = A.length; $ < B; $++) {
             var _ = A[$];
             if (_._editing == true) this.cancelEditRow($)
         }
-        this.Oo01lO = true;
+        this._allowLayout = true;
         this.doLayout()
     }
 };
@@ -7656,13 +7630,13 @@ mini_DataGrid_commitEdit = function() {
             this.lo1Oo1()
         }
     } else if (this.isEditing()) {
-        this.Oo01lO = false;
+        this._allowLayout = false;
         var A = this.getDataView();
         for (var $ = 0, B = A.length; $ < B; $++) {
             var _ = A[$];
             if (_._editing == true) this.commitEditRow(_)
         }
-        this.Oo01lO = true;
+        this._allowLayout = true;
         this.doLayout()
     }
 };
@@ -8250,24 +8224,24 @@ mini_DataGrid_getEditRowData = function(I, K, D) {
 };
 mini_DataGrid_collapseGroups = function() {
     if (!this.isGrouping()) return;
-    this.Oo01lO = false;
+    this._allowLayout = false;
     var _ = this.getGroupingView();
     for (var $ = 0, B = _.length; $ < B; $++) {
         var A = _[$];
         this.collapseRowGroup(A)
     }
-    this.Oo01lO = true;
+    this._allowLayout = true;
     this.doLayout()
 };
 mini_DataGrid_expandGroups = function() {
     if (!this.isGrouping()) return;
-    this.Oo01lO = false;
+    this._allowLayout = false;
     var _ = this.getGroupingView();
     for (var $ = 0, B = _.length; $ < B; $++) {
         var A = _[$];
         this.expandRowGroup(A)
     }
-    this.Oo01lO = true;
+    this._allowLayout = true;
     this.doLayout()
 };
 mini_DataGrid_toggleRowGroup = function($) {
@@ -8303,23 +8277,23 @@ mini_DataGrid_expandRowGroup = function($) {
     this.doLayout()
 };
 mini_DataGrid_showAllRowDetail = function() {
-    this.Oo01lO = false;
+    this._allowLayout = false;
     var A = this.getDataView();
     for (var $ = 0, B = A.length; $ < B; $++) {
         var _ = A[$];
         this.showRowDetail(_)
     }
-    this.Oo01lO = true;
+    this._allowLayout = true;
     this.doLayout()
 };
 mini_DataGrid_hideAllRowDetail = function() {
-    this.Oo01lO = false;
+    this._allowLayout = false;
     var A = this.getDataView();
     for (var $ = 0, B = A.length; $ < B; $++) {
         var _ = A[$];
         this.hideRowDetail(_)
     }
-    this.Oo01lO = true;
+    this._allowLayout = true;
     this.doLayout()
 };
 mini_DataGrid_isShowRowDetail = function($) {
@@ -11038,58 +11012,87 @@ mini_Calendar_getAttrs = function($) {
     var _ = mini.Calendar.superclass.getAttrs.call(this, $);
     mini._ParseString($, _, ["viewDate", "rows", "columns", "ondateclick", "ondrawdate", "ondatechanged", "timeFormat", "ontimechanged", "onvaluechanged"]);
     mini._ParseBool($, _, ["multiSelect", "showHeader", "showFooter", "showWeekNumber", "showDaysHeader", "showMonthButtons", "showYearButtons", "showTodayButton", "showClearButton", "showYesterdayButton", "showTime", "showOkButton"]);
-    return _
+    return _;
 };
-mini_Component_set = function(A) {
-    if (typeof A == "string") return this;
-    var D = this.Oo01lO;
-    this.Oo01lO = false;
-    var B = A.renderTo || A.render;
-    delete A.renderTo;
-    delete A.render;
-    for (var $ in A)
-        if ($.toLowerCase().indexOf("on") == 0) {
-            if (this["_$" + $]) continue;
-            var F = A[$];
-            this.on($.substring(2, $.length).toLowerCase(), F);
-            delete A[$]
+/**
+* 通用的设置属性方法，可以用于设置事件，设置属性。设置属性完成就会自动调用组件的doLayout方法。
+* 属性中可以包括自定义的renderTo 或 render 用于指向渲染到的容器对象，
+* 则设置完成后将会调用组件的render方法把组件渲染到容器中。
+* @param kv {Object} 参数对象
+* @return {Object} 组件实例本身
+* @example
+* var a = new Component();
+* a.set({id:'id'});
+* a.id => id
+*/
+mini_Component_set = function(kv) {
+    if (typeof kv == "string") return this;
+    var _allowLayout = this._allowLayout;
+    this._allowLayout = false;
+    var renderTo = kv.renderTo || kv.render;
+    delete kv.renderTo;
+    delete kv.render;
+    for (var key in kv)
+        if (key.toLowerCase().indexOf("on") == 0) {
+            if (this["_$" + key]) continue;
+            var fn = kv[key];
+            this.on(key.substring(2, key.length).toLowerCase(), fn);
+            delete kv[key];
         }
-    for ($ in A) {
-        var E = A[$],
-            C = "set" + $.charAt(0).toUpperCase() + $.substring(1, $.length),
-            _ = this[C];
-        if (_) _.call(this, E);
-        else this[$] = E
+    for (key in kv) {
+        var v = kv[key],
+            n = "set" + key.charAt(0).toUpperCase() + key.substring(1, key.length),
+            setter = this[n];
+        if (setter) setter.call(this, v);
+        else this[key] = v;
     }
-    if (B && this.render) this.render(B);
-    this.Oo01lO = D;
+    if (renderTo && this.render) this.render(renderTo);
+    this._allowLayout = _allowLayout;
     if (this.doLayout) this.doLayout();
-    return this
+    return this;
 };
-mini_Component_fire = function(A, B) {
-    if (this.O0oooo == false) return;
-    A = A.toLowerCase();
-    var _ = this._events[A];
-    if (_) {
-        if (!B) B = {};
-        if (B && B != this) {
-            B.source = B.sender = this;
-            if (!B.type) B.type = A
+
+/**
+* 触发组件实例的一个事件
+* @param type {String}事件类型
+* @param [event] {Event}可以使一个JSON对象
+* @example 
+* var a = new Component();
+* a.fire('click');
+*/
+mini_Component_fire = function(type, event) {
+    if (this._canFire == false) return;
+    type = type.toLowerCase();
+    var handlers = this._events[type];
+    if (handlers) {
+        if (!event) event = {};
+        if (event && event != this) {
+            event.source = event.sender = this;
+            if (!event.type) event.type = type;
         }
-        for (var $ = 0, D = _.length; $ < D; $++) {
-            var C = _[$];
-            if (C) C[0].apply(C[1], [B])
+        for (var i = 0, l = handlers.length; i < l; i++) {
+            var listener = handlers[i];
+            if (listener) {
+                listener[0].apply(listener[1], [event]);
+            }
         }
     }
 };
+/**
+* 为组件实例添加一个事件响应函数
+* @param type {String} 事件类型
+* @param fn {Function} 响应函数
+* @param [scope] {Object} 函数上下文
+* @returns {Object} 组件实例本身
+*/
 mini_Component_on = function(type, fn, scope) {
     if (typeof fn == "string") {
         var f = mini._getFunctoin(fn);
         if (!f) {
             var id = mini.newId("__str_");
             window[id] = fn;
-            eval("fn = function(e){var s = " + id + ";var fn = mini._getFunctoin(s); if(fn) {fn.call(this,e)}else{eval(s);}}")
-        } else fn = f
+            eval("fn = function(e){var s = " + id + ";var fn = mini._getFunctoin(s); if(fn) {fn.call(this,e)}else{eval(s);}}");
+        } else fn = f;
     }
     if (typeof fn != "function" || !type) return false;
     type = type.toLowerCase();
@@ -11097,28 +11100,47 @@ mini_Component_on = function(type, fn, scope) {
     if (!event) event = this._events[type] = [];
     scope = scope || this;
     if (!this.findListener(type, fn, scope)) event.push([fn, scope]);
-    return this
+    return this;
 };
-mini_Component_un = function($, C, _) {
-    $ = $.toLowerCase();
-    var A = this._events[$];
-    if (A)
-        if (C) {
-            _ = _ || this;
-            var B = this.findListener($, C, _);
-            if (B) A.remove(B)
-        } else delete this._events[$];
-    return this
-};
-mini_Component_findListener = function(A, E, B) {
-    A = A.toLowerCase();
-    B = B || this;
-    var _ = this._events[A];
-    if (_)
-        for (var $ = 0, D = _.length; $ < D; $++) {
-            var C = _[$];
-            if (C[0] === E && C[1] === B) return C
+/**
+* 删除一个事件响应函数
+* @param type {String} 事件类型
+* @param fn {Function} 响应函数
+* @param [scope] {Object} 函数上下文
+* @returns {Object} 组件实例本身
+*/
+mini_Component_un = function(type, fn, scope) {
+    type = type.toLowerCase();
+    var event = this._events[type];
+    if (event)
+        if (fn) {
+            scope = scope || this;
+            var listener = this.findListener(type, fn, scope);
+            if (listener) {
+                event.remove(listener);
+            }
+        } else {
+            delete this._events[type];
         }
+    return this;
+};
+/**
+* 获得指定类型时间的执行响应函数的定义内容 Listener。
+* @param type {String} 事件类型
+* @param fn {Function} 响应函数
+* @param [scope] {Object} 函数上下文
+* @returns {Object} Listener
+*/
+mini_Component_findListener = function(type, fn, scope) {
+    type = type.toLowerCase();
+    scope = scope || this;
+    var handlers = this._events[type];
+    if (handlers) {
+        for (var i = 0, l = handlers.length; i < l; i++) {
+            var listener = handlers[i];
+            if (listener[0] === fn && listener[1] === scope) return listener;
+        }
+    }
 };
 mini_Component_setId = function($) {
 
@@ -11454,15 +11476,15 @@ mini_MenuButton_setEnabled = function($) {
 };
 mini_OutlookBar_set = function(_) {
     if (typeof _ == "string") return this;
-    var A = this.Oo01lO;
-    this.Oo01lO = false;
+    var A = this._allowLayout;
+    this._allowLayout = false;
     var $ = _.activeIndex;
     delete _.activeIndex;
     if (_.imgPath) this.setImgPath(_.imgPath);
     delete _.imgPath;
     mini.OutlookBar.superclass.set.call(this, _);
     if (mini.isNumber($)) this.setActiveIndex($);
-    this.Oo01lO = A;
+    this._allowLayout = A;
     this.doLayout();
     return this
 };
@@ -12683,7 +12705,7 @@ mini_DatePicker_showPopup = function() {
     if (A.cancel == true) return;
     this.Ol0Oo = this._getCalendar();
     this.Ol0Oo.beginUpdate();
-    this.Ol0Oo.Oo01lO = false;
+    this.Ol0Oo._allowLayout = false;
     if (this.Ol0Oo.el.parentNode != this.popup._contentEl) this.Ol0Oo.render(this.popup._contentEl);
     this.Ol0Oo.set({
         monthPicker: this._monthPicker,
@@ -12711,7 +12733,7 @@ mini_DatePicker_showPopup = function() {
         this.Ol0Oo.on("dateclick", this.O11o1O, this);
         this.Ol0Oo.on("drawdate", this.Ool1O, this);
         this.Ol0Oo.endUpdate();
-        this.Ol0Oo.Oo01lO = true;
+        this.Ol0Oo._allowLayout = true;
         this.Ol0Oo.doLayout();
         this.Ol0Oo.focus();
         this.Ol0Oo._target = this
@@ -16808,7 +16830,7 @@ mini.Component.prototype = {
     id: null,
     o0ooo: "mini-",
     l00O0: false,
-    O0oooo: true
+    _canFire: true
 };
 mini_Component = mini.Component.prototype;
 mini_Component.destroy = mini_Component_destroy;
@@ -17296,8 +17318,8 @@ mini.parse = function(D, C) {
     if (C !== false) mini.layout(D)
 };
 mini._ParseString = function(B, A, E) {
-    for (var $ = 0, D = E.length; $ < D; $++) {
-        var C = E[$],
+    for (var i = 0, l = E.length; i < l; i++) {
+        var C = E[i],
             _ = mini.getAttr(B, C);
         if (_) A[C] = _
     }
@@ -21841,7 +21863,7 @@ mini_DatePicker.destroy = mini_DatePicker_destroy;
 mini_DatePicker._getCalendar = mini_DatePicker__getCalendar;
 mini.regClass(mini.DatePicker, "datepicker");
 mini.MonthPicker = function() {
-    mini.MonthPicker.superclass.constructor.apply(this, arguments)
+    mini.MonthPicker.superclass.constructor.apply(this, arguments);
 };
 mini.extend(mini.MonthPicker, mini.DatePicker, {
     uiCls: "mini-monthpicker",
@@ -31148,7 +31170,7 @@ mini_DataGrid._doMoveRowEl = mini_DataGrid__doMoveRowEl;
 mini_DataGrid._doRemoveRowEl = mini_DataGrid__doRemoveRowEl;
 mini_DataGrid._doAddRowEl = mini_DataGrid__doAddRowEl;
 mini_DataGrid.l1111OEl = mini_DataGrid_l1111OEl;
-mini_DataGrid.lool0 = mini_DataGrid_lool0;
+mini_DataGrid.__OnPageChanged = mini_DataGrid___OnPageChanged;
 mini_DataGrid.unbindPager = mini_DataGrid_unbindPager;
 mini_DataGrid.bindPager = mini_DataGrid_bindPager;
 mini_DataGrid.setPager = mini_DataGrid_setPager;
