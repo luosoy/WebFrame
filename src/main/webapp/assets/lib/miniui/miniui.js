@@ -17,36 +17,49 @@ mini_Fit__initEvents = function() {};
 mini_Fit_isFixedSize = function() {
     return false;
 };
-mini_Fit_doLayout = function() {
-    if (!this.canLayout()) return;
-    var $ = this.el.parentNode,
-        _ = mini.getChildNodes($);
-    if ($ == document.body) this.el.style.height = "0px";
-    var F = mini.getHeight($, true);
-    for (var E = 0, D = _.length; E < D; E++) {
-        var C = _[E],
-            J = C.tagName ? C.tagName.toLowerCase() : "";
-        if (C == this.el || (J == "style" || J == "script" || C.type == "hidden")) continue;
-        var G = mini.getStyle(C, "position");
-        if (G == "absolute" || G == "fixed") continue;
-        var A = mini.getHeight(C),
-            I = mini.getMargins(C);
-        F = F - A - I.top - I.bottom;
+mini_Fit_doLayout = function () {
+    if (!this.canLayout()){
+        return;
     }
-    var H = mini.getBorders(this.el),
-        B = mini.getPaddings(this.el),
-        I = mini.getMargins(this.el);
-    F = F - I.top - I.bottom;
-    if (jQuery.boxModel) F = F - B.top - B.bottom - H.top - H.bottom;
-    if (F < 0) F = 0;
-    this.el.style.height = F + "px";
-    try {
-        _ = mini.getChildNodes(this.el);
-        for (E = 0, D = _.length; E < D; E++) {
-            C = _[E];
-            mini.layout(C);
+    var parentNode = this.el.parentNode,
+            childNodes = mini.getChildNodes(parentNode);
+    if (parentNode == document.body){
+        this.el.style.height = "0px";
+    }
+    var height = mini.getHeight(parentNode, true);
+    for (var i = 0, l = childNodes.length; i < l; i++) {
+        var node = childNodes[i],
+                tagName = node.tagName ? node.tagName.toLowerCase() : "";
+        if (node == this.el || (tagName == "style" || tagName == "script" || node.type == "hidden")){
+            continue;
         }
-    } catch (K) {}
+        var pos = mini.getStyle(node, "position");
+        if (pos == "absolute" || pos == "fixed"){
+            continue;
+        }
+        var h = mini.getHeight(node),
+                margin = mini.getMargins(node);
+        height = height - h - margin.top - margin.bottom;
+    }
+    var border = mini.getBorders(this.el),
+            padding = mini.getPaddings(this.el),
+            margin = mini.getMargins(this.el);
+    height = height - margin.top - margin.bottom;
+    if (jQuery.boxModel){
+        height = height - padding.top - padding.bottom - border.top - border.bottom;
+    }
+    if (height < 0){
+        height = 0;
+    }
+    this.el.style.height = height + "px";
+    try {
+        childNodes = mini.getChildNodes(this.el);
+        for (i = 0, l = childNodes.length; i < l; i++) {
+            node = childNodes[i];
+            mini.layout(node);
+        }
+    } catch (e) {
+    }
 };
 mini_Fit_set_bodyParent = function($) {
     if (!$) return;
