@@ -21150,41 +21150,7 @@ mini.parseTime = function (F, G) {
     }
     return $
 };
-mini.dateInfo = {
-    monthsLong: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
-    monthsShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
-    daysLong: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
-    daysShort: ["日", "一", "二", "三", "四", "五", "六"],
-    quarterLong: ['一季度', '二季度', '三季度', '四季度'],
-    quarterShort: ['Q1', 'Q2', 'Q2', 'Q4'],
-    halfYearLong: ['上半年', '下半年'],
-    patterns: {
-        "d": "yyyy-M-d",
-        "D": "yyyy年M月d日",
-        "f": "yyyy年M月d日 H:mm",
-        "F": "yyyy年M月d日 H:mm:ss",
-        "g": "yyyy-M-d H:mm",
-        "G": "yyyy-M-d H:mm:ss",
-        "m": "MMMd日",
-        "o": "yyyy-MM-ddTHH:mm:ss.fff",
-        "s": "yyyy-MM-ddTHH:mm:ss",
-        "t": "H:mm",
-        "T": "H:mm:ss",
-        "U": "yyyy年M月d日 HH:mm:ss",
-        "y": "yyyy年MM月"
-    },
-    tt: {
-        "AM": "上午",
-        "PM": "下午"
-    },
-    ten: {
-        "Early": "上旬",
-        "Mid": "中旬",
-        "Late": "下旬"
-    },
-    today: '今天',
-    clockType: 24
-};
+
 (function (Q) {
     var P = Q.mini;
     if (!P)
