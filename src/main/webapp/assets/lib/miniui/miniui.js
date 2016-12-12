@@ -7097,7 +7097,8 @@ mini_DataGrid_bindPager = function($) {
     this.unbindPager($);
     this._pagers.add($);
 //    $.on("beforepagechanged", this.__OnPageChanged, this)
-    $.on("pagechanged", this.__OnPageChanged, this)
+    //add by luozp 修改触发事件
+    $.on("pagechanged", this.__OnPageChanged, this);
 };
 mini_DataGrid_unbindPager = function($) {
     if (!$) return;
@@ -7105,12 +7106,6 @@ mini_DataGrid_unbindPager = function($) {
     $.un("pagechanged", this.__OnPageChanged, this)
 };
 mini_DataGrid___OnPageChanged = function(e) {
-    /** 解决当列表为空时*/
-    /** 解决当列表为空时，刷新无效*/
-    if (this.data.length == 0 && !e.isreload){
-        this.setPageSize(e.pageSize);
-        return;
-    }
     /*添加pagechanged事件*/
     this.fire("pagechanged", e);
     e.cancel = true;
@@ -25431,7 +25426,7 @@ mini.extend(mini.DataSource, mini.Component, {
     load: function($, C, B, A) {
         if (typeof $ == "string") {
             this.setUrl($);
-            return
+            return;
         }
         if (this._loadTimer) clearTimeout(this._loadTimer);
         this.loadParams = $ || {};
@@ -25441,9 +25436,9 @@ mini.extend(mini.DataSource, mini.Component, {
             var _ = this;
             this._loadTimer = setTimeout(function() {
                 _._doLoadAjax(_.loadParams, C, B, A);
-                _._loadTimer = null
-            }, 1)
-        } else this._doLoadAjax(this.loadParams, C, B, A)
+                _._loadTimer = null;
+            }, 1);
+        } else this._doLoadAjax(this.loadParams, C, B, A);
     },
     reload: function(A, _, $) {
         this.load(this.loadParams, A, _, $)
@@ -25496,6 +25491,13 @@ mini.extend(mini.DataSource, mini.Component, {
         var M = this._evalUrl(),
             A = this._evalType(M),
             I = o0ll1(this.ajaxData, this);
+        //add by luozp 如果url没有时 不在请求
+        if (!M || M == "" ) {
+            this.pageIndex = L.pageIndex;
+            this.pageSize = L.pageSize;
+            return;
+        }
+    
         jQuery.extend(true, L, I);
         var O = {
             url: M,
