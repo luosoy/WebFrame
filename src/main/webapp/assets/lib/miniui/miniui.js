@@ -112,31 +112,31 @@ mini_Box_setBody = function(_) {
     if (!mini.isArray(_)) _ = [_];
     for (var $ = 0, A = _.length; $ < A; $++) mini.append(this._bodyEl, _[$]);
     mini.parse(this._bodyEl);
-    this.doLayout()
+    this.doLayout();
 };
 mini_Box_set_bodyParent = function($) {
     if (!$) return;
     var _ = this._bodyEl,
         A = $;
     while (A.firstChild) _.appendChild(A.firstChild);
-    this.doLayout()
+    this.doLayout();
 };
 mini_Box_setBodyStyle = function($) {
     mini.setStyle(this._bodyEl, $);
-    this.doLayout()
+    this.doLayout();
 };
 mini_Box_getAttrs = function($) {
     var _ = mini.Box.superclass.getAttrs.call(this, $);
     _._bodyParent = $;
     mini._ParseString($, _, ["bodyStyle"]);
-    return _
+    return _;
 };
 mini_Tree_setTextField = function($) {
     this._dataSource.setTextField($);
     this._columnModel.updateColumn("node", {
         field: $
     });
-    this.textField = $
+    this.textField = $;
 };
 mini_Tree_l110O0ByEvent = function(A, _) {
 
@@ -144,7 +144,7 @@ mini_Tree_l110O0ByEvent = function(A, _) {
     var $ = mini.Tree.superclass.l110O0ByEvent.call(this, A);
     if (_ === false) return $;
     if ($ && oOlO(A.target, "mini-tree-nodeshow")) return $;
-    return null
+    return null;
 };
 mini_Tree__getRowHeight = function($) {
     var _ = this.defaultRowHeight;
