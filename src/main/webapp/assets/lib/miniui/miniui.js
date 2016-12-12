@@ -61,21 +61,21 @@ mini_Fit_doLayout = function () {
     } catch (e) {
     }
 };
-mini_Fit_set_bodyParent = function($) {
-    if (!$) return;
-    var _ = this._bodyEl,
-        A = $;
-    while (A.firstChild) {
+mini_Fit_set_bodyParent = function(value) {
+    if (!value) return;
+    var el = this._bodyEl,
+        p = value;
+    while (p.firstChild) {
         try {
-            _.appendChild(A.firstChild)
-        } catch (B) {}
+            el.appendChild(p.firstChild);
+        } catch (e) {}
     }
-    this.doLayout()
+    this.doLayout();
 };
 mini_Fit_getAttrs = function($) {
     var _ = mini.Fit.superclass.getAttrs.call(this, $);
     _._bodyParent = $;
-    return _
+    return _;
 };
 mini_Box__create = function() {
     this.el = document.createElement("div");
