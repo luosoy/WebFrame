@@ -12,11 +12,10 @@ var view = View.extend({
                 columns: [
                     {field: 'name', header: '名称', name: 'name', width: 80},
                     {field: 'age', header: '年龄', name: 'age', width: 150}
-                ]
-//                onbeforepagechanged: function (e) {
-//                    alert(1);
-//                    this.ui.loadTable();
-//                }
+                ],
+                onpagechanged: function (e) {
+                    this.ui.loadTable();
+                }
             },
             render: function () {
                 this.loadTable();
@@ -50,4 +49,6 @@ var view = View.extend({
 
     }
 });
+
+
 
