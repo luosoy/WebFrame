@@ -81,7 +81,7 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
-    <bean class="cn.com.servyou.framework.extension.web.ExceptionResolver" />
+    <bean class="com.luosoy.frame.web.ExceptionResolver" />
     
     <aop:aspectj-autoproxy />
 </beans>
