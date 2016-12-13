@@ -2,21 +2,23 @@ package com.luosoy.frame.web.page;
 
 import cn.com.servyou.framework.extension.page.FilterDto;
 import com.luosoy.frame.exception.SystemException;
-import com.luosoy.frame.web.page.OrderDto.Direction;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 public class PageableDto implements Serializable {
 
     private static final long serialVersionUID = 6087799947613628055L;
-
 
     /**
      * 默认页码.
@@ -56,12 +58,12 @@ public class PageableDto implements Serializable {
     /**
      * 排序属性 .
      */
-    private String orderProperty;
+    private String sortField;
 
     /**
      * 排序方向 .
      */
-    private Direction orderDirection;
+    private Direction sortOrder;
 
     /**
      * 筛选.
@@ -99,7 +101,7 @@ public class PageableDto implements Serializable {
      *
      * @return 页码
      */
-    public int getPageIndex() {   
+    public int getPageIndex() {
         return pageIndex;
     }
 
@@ -171,17 +173,17 @@ public class PageableDto implements Serializable {
      *
      * @return 排序属性
      */
-    public String getOrderProperty() {
-        return orderProperty;
+    public String getSortField() {
+        return sortField;
     }
 
     /**
      * 设置排序属性.
      *
-     * @param orderProperty 排序属性
+     * @param sortField 排序属性
      */
-    public void setOrderProperty(String orderProperty) {
-        this.orderProperty = orderProperty;
+    public void setSortField(String sortField) {
+        this.sortField = sortField;
     }
 
     /**
@@ -189,17 +191,17 @@ public class PageableDto implements Serializable {
      *
      * @return 排序方向
      */
-    public Direction getOrderDirection() {
-        return orderDirection;
+    public Direction getSortOrder() {
+        return sortOrder;
     }
 
     /**
      * 设置排序方向.
      *
-     * @param orderDirection 排序方向
+     * @param sortOrder 排序方向
      */
-    public void setOrderDirection(Direction orderDirection) {
-        this.orderDirection = orderDirection;
+    public void setSortOrder(Direction sortOrder) {
+        this.sortOrder = sortOrder;
     }
 
     /**
@@ -257,7 +259,7 @@ public class PageableDto implements Serializable {
         PageableDto other = (PageableDto) obj;
         return new EqualsBuilder().append(getPageIndex(), other.getPageIndex()).append(getPageSize(), other.getPageSize())
                 .append(getSearchProperty(), other.getSearchProperty()).append(getSearchValue(), other.getSearchValue())
-                .append(getOrderProperty(), other.getOrderProperty()).append(getOrderDirection(), other.getOrderDirection())
+                .append(getSortField(), other.getSortField()).append(getSortOrder(), other.getSortOrder())
                 .append(getFilters(), other.getFilters()).append(getOrders(), other.getOrders()).isEquals();
     }
 
@@ -268,8 +270,8 @@ public class PageableDto implements Serializable {
         hash = 89 * hash + this.pageSize;
         hash = 89 * hash + (this.searchProperty != null ? this.searchProperty.hashCode() : 0);
         hash = 89 * hash + (this.searchValue != null ? this.searchValue.hashCode() : 0);
-        hash = 89 * hash + (this.orderProperty != null ? this.orderProperty.hashCode() : 0);
-        hash = 89 * hash + (this.orderDirection != null ? this.orderDirection.hashCode() : 0);
+        hash = 89 * hash + (this.sortField != null ? this.sortField.hashCode() : 0);
+        hash = 89 * hash + (this.sortOrder != null ? this.sortOrder.hashCode() : 0);
         hash = 89 * hash + (this.filters != null ? this.filters.hashCode() : 0);
         hash = 89 * hash + (this.orders != null ? this.orders.hashCode() : 0);
         return hash;
@@ -302,6 +304,15 @@ public class PageableDto implements Serializable {
     }
 
     public Pageable buildPageable() {
+        if (StringUtils.isNotEmpty(this.sortField) && this.sortOrder != null) {
+            return new PageRequest(this.pageIndex, this.pageSize, new Sort(this.sortOrder, this.sortField));
+        } else if (CollectionUtils.isNotEmpty(orders)) {
+            List<Sort.Order> lorder = new ArrayList<Sort.Order>();
+            for (OrderDto order : orders) {
+                lorder.add(new Sort.Order(order.getSortOrder(), order.getSortField()));
+            }
+            return new PageRequest(this.pageIndex, this.pageSize, new Sort(lorder));
+        }
         return new PageRequest(this.pageIndex, this.pageSize);
     }
 

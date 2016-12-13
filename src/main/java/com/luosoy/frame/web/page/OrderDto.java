@@ -22,36 +22,13 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.springframework.data.domain.Sort.Direction;
 
 public class OrderDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 方向.
-     */
-    public enum Direction {
-
-        /**
-         * 递增.
-         */
-        ASC,
-        /**
-         * 递减.
-         */
-        DESC;
-
-        /**
-         * 从String中获取Direction.
-         *
-         * @param value 值
-         * @return String对应的Direction
-         */
-        public static Direction fromString(String value) {
-            return Direction.valueOf(value.toLowerCase());
-        }
-    }
-
+   
     /**
      * 默认方向.
      */
@@ -60,12 +37,12 @@ public class OrderDto implements Serializable {
     /**
      * 属性 .
      */
-    private String property;
+    private String sortField;
 
     /**
      * 方向.
      */
-    private Direction direction = DEFAULT_DIRECTION;
+    private Direction sortOrder = DEFAULT_DIRECTION;
 
     /**
      * 初始化一个新创建的Order对象.
@@ -78,8 +55,8 @@ public class OrderDto implements Serializable {
      * @param direction 方向
      */
     public OrderDto(String property, Direction direction) {
-        this.property = property;
-        this.direction = direction;
+        this.sortField = property;
+        this.sortOrder = direction;
     }
 
     /**
@@ -107,17 +84,17 @@ public class OrderDto implements Serializable {
      *
      * @return 属性
      */
-    public String getProperty() {
-        return property;
+    public String getSortField() {
+        return sortField;
     }
 
     /**
      * 设置属性.
      *
-     * @param property 属性
+     * @param sortField 属性
      */
-    public void setProperty(String property) {
-        this.property = property;
+    public void setSortField(String sortField) {
+        this.sortField = sortField;
     }
 
     /**
@@ -125,17 +102,17 @@ public class OrderDto implements Serializable {
      *
      * @return 方向
      */
-    public Direction getDirection() {
-        return direction;
+    public Direction getSortOrder() {
+        return sortOrder;
     }
 
     /**
      * 设置方向.
      *
-     * @param direction 方向
+     * @param sortOrder 方向
      */
-    public void setDirection(Direction direction) {
-        this.direction = direction;
+    public void setSortOrder(Direction sortOrder) {
+        this.sortOrder = sortOrder;
     }
 
     /**
@@ -155,7 +132,7 @@ public class OrderDto implements Serializable {
             return true;
         }
         OrderDto other = (OrderDto) obj;
-        return new EqualsBuilder().append(getProperty(), other.getProperty()).append(getDirection(), other.getDirection()).isEquals();
+        return new EqualsBuilder().append(getSortField(), other.getSortField()).append(getSortOrder(), other.getSortOrder()).isEquals();
     }
 
     /**
@@ -165,7 +142,7 @@ public class OrderDto implements Serializable {
      */
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getProperty()).append(getDirection()).toHashCode();
+        return new HashCodeBuilder(17, 37).append(getSortField()).append(getSortOrder()).toHashCode();
     }
 
 }
