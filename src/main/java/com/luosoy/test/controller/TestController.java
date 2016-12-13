@@ -6,11 +6,14 @@
 package com.luosoy.test.controller;
 
 import com.luosoy.frame.web.Response;
+import com.luosoy.frame.web.page.PageableDto;
 import com.luosoy.test.dto.TestDTO;
+import com.luosoy.test.dto.TestPageDTO;
 import com.luosoy.test.facade.TestFacade;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,8 +36,8 @@ public class TestController {
 
     @RequestMapping(value = "/findTest", method = RequestMethod.POST)
     @ResponseBody
-    public Response<List<TestDTO>> find() {
-        return Response.success(testFacade.find());
+    public Response<TestPageDTO> find(@RequestBody PageableDto pageable) {
+        return Response.success(testFacade.find(pageable));
     }
 
 }

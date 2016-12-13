@@ -5,7 +5,9 @@
  */
 package com.luosoy.test.facade;
 
+import com.luosoy.frame.web.page.PageableDto;
 import com.luosoy.test.dto.TestDTO;
+import com.luosoy.test.dto.TestPageDTO;
 import com.luosoy.test.service.TestService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +29,12 @@ public class TestFacade {
         ts.save(tdto);
     }
     
+    @Transactional(value = "testTransactionManager")
+    public void save(List<TestDTO> tdto) {
+        ts.save(tdto);
+    }
     
-    public List<TestDTO> find(){
-        return ts.find();
+    public TestPageDTO find(PageableDto pageable){
+        return ts.find(pageable);
     }
 }

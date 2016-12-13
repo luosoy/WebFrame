@@ -15,12 +15,13 @@ import org.springframework.data.domain.Pageable;
 
 public class PageableDto implements Serializable {
 
-    private static final long serialVersionUID = -3930180379790344299L;
+    private static final long serialVersionUID = 6087799947613628055L;
+
 
     /**
      * 默认页码.
      */
-    private static final int DEFAULT_PAGE_NUMBER = 0;
+    private static final int DEFAULT_PAGE_INDEX = 0;
 
     /**
      * 默认每页记录数 .
@@ -35,7 +36,7 @@ public class PageableDto implements Serializable {
     /**
      * 页码 .
      */
-    private int pageNumber = DEFAULT_PAGE_NUMBER;
+    private int pageIndex = DEFAULT_PAGE_INDEX;
 
     /**
      * 每页记录数 .
@@ -81,12 +82,12 @@ public class PageableDto implements Serializable {
     /**
      * 初始化一个新创建的Pageable对象.
      *
-     * @param pageNumber 页码
+     * @param pageIndex 页码
      * @param pageSize 每页记录数
      */
-    public PageableDto(Integer pageNumber, Integer pageSize) {
-        if (pageNumber != null && pageNumber >= 1) {
-            this.pageNumber = pageNumber;
+    public PageableDto(Integer pageIndex, Integer pageSize) {
+        if (pageIndex != null && pageIndex >= 1) {
+            this.pageIndex = pageIndex;
         }
         if (pageSize != null && pageSize >= 1 && pageSize <= MAX_PAGE_SIZE) {
             this.pageSize = pageSize;
@@ -98,17 +99,17 @@ public class PageableDto implements Serializable {
      *
      * @return 页码
      */
-    public int getPageNumber() {
-        return pageNumber;
+    public int getPageIndex() {   
+        return pageIndex;
     }
 
     /**
      * 设置页码.
      *
-     * @param pageNumber 页码
+     * @param pageIndex 页码
      */
-    public void setPageNumber(int pageNumber) {
-        this.pageNumber = pageNumber < 1 ? DEFAULT_PAGE_NUMBER : pageNumber;
+    public void setPageIndex(int pageIndex) {
+        this.pageIndex = pageIndex < 1 ? DEFAULT_PAGE_INDEX : pageIndex;
     }
 
     /**
@@ -254,7 +255,7 @@ public class PageableDto implements Serializable {
             return true;
         }
         PageableDto other = (PageableDto) obj;
-        return new EqualsBuilder().append(getPageNumber(), other.getPageNumber()).append(getPageSize(), other.getPageSize())
+        return new EqualsBuilder().append(getPageIndex(), other.getPageIndex()).append(getPageSize(), other.getPageSize())
                 .append(getSearchProperty(), other.getSearchProperty()).append(getSearchValue(), other.getSearchValue())
                 .append(getOrderProperty(), other.getOrderProperty()).append(getOrderDirection(), other.getOrderDirection())
                 .append(getFilters(), other.getFilters()).append(getOrders(), other.getOrders()).isEquals();
@@ -263,7 +264,7 @@ public class PageableDto implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 89 * hash + this.pageNumber;
+        hash = 89 * hash + this.pageIndex;
         hash = 89 * hash + this.pageSize;
         hash = 89 * hash + (this.searchProperty != null ? this.searchProperty.hashCode() : 0);
         hash = 89 * hash + (this.searchValue != null ? this.searchValue.hashCode() : 0);
@@ -301,7 +302,7 @@ public class PageableDto implements Serializable {
     }
 
     public Pageable buildPageable() {
-        return new PageRequest(this.pageNumber, this.pageSize);
+        return new PageRequest(this.pageIndex, this.pageSize);
     }
 
 }

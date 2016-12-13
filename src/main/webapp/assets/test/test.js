@@ -10,38 +10,37 @@ var view = View.extend({
                 singleSelect: true,
                 collapsible: true,
                 columns: [
+                    {type:'indexcolumn',header:'序号'},
                     {field: 'name', header: '名称', name: 'name', width: 80},
                     {field: 'age', header: '年龄', name: 'age', width: 150}
                 ],
                 onpagechanged: function (e) {
-                    this.ui.loadTable();
+                    this.ui.loadTable({
+                        pageIndex: e.pageIndex,
+                        pageSize: e.pageSize
+                    }
+                    );
                 }
             },
             render: function () {
-                this.loadTable();
+                this.loadTable({
+                    pageIndex: this.mui.pageIndex,
+                    pageSize: this.mui.pageSize
+                }
+                );
             },
-            loadTable: function () {
+            loadTable: function (page) {
                 var grid = this;
                 $.send({
                     url: "test/findTest",
+                    data: page,
                     isjson: true,
                     ajaxType: "post",
                     success: function (data) {
-                        grid.mui.setData(data.data);
-                        grid.mui.setTotalCount(data.data.length);
+                        grid.mui.setData(data.data.data);
+                        grid.mui.setTotalCount(data.data.totalCount);
                     }
                 });
-            }
-        },
-        cc: {
-            el: '#cc',
-            type: 'ComboBox',
-            config: {
-                url: "test/findTest",
-                isjson: true,
-                ajaxType: "post",
-                textField: "name",
-                valueField: "age"
             }
         }
     },
