@@ -10,24 +10,26 @@ var view = View.extend({
                 singleSelect: true,
                 collapsible: true,
                 columns: [
-                    {type:'indexcolumn',header:'序号'},
+                    {type: 'indexcolumn', header: '序号'},
                     {field: 'name', header: '名称', name: 'name', width: 80},
                     {field: 'age', header: '年龄', name: 'age', width: 150}
                 ],
                 onpagechanged: function (e) {
                     this.ui.loadTable({
                         pageIndex: e.pageIndex,
-                        pageSize: e.pageSize
-                    }
-                    );
+                        pageSize: e.pageSize,
+                        sortField: 'age',
+                        sortOrder: 'ASC'
+                    });
                 }
             },
             render: function () {
                 this.loadTable({
                     pageIndex: this.mui.pageIndex,
-                    pageSize: this.mui.pageSize
-                }
-                );
+                    pageSize: this.mui.pageSize,
+                    sortField: 'age',
+                    sortOrder: 'ASC'
+                });
             },
             loadTable: function (page) {
                 var grid = this;
