@@ -57,24 +57,4 @@ public class BusinessException extends BaseException {
     public BusinessException(String message, String errorCode) {
         super(message, null, errorCode);
     }
-
-    /**
-     * Instantiates a new business exception.
-     *
-     * @param cause the cause
-     * @param errorCode the error code
-     * @param args the args
-     */
-//    public BusinessException(Throwable cause, String errorCode, Object... args) {
-//        //super(mu.getMessage(errorCode, args), cause, errorCode);
-//    }
-    /**
-     * Instantiates a new business exception.
-     *
-     * @param errorCode the error code
-     * @param args the args
-     */
-//    public BusinessException(String errorCode, Object... args) {
-//        super(mu.getMessage(errorCode, args), null, errorCode);
-//    }
 }
