@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.luosoy.frame.exception;
 
 @SuppressWarnings("serial")
@@ -15,16 +12,18 @@ public class ValidationException extends BusinessException {
     /**
      * The validation result.
      */
-//    private ValidationResult validationResult;// NOSONAR
+    private ValidationResult validationResult;// NOSONAR
+
     /**
      * Instantiates a new validation exception.
      *
      * @param validationResult the validation result
      */
-//    public ValidationException(ValidationResult validationResult) {
-//        super("验证错误", null, VALIDATION_FAILED);
-//        this.validationResult = validationResult;
-//    }
+    public ValidationException(ValidationResult validationResult) {
+        super("验证错误", null, VALIDATION_FAILED);
+        this.validationResult = validationResult;
+    }
+
     /**
      * Instantiates a new validation exception.
      *
@@ -41,7 +40,7 @@ public class ValidationException extends BusinessException {
      *
      * @return the validation result
      */
-//    public ValidationResult getValidationResult() {
-//        return validationResult;
-//    }
+    public ValidationResult getValidationResult() {
+        return validationResult;
+    }
 }
