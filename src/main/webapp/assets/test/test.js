@@ -9,10 +9,11 @@ var view = View.extend({
                 height: '250px',
                 singleSelect: true,
                 collapsible: true,
+                sortMode:"client",
                 columns: [
                     {type: 'indexcolumn', header: '序号'},
-                    {field: 'name', header: '名称', name: 'name', width: 80},
-                    {field: 'age', header: '年龄', name: 'age', width: 150}
+                    {field: 'name',allowSort:true, header: '名称', name: 'name', width: 80},
+                    {field: 'age',allowSort:true, header: '年龄', name: 'age', width: 150}
                 ],
                 onpagechanged: function (e) {
                     this.ui.loadTable({

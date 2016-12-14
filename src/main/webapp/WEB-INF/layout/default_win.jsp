@@ -11,7 +11,7 @@
         <meta http-equiv="Cache-Control" content="no-store" />
         <meta http-equiv="Pragma" content="no-cache" />
         <meta http-equiv="Expires" content="0" />
-        <title><sitemesh:write property='title' /> - ${title}</title>
+        <title><sitemesh:write property='title' /></title>
         <link href="${stc}/lib/miniui/themes/default/miniui.css" rel="stylesheet"/>
         <link href="${stc}/lib/miniui/themes/icons.css" rel="stylesheet"/>
         <script type="text/javascript">
