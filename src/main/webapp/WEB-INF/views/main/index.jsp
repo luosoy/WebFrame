@@ -3,9 +3,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>主页</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <div class="navbar navbar-inverse navbar-fixed-top navbar-layoutit">
+        </div>
+        <div class="container">
+        </div>
     </body>
 </html>
