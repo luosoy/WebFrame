@@ -7,13 +7,15 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <meta http-equiv="Cache-Control" content="no-store" />
         <meta http-equiv="Pragma" content="no-cache" />
         <meta http-equiv="Expires" content="0" />
         <title><sitemesh:write property='title' /></title>
         <link href="${stc}/lib/miniui/themes/default/miniui.css" rel="stylesheet"/>
+        <link href="${stc}/lib/miniui/themes/bootstrap/skin.css" rel="stylesheet"/>
         <link href="${stc}/lib/miniui/themes/icons.css" rel="stylesheet"/>
+        <link href="${stc}/lib/bootstrap/bootstrap.min.css" rel="stylesheet"/>
         <script type="text/javascript">
             var SYS = {
                 ctx: '${ctx}',
@@ -23,6 +25,7 @@
         </script>
         <!--[if lt IE 8]><script src="${stc}/lib/json/json3.min.js" type="text/javascript"></script><![endif]-->
         <script src="${stc}/lib/jquery/jquery.min.js" type="text/javascript"></script>
+        <script src="${stc}/lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="${stc}/lib/miniui/miniui.js" type="text/javascript"></script>
         <script src="${stc}/lib/common.js" type="text/javascript"></script>
         <sitemesh:write property='head'/>
