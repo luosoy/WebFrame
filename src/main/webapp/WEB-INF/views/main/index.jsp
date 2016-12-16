@@ -2,13 +2,18 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>主页</title>
+        <link href="${stc}/main/css/index.css" rel="stylesheet">
+        <script src="${stc}/main/js/index.js" type="text/javascript"></script>
     </head>
     <body>
-        <div class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-container" id="navbar-container">
+               
+            </div>
         </div>
         <div class="container">
         </div>
+
     </body>
 </html>
