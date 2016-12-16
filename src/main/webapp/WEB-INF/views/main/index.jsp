@@ -6,7 +6,7 @@
         <title>主页</title>
     </head>
     <body>
-        <div class="navbar navbar-inverse navbar-fixed-top navbar-layoutit">
+        <div class="navbar navbar-default navbar-fixed-top">
         </div>
         <div class="container">
         </div>
