@@ -26,5 +26,15 @@ public class MainController {
     private String index(){
         return "main/index";
     }
+    
+    @RequestMapping("/login")
+    private String login(){
+        return "main/login";
+    }
+    
+    @RequestMapping("/dologin")
+    private String dologin(){
+        return "redirect:/web/main/index";
+    }
 
 }
