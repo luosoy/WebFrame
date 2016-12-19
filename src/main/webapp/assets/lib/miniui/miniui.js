@@ -943,7 +943,7 @@ mini_Tabs_doLayout = function () {
         if (!l && this.showBody) {
             var B = mini.getHeight(G, true);
             if (jQuery.boxModel) {
-                C = lol0(a), U = mini.getBorders(a);
+                C = mini.getPaddings(a), U = mini.getBorders(a);
                 B = B - C.top - C.bottom - U.top - U.bottom
             }
             a.style.height = B + "px"
@@ -13061,7 +13061,7 @@ mini_OutlookBar_ooo01 = function () {
                 I = mini.getBorders(H.lastChild);
         C = C - B.top - B.bottom - I.top - I.bottom
     }
-    B = lol0(H), I = mini.getBorders(H), L = l0l1(H);
+    B = mini.getPaddings(H), I = mini.getBorders(H), L = l0l1(H);
     C = C - L.top - L.bottom;
     C = C - B.top - B.bottom - I.top - I.bottom;
     if (C < 0)
