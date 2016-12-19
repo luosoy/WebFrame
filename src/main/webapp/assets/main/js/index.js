@@ -1,4 +1,5 @@
 var view = View.extend({
+    tabMap: {},
     uis: {
         contentTab: {
             el: "#contentTab",
@@ -8,10 +9,19 @@ var view = View.extend({
                 height: "600px"
             },
             addTab: function (title, url) {
-                var tab = {title: title, url: url, showCloseButton: true};
                 var tabs = this.mui;
-                tabs.addTab(tab);
-                tabs.activeTab(tab);
+                var tmpTab = view.tabMap[title + url];
+                if (tmpTab) {
+                    tabs.activeTab(tmpTab);
+                } else {
+                    var tab = {title: title, url: url, showCloseButton: true};
+                    tab.ondestroy = function (e) {
+                        delete view.tabMap[e.tab.title + e.tab.url];
+                    };
+                    tabs.addTab(tab);
+                    tabs.activeTab(tab);
+                    view.tabMap[title + url] = tab;
+                }
             }
         }
     }
@@ -39,7 +49,10 @@ $(".nav>li").css({"borderColor": "#dbe9f1"});
 $(".nav>.current").prev().css({"borderColor": "#7ac47f"});
 $(".nav").on("click", "li", function (e) {
     var aurl = $(this).find("a").attr("date-src");
-    view.uis.contentTab.addTab("test",aurl);
+    var title = $(this).find("a").html();
+    if (aurl && aurl !== "") {
+        view.uis.contentTab.addTab(title, aurl);
+    }
     $(".nav>li").css({"borderColor": "#dbe9f1"});
     $(".nav>.current").prev().css({"borderColor": "#7ac47f"});
     return false;

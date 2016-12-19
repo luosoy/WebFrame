@@ -15,7 +15,6 @@
         <link href="${stc}/lib/miniui/themes/default/miniui.css" rel="stylesheet"/>
         <link href="${stc}/lib/miniui/themes/bootstrap/skin.css" rel="stylesheet"/>
         <link href="${stc}/lib/miniui/themes/icons.css" rel="stylesheet"/>
-        <link href="${stc}/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
         <link href="${stc}/lib/common.css" rel="stylesheet"/>
         <script type="text/javascript">
             var SYS = {
@@ -26,7 +25,6 @@
         </script>
         <!--[if lt IE 8]><script src="${stc}/lib/json/json3.min.js" type="text/javascript"></script><![endif]-->
         <script src="${stc}/lib/jquery/jquery.min.js" type="text/javascript"></script>
-        <script src="${stc}/lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="${stc}/lib/miniui/miniui.js" type="text/javascript"></script>
         <script src="${stc}/lib/common.js" type="text/javascript"></script>
         <sitemesh:write property='head'/>
