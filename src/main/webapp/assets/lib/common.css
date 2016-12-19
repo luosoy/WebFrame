@@ -164,3 +164,15 @@ body{
 [class^='col-'], [class*=' col-'] {
     float: left;
 }
+
+.fn-ar {
+  text-align: right;
+}
+
+.fn-al {
+  text-align: left;
+}
+
+.fn-ac {
+  text-align: center;
+}
