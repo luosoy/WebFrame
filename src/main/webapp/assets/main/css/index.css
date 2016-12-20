@@ -4,7 +4,7 @@
 #hd .hd-wrap .top-light{ position:absolute; width:346px; height:74px; background:url(../images/toplight.png); top:0; left:0;}
 .logo{ 
     float:left;
-    margin:10px 0 0 24px;
+    margin:12px 0 0 24px;
     width:246px;
     height:54px;
     position:relative;
@@ -18,9 +18,54 @@
 .login-info .welcome .user-name{ float:left; color:#fff;}
 .login-info .login-msg{ float:left; margin-left:22px;}
 .login-info .login-msg a{ float:left; height:18px; line-height:18px;}
-.login-info .login-msg a.msg-txt{ float:left; padding-left:20px; width:48px; background:url(../images/topmail.png)no-repeat left center; color:#fff; font-size:14px;}
+.login-info .login-msg a.msg-txt{ float:left; padding-left:20px; width:28px; background:url(../images/topmail.png)no-repeat left center; color:#fff; font-size:14px;}
 .login-info .login-msg a.msg-num{ float:left; width:16px; height:9px; margin:6px 0 0 4px; background:url(../images/countbg.png); color:#fff; line-height:9px; font-size:9px; text-align: center;}
 .toolbar{ float:right; margin:20px 14px 0 0;}
 .toolbar a{ float:left; height:42px; line-height:42px;}
 .toolbar a.home-btn{ width:40px; margin-right:10px; background:url(../images/home.png)no-repeat left top; color:#fff; font-size:14px;}
 .toolbar a.quit-btn{ width:39px; background:url(../images/exit.png) no-repeat left top;}
+
+ul, li{ 
+    margin:0;
+    padding:0;
+    border:0;
+    font-weight:inherit;
+    font-style:inherit;
+    font-size:100%;
+    font-family:inherit;
+    vertical-align:baseline;
+    list-style:none;
+}
+
+.sidebar{ height:100%; width:100%; overflow-y:auto;}
+.sidebar h2{  background:url(../images/lefttopbg.png) repeat-x; border-radius:2px 2px 0 0; }
+.sidebar h2 p{ margin-left:15px;padding-left:25px; line-height:35px;color:#fff; font-size:14px; font-weight:bold; background:url(../images/icon0.png) no-repeat left center;}
+
+
+.ue-clear:after{content: "";display:block;height:0;clear:both;visibility:hidden;}
+.ue-clear{display:inline-block;}
+*html .ue-clear{height:1%;}
+.ue-clear{display:block; overflow:hidden;}
+
+.sidebar .nav{ border:1px solid #bdd0db; border-top:none; background:#f1f8fc;}
+.sidebar .nav>li{ line-height:40px; border-bottom:1px solid #dbe9f1; cursor:pointer;}
+.sidebar .nav>li.current .nav-header{ background:#6ec673;   border-color:#72b877;}
+.sidebar .nav>li.current .nav-header span{color:#fff;}
+.sidebar .nav>li .nav-header{ padding-right:14px;}
+.sidebar .nav>li .nav-header a{ display:block; margin-left:8px; padding-left:32px; color:#000; font-size:13px;}
+.sidebar .nav>li .nav-header a span{ float:left;}
+.sidebar .nav>li .nav-header a i{float:right; width:12px; height:40px; background:url(../images/leftjt01.png) no-repeat center center;}
+.sidebar .nav>li.current .nav-header a i{  background:url(../images/leftjt03.png) no-repeat center center;}
+.sidebar .nav>li.current.hasChild .nav-header a i{  background:url(../images/leftjt02.png) no-repeat center center;}
+.sidebar .nav>li.office .nav-header a{ background:url(../images/ico01.png) no-repeat left center;}
+.sidebar .nav>li.gongwen .nav-header a{ background:url(../images/ico02.png) no-repeat left center;}
+.sidebar .nav>li.nav-info .nav-header a{ background:url(../images/ico03.png) no-repeat left center;}
+.sidebar .nav>li.konwledge .nav-header a{ background:url(../images/ico04.png) no-repeat left center;}
+.sidebar .nav>li.agency .nav-header a{ background:url(../images/ico05.png) no-repeat left center;}
+.sidebar .nav>li.email .nav-header a{ background:url(../images/ico06.png) no-repeat left center;}
+.sidebar .nav>li.system .nav-header a{ background:url(../images/ico07.png) no-repeat left center;}
+.sidebar .nav>li .subnav{ display:none; padding:6px 0 11px 0;}
+.sidebar .nav>li.current .subnav{ display:none;}
+.sidebar .nav>li.current.hasChild .subnav{ display:block;}
+.sidebar .nav>li .subnav li{ line-height:28px; margin-left:30px; padding-left:10px; background:url(../images/leftjt04.png) no-repeat left center;}
+.sidebar .nav>li .subnav li a{ color:#000; font-size:12px;text-decoration:none;cursor:pointer;}
