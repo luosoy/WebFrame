@@ -16,7 +16,7 @@ public class UUIDProducer implements IdProducer{
 
     @Override
     public Sequence produce(Context ctx) {
-        return new Sequence(UUID.randomUUID().toString().replace("-", ""));
+        return new Sequence(UUID.randomUUID().toString().replace("-", "").toUpperCase());
     }
 
 }
