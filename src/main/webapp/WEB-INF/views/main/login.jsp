@@ -3,7 +3,6 @@
 <html>
     <head>
         <title>系统登陆</title>
-        <link href="${stc}/main/css/base.css" rel="stylesheet">
         <link href="${stc}/main/css/login.css" rel="stylesheet">
     </head>
     <body>

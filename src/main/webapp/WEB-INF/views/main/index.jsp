@@ -8,7 +8,7 @@
     </head>
     <body style="width: 100%;height: 100%">
         <div id="layout1" class="mini-layout" style="width: 100%;height: 100%;">
-            <div title="north" region="north" height="76" showHeader="false" showSplit="false" splitSize="0" style="border: 0px;">
+            <div region="north" height="76" showHeader="false" showSplit="false" splitSize="0" style="border: 0px;">
                 <div id="hd">
                     <div class="hd-wrap ue-clear">
                         <div class="top-light"></div>
@@ -28,6 +28,15 @@
                                 <a href="javascript:;" class="msg-num">10</a>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div title="south" region="south" showHeader="false" showSplit="false" splitSize="0" height="10" style="border: 0px;"  >
+                <div id="ft" class="ue-clear">
+                    <div class="ft-left">
+                        <span>system</span>
+                        <em></em>
                     </div>
                 </div>
             </div>
@@ -83,6 +92,8 @@
                     </ul>
                 </div>
             </div>
+
+
 
             <div title="center" region="center" style="border: 0px;"  >
                 <div id="contentTab" style="width: 100%;height: 100%"></div>
