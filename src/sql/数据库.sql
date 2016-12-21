@@ -71,7 +71,7 @@ drop table if exists QX_USER_ROLE;
 /*==============================================================*/
 create table DM_PERMISSION
 (
-   PERMISSION_DM        varchar(2) not null comment '权限',
+   PERMISSION_DM        int(2) not null comment '权限',
    PERMISSION_MC        varchar(80) not null comment '权限名称',
    YXBZ                 char(1) not null default 'Y' comment '有效标志',
    primary key (PERMISSION_DM)
@@ -135,7 +135,7 @@ create table QX_ROLE_RESOURCES
 (
    ROLE_UUID            varchar(32) not null comment '角色UUID',
    RESOURCES_UUID       varchar(32) not null comment '资源UUID',
-   PERMISSION_DM        varchar(2) not null comment '权限',
+   PERMISSION_DM        int(2) not null default 7 comment '权限',
    primary key (ROLE_UUID, RESOURCES_UUID)
 );
 
@@ -180,6 +180,7 @@ create table QX_USER_ROLE
 );
 
 alter table QX_USER_ROLE comment '用户角色';
+
 
 
 
