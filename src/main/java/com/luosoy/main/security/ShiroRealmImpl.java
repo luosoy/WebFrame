@@ -27,11 +27,6 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * <pre>类名: ShiroRealmImpl</pre>
- * <pre>描述: TODO</pre>
- * <pre>版权: 税友软件集团股份有限公司</pre>
- * <pre>日期: 2016-12-21 上午10:05:08 </pre>
- *
  * @author 罗真朋
  * @version 1.0
  */

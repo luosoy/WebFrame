@@ -5,6 +5,7 @@
  */
 package com.luosoy.main.controller;
 
+import com.luosoy.main.dto.UserLoginDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,7 +30,7 @@ public class MainController {
     }
 
     @RequestMapping(value = "/dologin", method = RequestMethod.POST)
-    private String dologin() {
+    private String dologin(UserLoginDTO loginDTO) {
         return "redirect:/web/main/index";
     }
 

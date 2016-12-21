@@ -39,6 +39,7 @@
             <value>
                 /assets/** = anon
                 /web/main/login = anon
+                /web/main/dologin = anon
                 /web/** = authc
             </value>
         </property>

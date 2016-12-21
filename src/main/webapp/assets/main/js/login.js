@@ -25,11 +25,33 @@ $(function () {
             $this.parent().removeClass('checked');
         }
     }
-    
-    $("#login").click(function(){
-        $.submit({
-           url:"main/dologin",
-           ajaxType:'post'
-        });
+
+    $("#login").click(function () {
+        var loginMsg = $("#login-msg-span");
+        loginMsg.html("");
+        var msg = "";
+        var bool = true;
+        var loginName = $("#userInput").val();
+        var pwd = $("#pwdInput").val();
+        if (!loginName || loginName == "") {
+            msg += "用户名不能为空！";
+            bool = false;
+        }
+        if (!pwd || pwd == "") {
+            msg += "密码不能为空！";
+            bool = false;
+        }
+        loginMsg.html(msg);
+        if (bool) {
+            $.submit({
+                url: "main/dologin",
+                type: 'post',
+                data: {
+                    loginName: loginName,
+                    password: pwd,
+                    remember: $("#remember").is(':checked')
+                }
+            });
+        }
     });
 });

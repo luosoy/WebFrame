@@ -12,11 +12,6 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
- * <pre>类名: QxRoleResourcesCMPPK</pre>
- * <pre>描述: TODO</pre>
- * <pre>版权: 税友软件集团股份有限公司</pre>
- * <pre>日期: 2016-12-21 上午09:55:12 </pre>
- *
  * @author 罗真朋
  * @version 1.0
  */
