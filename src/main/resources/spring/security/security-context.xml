@@ -32,20 +32,19 @@
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager" />
         <!--没有权限或者失败后跳转的页面--> 
-        <property name="loginUrl" value="/login.jsp" />
-        <property name="successUrl" value="/index.jsp" />
+        <property name="loginUrl" value="/web/main/login" />		
+        <property name="successUrl" value="/web/main/index" />	
+        <property name="unauthorizedUrl" value="/web/main/login" />
         <property name="filterChainDefinitions">
             <value>
                 /assets/** = anon
-                /login.jsp = anon
-                /web/loginctl/login = anon
-                /web/** = oauth2Authc
-                /** = oauth2Authc
+                /web/main/login = anon
+                /web/** = authc
             </value>
         </property>
     </bean>
 	
-    <bean id="shiroRealm" class="cn.com.servyou.hsgl.security.HsglShiroRealm"/>
-    <bean id="oauth2Authc" class="cn.com.servyou.hsgl.security.HsglAuthenticationFilter"/>
+    <bean id="shiroRealm" class="com.luosoy.main.security.ShiroRealmImpl"/>
+    <!--<bean id="oauth2Authc" class="cn.com.servyou.hsgl.security.HsglAuthenticationFilter"/>-->
 
 </beans>

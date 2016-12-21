@@ -32,7 +32,7 @@
     <import resource="classpath*:/spring/bean/beans-context.xml" />
     <import resource="classpath*:/spring/data/data-context.xml" />
     <import resource="classpath*:/spring/cache/cache-context.xml" />
-    <!--<import resource="classpath*:/spring/security/security-context.xml" />-->
+    <import resource="classpath*:/spring/security/security-context.xml" />
     <aop:aspectj-autoproxy />
 
 </beans>
