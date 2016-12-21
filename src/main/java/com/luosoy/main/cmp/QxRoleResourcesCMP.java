@@ -6,15 +6,11 @@
 
 package com.luosoy.main.cmp;
 
-import com.luosoy.frame.jpa.identity.IdInjectionEntityListener;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
