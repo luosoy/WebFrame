@@ -11,7 +11,7 @@
                 <div class="login">
                     <div class="login-top"><h1 class="logo"></h1></div>
                     <div class="login-msg">
-                        <span id="login-msg-span">${loginMsg}</span>
+                        <span id="login-msg-span"></span>
                     </div>
                     <div class="login-input">
                         <p class="user ue-clear">

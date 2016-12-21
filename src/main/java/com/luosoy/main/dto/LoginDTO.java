@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author 罗真朋
  * @version 1.0
  */
-public class UserLoginDTO implements Serializable {
+public class LoginDTO implements Serializable {
 
     private static final long serialVersionUID = -4850793284494121844L;
 

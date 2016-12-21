@@ -43,15 +43,28 @@ $(function () {
         }
         loginMsg.html(msg);
         if (bool) {
-            $.submit({
+            $.send({
                 url: "main/dologin",
-                type: 'post',
                 data: {
                     loginName: loginName,
                     password: pwd,
                     remember: $("#remember").is(':checked')
+                },
+                isjson: true,
+                ajaxType: "post",
+                success: function (result) {
+                    var data = result.data;
+                    if (data.success) {
+                        $.submit({
+                            url: data.successUrl,
+                            type: 'post'
+                        });
+                    }else{
+                        $("#login-msg-span").html(data.errMsg);
+                    }
                 }
             });
+
         }
     });
 });

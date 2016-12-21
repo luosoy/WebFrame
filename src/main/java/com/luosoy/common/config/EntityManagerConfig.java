@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.luosoy.test.config;
+package com.luosoy.common.config;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,6 +22,12 @@ public class EntityManagerConfig {
 
     @Bean(name = "IdSequeceEntityManager")
     public EntityManager produceEntityManager() {
+        return em;
+    }
+    
+    
+    @Bean(name = "NativeEntityManager")
+    public EntityManager produceNativeEntityManager() {
         return em;
     }
 }
