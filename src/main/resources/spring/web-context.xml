@@ -23,7 +23,6 @@
 
     <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
         <mvc:argument-resolvers>
-            <bean class="com.luosoy.frame.web.converter.ContextMethodArgumentResolver" />
         </mvc:argument-resolvers>
         <mvc:message-converters register-defaults="true">
             <bean
