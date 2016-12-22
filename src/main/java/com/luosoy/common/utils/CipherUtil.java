@@ -144,7 +144,7 @@ public class CipherUtil {
      * @return
      */    
     public static String createSalt() {
-        return (new SecureRandomNumberGenerator()).nextBytes().toHex();        
+        return new SecureRandomNumberGenerator().nextBytes().toHex();        
     }
 
     /**
