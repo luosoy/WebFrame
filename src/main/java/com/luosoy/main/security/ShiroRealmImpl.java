@@ -5,6 +5,7 @@
  */
 package com.luosoy.main.security;
 
+import com.luosoy.common.utils.CipherUtil;
 import com.luosoy.common.utils.Const;
 import com.luosoy.frame.beans.BeanConvertUtil;
 import com.luosoy.main.cmp.QxRoleCMP;

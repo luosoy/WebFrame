@@ -36,11 +36,11 @@ import org.springframework.beans.factory.BeanInitializationException;
  */
 public class CustomShiroFilterFactoryBean extends ShiroFilterFactoryBean {
 
-    private static transient final Logger log = LoggerFactory.getLogger(CustomShiroFilterFactoryBean.class);
+    private static transient final Logger LOG = LoggerFactory.getLogger(CustomShiroFilterFactoryBean.class);
 
     @Override
     protected AbstractShiroFilter createInstance() throws Exception {
-        log.debug("Creating Shiro Filter instance.");
+        LOG.debug("Creating Shiro Filter instance.");
 
         SecurityManager securityManager = getSecurityManager();
         if (securityManager == null) {
