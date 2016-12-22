@@ -1,2 +1,4 @@
 /target/
 /src/database/frame.pdb
+/src/main/resources/rebel.xml
+/nb-configuration.xml
