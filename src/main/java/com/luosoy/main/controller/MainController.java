@@ -40,6 +40,11 @@ public class MainController {
     private String login() {
         return "main/login";
     }
+    
+    @RequestMapping("/unauthorized")
+    private String unauthorized() {
+        return "main/unauthorized";
+    }
 
     @RequestMapping(value = "/dologin", method = RequestMethod.POST)
     @ResponseBody

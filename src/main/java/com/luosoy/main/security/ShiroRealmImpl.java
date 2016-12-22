@@ -7,9 +7,15 @@ package com.luosoy.main.security;
 
 import com.luosoy.common.utils.Const;
 import com.luosoy.frame.beans.BeanConvertUtil;
+import com.luosoy.main.cmp.QxRoleCMP;
 import com.luosoy.main.cmp.QxUserCMP;
+import com.luosoy.main.dto.QxRoleDTO;
 import com.luosoy.main.dto.QxUserDTO;
+import com.luosoy.main.repository.QxRoleRepository;
 import com.luosoy.main.repository.QxUserRepository;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -35,10 +41,36 @@ public class ShiroRealmImpl extends AuthorizingRealm {
 
     @Autowired
     private QxUserRepository userRepository;
+    @Autowired
+    private QxRoleRepository roleRepository;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        List<String> ls = new ArrayList<String>();
+        if (getSession(Const.SESSION_ROLE) != null) {
+            List<QxRoleDTO> qrdtos = (List<QxRoleDTO>) getSession(Const.SESSION_ROLE);
+            if (CollectionUtils.isNotEmpty(qrdtos)) {
+                for (QxRoleDTO qrdto : qrdtos) {
+                    ls.add(qrdto.getUuid());
+                }
+            }
+        } else {
+            QxUserDTO qudto = (QxUserDTO) getSession(Const.SESSION_USER);
+            if (qudto != null) {
+                List<QxRoleCMP> qrcmps = roleRepository.findByUuid(qudto.getUuid());
+                List<QxRoleDTO> qrdtos = BeanConvertUtil.convertList(QxRoleCMP.class, QxRoleDTO.class, qrcmps);
+                if (CollectionUtils.isNotEmpty(qrdtos)) {
+                    for (QxRoleDTO qrdto : qrdtos) {
+                        ls.add(qrdto.getUuid());
+                    }
+                    setSession(Const.SESSION_ROLE, qrdtos);
+                }
+            }
+        }
+        if (CollectionUtils.isNotEmpty(ls)) {
+            authorizationInfo.addRoles(ls);
+        }
         return authorizationInfo;
     }
 
@@ -77,6 +109,17 @@ public class ShiroRealmImpl extends AuthorizingRealm {
                 session.setAttribute(key, value);
             }
         }
+    }
+
+    private Object getSession(Object key) {
+        Subject currentUser = SecurityUtils.getSubject();
+        if (null != currentUser) {
+            Session session = currentUser.getSession();
+            if (null != session) {
+                return session.getAttribute(key);
+            }
+        }
+        return null;
     }
 
 }
