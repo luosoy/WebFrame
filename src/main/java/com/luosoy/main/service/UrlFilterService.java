@@ -10,15 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UrlFilterService implements InitializingBean {
+public class UrlFilterService {
 
     @Autowired
     @Qualifier(value = "NativeEntityManager")
@@ -27,6 +27,7 @@ public class UrlFilterService implements InitializingBean {
     @Autowired
     private ShiroFilerChainManager shiroFilerChainManager;
 
+    @PostConstruct
     public void initFilterChain() {
         shiroFilerChainManager.initFilterChains(findAll());
     }
@@ -75,11 +76,6 @@ public class UrlFilterService implements InitializingBean {
             }
         }
         filterDTO.setUrl(allDTO.getUrl());
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        initFilterChain();
     }
 
 }
