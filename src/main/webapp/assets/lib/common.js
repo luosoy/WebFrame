@@ -46,7 +46,7 @@ $.ajax = $.send = function (settings) {
         success: function (data) {
             var args = arguments, ndata = data, func;
             ndata = mini.decode(ndata);
-            if (ndata.content) {
+            if (ndata.content && !settings.failed) {
                 if ('SESSION_TIMEOUT' == ndata.content) {
                     window.location.reload();
                     return;
