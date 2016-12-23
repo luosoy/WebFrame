@@ -57,4 +57,12 @@ public class BusinessException extends BaseException {
     public BusinessException(String message, String errorCode) {
         super(message, null, errorCode);
     }
+
+    public BusinessException(String message, Throwable cause) {
+        super(message, cause, REQUEST_EXCEPTION);
+    }
+
+    public BusinessException(String message) {
+        super(message, null, REQUEST_EXCEPTION);
+    }
 }
