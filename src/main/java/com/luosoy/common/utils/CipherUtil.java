@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class CipherUtil {
-    
+
     private static transient final Logger LOG = LoggerFactory.getLogger(CipherUtil.class);
-    
+
     private final static String[] HEXDIGITS = {"0", "1", "2", "3", "4", "5",
         "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
 
@@ -98,9 +98,9 @@ public class CipherUtil {
      *
      * @param str
      * @return
-     */    
-    public static String encrytBase64(String str) {        
-        return Base64.encodeToString(str.getBytes());        
+     */
+    public static String encrytBase64(String str) {
+        return Base64.encodeToString(str.getBytes());
     }
 
     /**
@@ -108,9 +108,9 @@ public class CipherUtil {
      *
      * @param str
      * @return
-     */    
-    public static String decryptBase64(String str) {        
-        return Base64.decodeToString(str);        
+     */
+    public static String decryptBase64(String str) {
+        return Base64.decodeToString(str);
     }
 
     /**
@@ -118,9 +118,9 @@ public class CipherUtil {
      *
      * @param str
      * @return
-     */    
-    public static String encrytHex(String str) {        
-        return Hex.encodeToString(str.getBytes());        
+     */
+    public static String encrytHex(String str) {
+        return Hex.encodeToString(str.getBytes());
     }
 
     /**
@@ -128,23 +128,23 @@ public class CipherUtil {
      *
      * @param str
      * @return
-     */    
-    public static String decryptHex(String str) {        
-        return new String(Hex.decode(str));        
-    }    
+     */
+    public static String decryptHex(String str) {
+        return new String(Hex.decode(str));
+    }
 
-    public static String generateKey() {        
-        AesCipherService aesCipherService = new AesCipherService();        
-        return Base64.encodeToString(aesCipherService.generateNewKey().getEncoded());        
+    public static String generateKey() {
+        AesCipherService aesCipherService = new AesCipherService();
+        return Base64.encodeToString(aesCipherService.generateNewKey().getEncoded());
     }
 
     /**
      * 生成盐
      *
      * @return
-     */    
+     */
     public static String createSalt() {
-        return new SecureRandomNumberGenerator().nextBytes().toHex();        
+        return new SecureRandomNumberGenerator().nextBytes().toHex();
     }
 
     /**
@@ -154,9 +154,9 @@ public class CipherUtil {
      * @param password 密码
      * @param salt 盐
      * @return
-     */    
+     */
     public static String createPwdEncrypt(String username, String password, String salt) {
-        return new Md5Hash(password, username + salt, 2).toBase64();        
+        return new Md5Hash(username + password, salt, 2).toBase64();
     }
 
     /**
@@ -164,23 +164,23 @@ public class CipherUtil {
      *
      * @param length 生成长度
      * @return
-     */    
-    public static String createRandomString(int length) {        
-        String val = "";        
+     */
+    public static String createRandomString(int length) {
+        String val = "";
         Random random = new Random();
         //参数length，表示生成几位随机数  
-        for (int i = 0; i < length; i++) {            
+        for (int i = 0; i < length; i++) {
             String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num";
             //输出字母还是数字  
             if ("char".equalsIgnoreCase(charOrNum)) {
                 //输出是大写字母还是小写字母  
-                int temp = random.nextInt(2) % 2 == 0 ? 65 : 97;                
-                val += (char) (random.nextInt(26) + temp);                
-            } else if ("num".equalsIgnoreCase(charOrNum)) {                
-                val += String.valueOf(random.nextInt(10));                
-            }            
-        }        
-        return val;        
-    }    
-    
+                int temp = random.nextInt(2) % 2 == 0 ? 65 : 97;
+                val += (char) (random.nextInt(26) + temp);
+            } else if ("num".equalsIgnoreCase(charOrNum)) {
+                val += String.valueOf(random.nextInt(10));
+            }
+        }
+        return val;
+    }
+
 }
