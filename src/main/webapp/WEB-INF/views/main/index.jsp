@@ -21,7 +21,7 @@
                         </div>
                         <div class="login-info ue-clear">
                             <div class="welcome ue-clear"><span>欢迎您,</span>
-                                <a href="javascript:;" class="user-name">Admin</a>
+                                <span class="user-name">${username}</span>
                             </div>
                             <div class="login-msg ue-clear">
                                 <a href="javascript:;" class="msg-txt">消息</a>
