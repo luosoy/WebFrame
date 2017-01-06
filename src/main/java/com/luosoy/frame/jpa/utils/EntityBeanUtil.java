@@ -40,9 +40,10 @@ public class EntityBeanUtil {
         if (CollectionUtils.isEmpty(oldEntitys) && CollectionUtils.isNotEmpty(newEntitys)) {
             repository.save(newEntitys);
             return newEntitys;
-        }
-
-        if (CollectionUtils.isNotEmpty(oldEntitys) && CollectionUtils.isNotEmpty(newEntitys)) {
+        } else if (CollectionUtils.isNotEmpty(oldEntitys) && CollectionUtils.isEmpty(newEntitys)) {
+            repository.delete(newEntitys);
+            return oldEntitys;
+        } else if (CollectionUtils.isNotEmpty(oldEntitys) && CollectionUtils.isNotEmpty(newEntitys)) {
             validEntity(oldEntitys);
             validEntity(newEntitys);
             List<T> persistEntitys = new ArrayList<T>();
