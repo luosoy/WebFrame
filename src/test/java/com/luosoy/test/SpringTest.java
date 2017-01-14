@@ -42,7 +42,14 @@ public class SpringTest {
             lt.add(testDTO);
 
         }
-        testFacade.save(lt);
+        
+        //testFacade.save(lt);
+        
+        TestDTO testDTO = new TestDTO();
+        testDTO.setAge(12 );
+        testDTO.setName("test");
+        
+        testFacade.save(testDTO);
     }
 
 }

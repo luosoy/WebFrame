@@ -1,9 +1,8 @@
-package com.luosoy.main.service;
+package com.luosoy.main.security;
 
 import com.luosoy.main.dto.UrlFilterDTO;
 import org.apache.shiro.web.filter.mgt.DefaultFilterChainManager;
 import org.apache.shiro.web.filter.mgt.NamedFilterList;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +13,6 @@ import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Service
 public class ShiroFilerChainManager {
 
     @Autowired
