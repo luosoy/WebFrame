@@ -5,7 +5,7 @@
  */
 package com.luosoy.main.service;
 
-import com.luosoy.common.utils.CipherUtil;
+import com.luosoy.frame.utils.CipherUtil;
 import com.luosoy.frame.exception.BusinessException;
 import com.luosoy.main.cmp.QxUserCMP;
 import com.luosoy.main.dto.QxUserRegisterDTO;

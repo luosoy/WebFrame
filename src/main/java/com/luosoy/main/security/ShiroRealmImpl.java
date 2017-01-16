@@ -5,8 +5,9 @@
  */
 package com.luosoy.main.security;
 
-import com.luosoy.common.utils.CipherUtil;
+import com.luosoy.frame.utils.CipherUtil;
 import com.luosoy.common.utils.Const;
+import com.luosoy.common.utils.SessionUtil;
 import com.luosoy.frame.beans.BeanConvertUtil;
 import com.luosoy.main.cmp.QxRoleCMP;
 import com.luosoy.main.cmp.QxUserCMP;
@@ -17,7 +18,6 @@ import com.luosoy.main.repository.QxUserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -29,9 +29,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -49,15 +47,15 @@ public class ShiroRealmImpl extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         List<String> ls = new ArrayList<String>();
-        if (getSession(Const.SESSION_ROLE) != null) {
-            List<QxRoleDTO> qrdtos = (List<QxRoleDTO>) getSession(Const.SESSION_ROLE);
+        if (SessionUtil.getSession(Const.SESSION_ROLE) != null) {
+            List<QxRoleDTO> qrdtos = (List<QxRoleDTO>) SessionUtil.getSession(Const.SESSION_ROLE);
             if (CollectionUtils.isNotEmpty(qrdtos)) {
                 for (QxRoleDTO qrdto : qrdtos) {
                     ls.add(qrdto.getUuid());
                 }
             }
         } else {
-            QxUserDTO qudto = (QxUserDTO) getSession(Const.SESSION_USER);
+            QxUserDTO qudto = (QxUserDTO) SessionUtil.getSession(Const.SESSION_USER);
             if (qudto != null) {
                 List<QxRoleCMP> qrcmps = roleRepository.findByUuid(qudto.getUuid());
                 List<QxRoleDTO> qrdtos = BeanConvertUtil.convertList(QxRoleCMP.class, QxRoleDTO.class, qrcmps);
@@ -65,7 +63,7 @@ public class ShiroRealmImpl extends AuthorizingRealm {
                     for (QxRoleDTO qrdto : qrdtos) {
                         ls.add(qrdto.getUuid());
                     }
-                    setSession(Const.SESSION_ROLE, qrdtos);
+                    SessionUtil.setSession(Const.SESSION_ROLE, qrdtos);
                 }
             }
         }
@@ -89,7 +87,7 @@ public class ShiroRealmImpl extends AuthorizingRealm {
                 String pwdEncrypt = CipherUtil.createPwdEncrypt(username, password, qudto.getSalt());
                 if (qudto.getPassword().equals(pwdEncrypt)) {
                     AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(qudto.getLoginname(), password, getName());
-                    this.setSession(Const.SESSION_USER, qudto);
+                    SessionUtil.setSession(Const.SESSION_USER, qudto);
                     return authenticationInfo;
                 } else {
                     throw new IncorrectCredentialsException();
@@ -100,27 +98,6 @@ public class ShiroRealmImpl extends AuthorizingRealm {
         } else {
             throw new UnknownAccountException();
         }
-    }
-
-    private void setSession(Object key, Object value) {
-        Subject currentUser = SecurityUtils.getSubject();
-        if (null != currentUser) {
-            Session session = currentUser.getSession();
-            if (null != session) {
-                session.setAttribute(key, value);
-            }
-        }
-    }
-
-    private Object getSession(Object key) {
-        Subject currentUser = SecurityUtils.getSubject();
-        if (null != currentUser) {
-            Session session = currentUser.getSession();
-            if (null != session) {
-                return session.getAttribute(key);
-            }
-        }
-        return null;
     }
 
 }

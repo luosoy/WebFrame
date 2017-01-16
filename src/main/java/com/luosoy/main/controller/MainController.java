@@ -5,9 +5,12 @@
  */
 package com.luosoy.main.controller;
 
+import com.luosoy.common.utils.Const;
+import com.luosoy.common.utils.SessionUtil;
 import com.luosoy.frame.web.Response;
 import com.luosoy.main.dto.LoginDTO;
 import com.luosoy.main.dto.LoginResultDTO;
+import com.luosoy.main.dto.QxUserDTO;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -17,6 +20,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,7 +36,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MainController {
 
     @RequestMapping("/index")
-    private String index() {
+    private String index(Model model) {
+        model.addAttribute(Const.USERNAME, ((QxUserDTO)SessionUtil.getSession(Const.SESSION_USER)).getName());
         return "main/index";
     }
 

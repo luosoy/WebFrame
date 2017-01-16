@@ -49,6 +49,8 @@
 
     
     <bean id="shiroRealm" class="com.luosoy.main.security.ShiroRealmImpl"/>
+    <bean class="com.luosoy.main.security.ShiroFilerChainManager" />
+    <bean id="urlFilterManager" class="com.luosoy.main.security.UrlFilterManager" />
     <!--<bean id="oauth2Authc" class="cn.com.servyou.hsgl.security.HsglAuthenticationFilter"/>-->
 
 </beans>

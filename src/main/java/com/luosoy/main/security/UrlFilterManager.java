@@ -1,4 +1,4 @@
-package com.luosoy.main.service;
+package com.luosoy.main.security;
 
 import com.luosoy.common.enums.ResTypeDmEnum;
 import com.luosoy.common.utils.Const;
@@ -15,10 +15,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-@Service
-public class UrlFilterService {
+
+public class UrlFilterManager {
 
     @Autowired
     @Qualifier(value = "NativeEntityManager")

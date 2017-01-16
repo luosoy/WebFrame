@@ -1,4 +1,4 @@
-package com.luosoy.common.utils;
+package com.luosoy.frame.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
