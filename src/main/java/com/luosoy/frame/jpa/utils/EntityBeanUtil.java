@@ -28,15 +28,61 @@ public class EntityBeanUtil {
      */
     public static final int STATIC = 0x00000008;
 
+    /**
+     * 用于合并并保存数据
+     *
+     * @param <T>
+     * @param repository 保存repository
+     * @param oldEntity 从数据返回的实体类
+     * @param newEntity 新的实体类
+     * @return 返回保存后的对象
+     */
     public static <T> T mergeSave(CrudRepository repository, T oldEntity, T newEntity) {
+        return mergeSave(repository, oldEntity, newEntity, false);
+    }
+
+    /**
+     * 用于合并并保存数据
+     *
+     * @param <T>
+     * @param repository 保存repository
+     * @param oldEntity 从数据返回的实体类
+     * @param newEntity 新的实体类
+     * @param isNotCopyNull 是否拷贝空对象
+     * @return 返回保存后的对象
+     */
+    public static <T> T mergeSave(CrudRepository repository, T oldEntity, T newEntity, boolean isNotCopyNull) {
         validEntity(oldEntity);
         validEntity(newEntity);
-        mergeEntity(oldEntity, newEntity);
+        mergeEntity(oldEntity, newEntity, isNotCopyNull);
         repository.save(oldEntity);
         return oldEntity;
     }
 
+    /**
+     * 用于合并并保存数据
+     *
+     * @param <T>
+     * @param repository 保存repository
+     * @param oldEntitys 从数据返回的实体类
+     * @param newEntitys 新的实体类
+     * @return
+     */
     public static <T> List<T> mergeSave(CrudRepository repository, List<T> oldEntitys, List<T> newEntitys) {
+        return mergeSave(repository, oldEntitys, newEntitys, false);
+    }
+
+    /**
+     * 用于合并并保存数据
+     *
+     * @param <T>
+     * @param repository 保存repository
+     * @param oldEntitys 从数据返回的实体类
+     * @param newEntitys 新的实体类
+     * @param isNotCopyNull 是否拷贝空对象
+     * @return 返回保存后的对象
+     */
+    public static <T> List<T> mergeSave(CrudRepository repository, List<T> oldEntitys, List<T> newEntitys, boolean isNotCopyNull) {
         if (CollectionUtils.isEmpty(oldEntitys) && CollectionUtils.isNotEmpty(newEntitys)) {
             repository.save(newEntitys);
             return newEntitys;
@@ -49,7 +95,7 @@ public class EntityBeanUtil {
             List<T> persistEntitys = new ArrayList<T>();
             List<T> insertEntitys = getInsertEntitys(oldEntitys, newEntitys);
             List<T> deleteEntitys = getDeleteEntitys(oldEntitys, newEntitys);
-            List<T> updateEntitys = getUpateEntitys(oldEntitys, newEntitys);
+            List<T> updateEntitys = getUpateEntitys(oldEntitys, newEntitys, isNotCopyNull);
             if (CollectionUtils.isNotEmpty(deleteEntitys)) {
                 repository.delete(deleteEntitys);
             }
@@ -67,7 +113,7 @@ public class EntityBeanUtil {
         }
     }
 
-    private static <T> void mergeEntity(T oldEntity, T newEntity) {
+    private static <T> void mergeEntity(T oldEntity, T newEntity, boolean isNotCopyNull) {
         Class<?> newClass = newEntity.getClass();
         List<Field> Idfields = getIdFields(newClass);
         Field[] fields = newClass.getDeclaredFields();
@@ -80,10 +126,14 @@ public class EntityBeanUtil {
                 field.setAccessible(true);
                 if (!isStatic(field.getModifiers())) {
                     Object obj = field.get(newEntity);
-                    if (obj != null) {
-                        if (obj instanceof Number && ((Number) obj).toString().equals("0")) {
-                            continue;
+                    if (isNotCopyNull) {
+                        if (obj != null) {
+                            if (obj instanceof Number && ((Number) obj).toString().equals("0")) {
+                                continue;
+                            }
+                            field.set(oldEntity, obj);
                         }
+                    } else {
                         field.set(oldEntity, obj);
                     }
                 }
@@ -208,7 +258,7 @@ public class EntityBeanUtil {
         return deleteEntitys;
     }
 
-    private static <T> List<T> getUpateEntitys(List<T> oldEntitys, List<T> newEntitys) {
+    private static <T> List<T> getUpateEntitys(List<T> oldEntitys, List<T> newEntitys, boolean isNotCopyNull) {
         List<T> updateEntitys = new ArrayList<T>();
         for (T oldEntity : oldEntitys) {
             List<Field> idFields = getIdFields(oldEntity.getClass());
@@ -228,7 +278,7 @@ public class EntityBeanUtil {
                     }
                 }
                 if (idFieldEq) {
-                    mergeEntity(oldEntity, newEntity);
+                    mergeEntity(oldEntity, newEntity, isNotCopyNull);
                     updateEntitys.add(oldEntity);
                     break;
                 }
