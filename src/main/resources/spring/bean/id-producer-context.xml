@@ -15,7 +15,6 @@
 	
 	<bean class="com.luosoy.frame.jpa.identity.UUIDProducer"/>
 
-	<bean class="com.luosoy.test.sequence.TestSequenceProducer">
-	</bean>
+	<bean class="com.luosoy.test.sequence.TestSequenceProducer"/>
 
 </beans>
