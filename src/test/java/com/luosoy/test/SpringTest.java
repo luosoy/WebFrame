@@ -5,10 +5,8 @@
  */
 package com.luosoy.test;
 
-import com.luosoy.test.dto.TestDTO;
-import com.luosoy.test.facade.TestFacade;
-import java.util.ArrayList;
-import java.util.List;
+import com.luosoy.main.dto.QxUserRegisterDTO;
+import com.luosoy.main.facade.QxUserFacade;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
@@ -30,26 +28,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class SpringTest {
 
     @Autowired
-    private TestFacade testFacade;
+    private QxUserFacade qxUserFacade;
 
     @Test
     public void test() {
-        List<TestDTO> lt = new ArrayList<TestDTO>();
-        for (int i = 0; i < 1000; i++) {
-            TestDTO testDTO = new TestDTO();
-            testDTO.setAge(12 + i);
-            testDTO.setName("test" + i);
-            lt.add(testDTO);
-
-        }
-        
-        testFacade.save(lt);
-        
-//        TestDTO testDTO = new TestDTO();
-//        testDTO.setAge(12 );
-//        testDTO.setName("test");
-//        
-//        testFacade.save(testDTO);
+        QxUserRegisterDTO qxUserRegisterDTO = new QxUserRegisterDTO();
+        qxUserRegisterDTO.setLoginname("test");
+        qxUserRegisterDTO.setPassword("123456");
+        qxUserRegisterDTO.setPassword2("123456");
+        qxUserRegisterDTO.setSalt("113113");
+        qxUserRegisterDTO.setName("admin");
+       qxUserFacade.save(qxUserRegisterDTO);
     }
 
 }
