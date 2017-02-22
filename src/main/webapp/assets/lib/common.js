@@ -399,7 +399,7 @@ $.fn.m2j = function (json, encode) {
     });
     return arrs.length == 1 ? arrs[0] : arrs;
 };
-$.fn.miniAttr = function (type) {
+$.fn.miniAttr = function (el) {
     var ui = new name();
     return ui.getAttrs(el) || {};
 };
