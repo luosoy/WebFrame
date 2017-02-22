@@ -3740,7 +3740,7 @@ mini_Layout_l0o1l = function (_) {
 };
 
 mini_Layout_Ol1o1 = function (D) {
-    if (this.O1lll0)
+    if (this._inAniming)
         return;
     var A = this.llooOl(D);
     if (A) {
@@ -7201,11 +7201,11 @@ mini_TreeGrid__doExpandCollapseNode = function (A) {
                     height: A + "px"
                 },
                         _ = this;
-                _.O1lll0 = true;
+                _._inAniming = true;
                 var F = jQuery(E);
                 F.animate($, 250, function () {
                     E.style.height = "auto";
-                    _.O1lll0 = false;
+                    _._inAniming = false;
                     _.doLayout();
                     mini.repaint(E)
                 })
@@ -7220,11 +7220,11 @@ mini_TreeGrid__doExpandCollapseNode = function (A) {
                             height: 0 + "px"
                         },
                         _ = this;
-                _.O1lll0 = true;
+                _._inAniming = true;
                 var F = jQuery(E);
                 F.animate($, 180, function () {
                     E.style.height = "auto";
-                    _.O1lll0 = false;
+                    _._inAniming = false;
                     if (D)
                         D.call(_);
                     _.doLayout();
@@ -12985,9 +12985,9 @@ mini_OutlookBar_doUpdate = function () {
 mini_OutlookBar_doLayout = function () {
     if (!this.canLayout())
         return;
-    if (this.O1lll0)
+    if (this._inAniming)
         return;
-    this.l1OO1();
+    this._doLayoutInner();
     for (var $ = 0, H = this.groups.length; $ < H; $++) {
         var _ = this.groups[$],
                 B = _._el,
@@ -13017,7 +13017,7 @@ mini_OutlookBar_doLayout = function () {
     }
     mini.layout(this._borderEl)
 };
-mini_OutlookBar_l1OO1 = function () {
+mini_OutlookBar__doLayoutInner = function () {
     if (this.isAutoHeight())
         this._borderEl.style.height = "auto";
     else {
@@ -13180,7 +13180,7 @@ mini_OutlookBar_collapseGroup = function (_) {
     }
     var C = this.getGroupBodyEl(_);
     if (this.allowAnim && D) {
-        this.O1lll0 = true;
+        this._inAniming = true;
         C.style.display = "block";
         C.style.height = "auto";
         if (this.autoCollapse && !this.expandOnLoad && !this.isAutoHeight())
@@ -13193,7 +13193,7 @@ mini_OutlookBar_collapseGroup = function (_) {
         var B = this,
                 H = jQuery(C);
         H.animate(A, 180, function () {
-            B.O1lll0 = false;
+            B._inAniming = false;
             mini.removeClass(C, "mini-outlookbar-overflow");
             B.doLayout()
         })
@@ -13224,7 +13224,7 @@ mini_OutlookBar_expandGroup = function ($) {
         }
     var G = this.getGroupBodyEl($);
     if (this.allowAnim && H == false) {
-        this.O1lll0 = true;
+        this._inAniming = true;
         G.style.display = "block";
         if (this.autoCollapse && !this.expandOnLoad && !this.isAutoHeight()) {
             var A = this.ooo01();
@@ -13245,7 +13245,7 @@ mini_OutlookBar_expandGroup = function ($) {
         K.animate(E, 180, function () {
             G.style.overflow = I;
             mini.removeClass(G, "mini-outlookbar-overflow");
-            F.O1lll0 = false;
+            F._inAniming = false;
             F.doLayout()
         })
     } else
@@ -13288,7 +13288,7 @@ mini_OutlookBar_llO1Oo = function (B) {
     return this.OO01l(A)
 };
 mini_OutlookBar_Ol1o1 = function (A) {
-    if (this.O1lll0)
+    if (this._inAniming)
         return;
     var _ = mini.findParent(A.target, "mini-outlookbar-groupHeader");
     if (!_)
@@ -23533,7 +23533,7 @@ OOooo1_prototype = {
             mini.addClass(this.el, this.Ol1OlO)
     },
     Ol0110: function (_) {
-        if (this.O1lll0)
+        if (this._inAniming)
             return;
         if (this.showAction != "leftclick")
             return;
@@ -23543,7 +23543,7 @@ OOooo1_prototype = {
         this.doShow(_)
     },
     llo1: function (_) {
-        if (this.O1lll0)
+        if (this._inAniming)
             return;
         if (this.showAction != "rightclick")
             return;
@@ -23554,7 +23554,7 @@ OOooo1_prototype = {
         this.doShow(_)
     },
     __OnMouseOver: function (A) {
-        if (this.O1lll0)
+        if (this._inAniming)
             return;
         if (this.showAction != "mouseover")
             return;
@@ -26173,7 +26173,7 @@ mini.copyTo(mini.Layout.prototype, {
     doLayout: function () {
         if (!this.canLayout())
             return;
-        if (this.O1lll0)
+        if (this._inAniming)
             return;
         var C = mini.getHeight(this.el, true),
                 _ = mini.getWidth(this.el, true),
@@ -26330,7 +26330,7 @@ mini.copyTo(mini.Layout.prototype, {
         this.fire("layout")
     },
     __OnMouseDown: function (B) {
-        if (this.O1lll0)
+        if (this._inAniming)
             return;
         if (mini.findParent(B.target, "mini-layout-split")) {
             var A = jQuery(B.target).attr("uid");
@@ -26465,7 +26465,7 @@ mini.copyTo(mini.Layout.prototype, {
             this.lOO1O($)
     },
     lOO1O: function (D) {
-        if (this.O1lll0)
+        if (this._inAniming)
             return;
         this.doLayout();
         var A = D.region,
@@ -26515,16 +26515,16 @@ mini.copyTo(mini.Layout.prototype, {
             }
         }
         mini.addClass(D._proxy, "mini-layout-maxZIndex");
-        this.O1lll0 = true;
+        this._inAniming = true;
         var G = this,
                 L = jQuery(H);
         L.animate(F, 250, function () {
             mini.removeClass(D._proxy, "mini-layout-maxZIndex");
-            G.O1lll0 = false
+            G._inAniming = false
         })
     },
     l1Ol0: function (F) {
-        if (this.O1lll0)
+        if (this._inAniming)
             return;
         F._Expanded = false;
         var B = F.region,
@@ -26553,17 +26553,17 @@ mini.copyTo(mini.Layout.prototype, {
             }
         }
         mini.addClass(F._proxy, "mini-layout-maxZIndex");
-        this.O1lll0 = true;
+        this._inAniming = true;
         var A = this,
                 G = jQuery(E);
         G.animate(_, 250, function () {
             mini.removeClass(F._proxy, "mini-layout-maxZIndex");
-            A.O1lll0 = false;
+            A._inAniming = false;
             A.doLayout()
         })
     },
     oll01: function (B) {
-        if (this.O1lll0)
+        if (this._inAniming)
             return;
         for (var $ = 0, A = this.regions.length; $ < A; $++) {
             var _ = this.regions[$];
@@ -27008,7 +27008,7 @@ mini_OutlookBar.getGroupEl = mini_OutlookBar_getGroupEl;
 mini_OutlookBar.OO01l = mini_OutlookBar_OO01l;
 mini_OutlookBar.getGroup = mini_OutlookBar_getGroup;
 mini_OutlookBar.ooo01 = mini_OutlookBar_ooo01;
-mini_OutlookBar.l1OO1 = mini_OutlookBar_l1OO1;
+mini_OutlookBar._doLayoutInner = mini_OutlookBar__doLayoutInner;
 mini_OutlookBar.doLayout = mini_OutlookBar_doLayout;
 mini_OutlookBar.doUpdate = mini_OutlookBar_doUpdate;
 mini_OutlookBar._getIconImg = mini_OutlookBar__getIconImg;
@@ -34697,7 +34697,7 @@ mini._Tree_Expander.prototype = {
             if (this._canToggle() == false)
                 return;
             _._tryToggleNode($)
-        } else if (_.expandOnNodeClick && !A && !_.O1lll0) {
+        } else if (_.expandOnNodeClick && !A && !_._inAniming) {
             if (this._canToggle() == false)
                 return;
             _._tryToggleNode($)
@@ -34711,7 +34711,7 @@ mini._Tree_Expander.prototype = {
         if (_.isEditingNode($))
             return;
         var A = _.isLeaf($);
-        if (_.O1lll0)
+        if (_._inAniming)
             return;
         if (mini.findParent(B.target, _.oO0o))
             return;
