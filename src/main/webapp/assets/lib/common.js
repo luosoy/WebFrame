@@ -517,7 +517,7 @@ var Global = {
                 parentField: 'parent',
                 width: '100%',
                 popupWidth: '100%',
-                emptyText: '请选择',
+                emptyText: '请选择'
             }
         },
         window: {
