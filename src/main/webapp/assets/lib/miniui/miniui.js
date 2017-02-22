@@ -21790,26 +21790,6 @@ mini_getStyle = function () {
     var $ = document.defaultView;
     return new Function("el", "style", ["style.indexOf('-')>-1 && (style=style.replace(/-(\\w)/g,function(m,a){return a.toUpperCase()}));", "style=='float' && (style='", $ ? "cssFloat" : "styleFloat", "');return el.style[style] || ", $ ? "window.getComputedStyle(el,null)[style]" : "el.currentStyle[style]", " || null;"].join(""))
 }();
-mini_isAncestor = function (A, $) {
-    var _ = false;
-    A = mini.byId(A);
-    $ = mini.byId($);
-    if (A === $)
-        return true;
-    if (A && $)
-        if (A.contains) {
-            try {
-                return A.contains($)
-            } catch (B) {
-                return false
-            }
-        } else if (A.compareDocumentPosition)
-            return !!(A.compareDocumentPosition($) & 16);
-        else
-            while ($ = $.parentNode)
-                _ = $ == A || _;
-    return _
-};
 mini_findParent = function (B, A, $) {
     B = mini.byId(B);
     var C = document.body,
@@ -22006,7 +21986,6 @@ mini.copyTo(mini, {
                 B.removeChild(C[$])
         }
     },
-    isAncestor: mini_isAncestor,
     findParent: mini_findParent,
     findChild: function (_, A) {
         _ = mini.byId(_);
