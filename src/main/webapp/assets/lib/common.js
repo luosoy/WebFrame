@@ -563,7 +563,7 @@ var View = {
         if (!this.$el || !this.$el.length) {
             this.$el = $(this.el);
             if (!this.$el || !this.$el.length) {
-                this.el = 'body'
+                this.el = 'body';
                 this.$el = $('body');
             }
         }
