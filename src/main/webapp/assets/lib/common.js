@@ -50,7 +50,7 @@ $.ajax = $.send = function (settings) {
                 if ('SESSION_TIMEOUT' == ndata.content) {
                     window.location.reload();
                     return;
-                } else if (!settings.nomsg || !settings.failed) {
+                } else if (!settings.nomsg && !settings.failed) {
                     if (ndata.contentList && ndata.contentList.length) {
                         mini.alert(ndata.contentList.join('<br>'));
                     } else {
