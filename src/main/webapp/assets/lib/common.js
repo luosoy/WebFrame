@@ -232,6 +232,7 @@ var SysUtils = SYS.SysUtils = {
                     $mui = $this.mini();
             if (mini.isControl($mui)) {
                 $mui.disable();
+                $mui.mask();
             } else if ($this.is('body')) {
                 mini.mask({
                     "iconCls": "mini-messagebox-waiting",
@@ -246,6 +247,7 @@ var SysUtils = SYS.SysUtils = {
                     $mui = $this.mini();
             if (mini.isControl($mui)) {
                 $mui.enable();
+                $mui.ummask();
             } else if ($this.is('body')) {
                 mini.unmask();
             }
