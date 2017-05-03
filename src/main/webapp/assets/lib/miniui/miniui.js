@@ -4799,8 +4799,8 @@ mini_Control_render = function (_, $) {
     $ = $.toLowerCase();
     if ($ == "before")
         jQuery(_).before(this.el);
-    else if ($ == "preend")
-        jQuery(_).preend(this.el);
+    else if ($ == "prepend")
+        jQuery(_).prepend(this.el);
     else if ($ == "after")
         jQuery(_).after(this.el);
     else
