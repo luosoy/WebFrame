@@ -13061,7 +13061,7 @@ mini_OutlookBar_ooo01 = function () {
                 I = mini.getBorders(H.lastChild);
         C = C - B.top - B.bottom - I.top - I.bottom
     }
-    B = mini.getPaddings(H), I = mini.getBorders(H), L = l0l1(H);
+    B = mini.getPaddings(H), I = mini.getBorders(H), L = mini.getMargins(H);
     C = C - L.top - L.bottom;
     C = C - B.top - B.bottom - I.top - I.bottom;
     if (C < 0)
