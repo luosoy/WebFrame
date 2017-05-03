@@ -14800,7 +14800,7 @@ mini_TreeSelect_setExpandOnNodeClick = function ($) {
 };
 
 mini_TreeSelect_oo11o = function (e) {
-    this[o0llOo]();
+    this.__doFocusCls();
     this.tree.clearFilter();
     this.fire("hidepopup");
 };
