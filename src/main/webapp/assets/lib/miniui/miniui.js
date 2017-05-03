@@ -34743,6 +34743,142 @@ mini._Tree_AsyncLoader.prototype = {
     }
 };
 
+mini.plugin = function(component, obj){
+	if(component && obj){
+		var k;
+		for( k in obj){
+			mini._plugin(component, k, obj[k]);
+		}
+	}
+};
+
+mini._plugin = function(component, key, value){
+	var tree, k, subclass;
+	if( typeof component == "string")
+		tree = mini._allComponents[component];
+	else{
+		for(k in mini._allComponents){
+			if(mini._allComponents[k][0] === component){
+				tree = mini._allComponents[k];
+			}
+		}
+	}
+	
+	component = tree[0];
+	for(var i = 1, len = tree.length;i < len; i++){
+		subclass = mini[tree[i]];
+		if(subclass && subclass.prototype && component.prototype[key] === subclass.prototype[key]){
+			mini._plugin(tree[i], key, value);
+		}
+	}
+	
+	component.prototype[key] = value;
+};
+mini.plugin(mini.TreeSelect,  {
+	
+	/**
+	 * 是否在弹出层显示搜索框
+	 * @type Boolean
+	 * @default
+	 */
+	showQueryToolBar : false,
+
+	_createQueryToolBar : function() {
+		if(this.showQueryToolBar && !this.queryToolbar) {
+			this.queryToolbar = new mini.ToolBar();
+			this.queryToolbar.render(this.popup._contentEl,"prepend");	//添加子元素
+
+			this.queryInput = new mini.TextBox();
+			this.queryInput.setEmptyText("请录入查询条件");
+            this.queryInput.setWidth(50);
+			this.queryInput.render(this.queryToolbar.el);
+			this.queryInput.on("enter",this._queryEvent, this);
+
+			this.queryButton = new mini.Button();
+			this.queryButton.setText("查询");
+			this.queryButton.setPlain(true);
+            this.queryButton.setStyle("margin-left:2px;");
+			this.queryButton.render(this.queryToolbar.el);
+			this.queryButton.onClick(this._queryEvent,this);
+            this.on("showpopup", function(){
+                var w = this.queryToolbar.getWidth();
+	            this.queryInput.setWidth(w-58);
+            });
+		}
+	},
+    _destroyQueryToolBar : function(removeEl) {
+        if (this.queryInput) {
+            mini.clearEvent(this.queryInput);
+            this.queryInput.destroy(removeEl);
+            this.queryInput = null;
+        }
+        
+        if (this.queryButton) {
+            mini.clearEvent(this.queryButton);
+            this.queryButton.destroy(removeEl);
+            this.queryButton = null;
+        }
+        
+        if (this.queryToolbar) {
+            mini.clearEvent(this.queryToolbar);
+            this.queryToolbar.destroy(removeEl);
+            this.queryToolbar = null;
+        }
+    },
+	_queryEvent : function(e) {
+		var value = this.queryInput.getValue();
+        var scope = this;
+        if (value && value.trim()) {
+            var firstLeafNode = null;
+            this.tree.filter(function (node) {
+                    var queryfield = mini._getMap(this.queryfield, node);
+                    if(queryfield == null || queryfield == undefined)
+                        queryfield = "";
+                    queryfield = String(queryfield).toLowerCase();
+                    if (node[this.textField].toLowerCase().indexOf(value.toLowerCase()) != -1 || node[this.idField].toLowerCase().indexOf(value.toLowerCase()) != -1 || queryfield.indexOf(value.toLowerCase()) != -1) {
+                        if (!firstLeafNode || node[this.parentField] == firstLeafNode[this.idField]) {
+                            firstLeafNode = node;
+                        }
+                        return true;
+                    }
+                }
+            );
+            if (firstLeafNode) {
+                this.tree.expandPath(firstLeafNode);
+            }
+        } else {
+			this.tree.clearFilter();
+		}
+	},
+	
+	/**
+	 * 设置 showQueryToolBar 属性值
+	 * @param value {Boolean}
+	 */
+	setShowQueryToolBar: function(value) {
+        this.showQueryToolBar = value;
+        if(!this.queryToolbar) return;
+        if(value){
+            this.queryToolbar.el.style.display = "";
+        }else{
+            this.queryToolbar.el.style.display = "none";
+        }
+	},
+	
+	/**
+	 * 获取 showQueryToolBar 属性值
+	 * @return {Boolean}
+	 */
+	getShowQueryToolBar: function() {
+		return this.showQueryToolBar;
+	},
+	doUpdate: function() {
+		mini.TreeSelect.superclass.doUpdate.call(this);
+		this._createQueryToolBar();
+	}
+});
+
+
 mini.locale = "zh_CN";
 
 
