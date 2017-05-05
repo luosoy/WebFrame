@@ -24,8 +24,12 @@ public class EntityManagerConfig {
     public EntityManager produceEntityManager() {
         return em;
     }
-    
-    
+
+    @Bean(name = "BaseCodeEntityManager")
+    public EntityManager produceBaseCodeEntityManager() {
+        return em;
+    }
+
     @Bean(name = "NativeEntityManager")
     public EntityManager produceNativeEntityManager() {
         return em;
