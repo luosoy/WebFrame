@@ -13,7 +13,7 @@
 	 http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
 
 	<jpa:repositories base-package="com.luosoy.frame.basecode.repository"
-		entity-manager-factory-ref="mainEntityManagerFactory"
-		transaction-manager-ref="mainTransactionManager">
+		entity-manager-factory-ref="basecodeEntityManagerFactory"
+		transaction-manager-ref="basecodeTransactionManager">
 	</jpa:repositories>
 </beans>
