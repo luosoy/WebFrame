@@ -35,7 +35,7 @@ public class BaseCodeFromDbService {
      * @param codeModel the code model
      * @return the code map
      */
-    @Cacheable(value = "basecode-common", key = "#codeModel.getCodeType()+\"Map\"")
+    @Cacheable(value = "basecode", key = "#codeModel.getCodeType()+\"Map\"")
     public Map<String, BaseCodeDTO> getCodeMap(BaseCodeDefDTO codeModel) {
         Map<String, BaseCodeDTO> resultMap = new HashMap<String, BaseCodeDTO>();
         List<BaseCodeDTO> codeList = this.getCodeListParamMap(codeModel, null);
@@ -45,7 +45,7 @@ public class BaseCodeFromDbService {
         return resultMap;
     }
 
-    @Cacheable(value = "basecode-common", key = "#codeModel.getCodeType()+#param+\"Map\"")
+    @Cacheable(value = "basecode", key = "#codeModel.getCodeType()+#param+\"Map\"")
     public Map<String, BaseCodeDTO> getCodeMap(BaseCodeDefDTO codeModel, Map<String, Object> param) {
         Map<String, BaseCodeDTO> resultMap = new HashMap<String, BaseCodeDTO>();
         List<BaseCodeDTO> codeList = this.getCodeListParamMap(codeModel, param);
@@ -61,7 +61,7 @@ public class BaseCodeFromDbService {
      * @param codeModel 代码模型定义
      * @return the code list param map
      */
-    @Cacheable(value = "basecode-common", key = "#codeModel.getCodeType()+\"List\"")
+    @Cacheable(value = "basecode", key = "#codeModel.getCodeType()+\"List\"")
     public List<BaseCodeDTO> getCodeList(BaseCodeDefDTO codeModel) {
         List<BaseCodeDTO> codeList = this.getCodeListParamMap(codeModel, null);
         return codeList;
