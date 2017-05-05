@@ -13,8 +13,9 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 	http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
 	
-	
 	<alias name="mainEntityManagerFactory" alias="basecodeEntityManagerFactory"/>
+    
+	<alias name="mainEntityManagerFactory" alias="IdEntityManagerFactory"/>
 	
 	<alias name="mainTransactionManager" alias="basecodeTransactionManager"/>
 	
