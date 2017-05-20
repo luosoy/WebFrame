@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import com.luosoy.frame.basecode.dto.BaseCodeDefDTO;
 import com.luosoy.frame.exception.SystemException;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
@@ -41,6 +40,22 @@ public class BaseCodeFromDbService {
         List<BaseCodeDTO> codeList = this.getCodeListParamMap(codeModel, null);
         for (BaseCodeDTO code : codeList) {
             resultMap.put(code.getValue(), code);
+        }
+        return resultMap;
+    }
+    
+    /**
+     * 取得Map形式的Code key:codeValue, value BaseCodeDTO.
+     *
+     * @param codeModel the code model
+     * @return the code map
+     */
+    @Cacheable(value = "basecode", key = "#codeModel.getCodeType()+\"NameMap\"")
+    public Map<String, BaseCodeDTO> getNameMap(BaseCodeDefDTO codeModel) {
+        Map<String, BaseCodeDTO> resultMap = new HashMap<String, BaseCodeDTO>();
+        List<BaseCodeDTO> codeList = this.getCodeListParamMap(codeModel, null);
+        for (BaseCodeDTO code : codeList) {
+            resultMap.put(code.getLabel(), code);
         }
         return resultMap;
     }
