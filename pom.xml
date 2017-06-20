@@ -12,7 +12,7 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-         <spring.version>4.2.8.RELEASE</spring.version>
+        <spring.version>4.2.8.RELEASE</spring.version>
     </properties>
 
     <dependencies>
@@ -22,7 +22,7 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         
-          <!-- ojdbc --> 
+        <!-- ojdbc --> 
         <!--        <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
@@ -88,6 +88,12 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1.1</version>
                 <configuration>
+                    <webResources>
+                        <resource>  
+                            <directory>src/main/deploy/${compile.environment}/webresources/WEB-INF</directory>  
+                            <targetPath>WEB-INF</targetPath>  
+                        </resource>  
+                    </webResources>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
@@ -118,5 +124,25 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>LOCAL_TEST</id>
+            <properties>
+                <compile.environment>LOCAL_TEST</compile.environment>
+            </properties>
+            <activation>  
+                <activeByDefault>true</activeByDefault>  
+            </activation>  
+        </profile>
+        <profile>
+            <id>PROD</id>
+            <properties>
+                <compile.environment>PROD</compile.environment>
+            </properties>
+            <activation>  
+                <activeByDefault>false</activeByDefault>  
+            </activation>  
+        </profile>
+    </profiles>
 
 </project>
