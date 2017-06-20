@@ -90,8 +90,8 @@
                 <configuration>
                     <webResources>
                         <resource>  
-                            <directory>src/main/deploy/${compile.environment}/webresources/WEB-INF</directory>  
-                            <targetPath>WEB-INF</targetPath>  
+                            <directory>src/main/deploy/${compile.environment}/webresources</directory>
+                            <filtering>true</filtering>
                         </resource>  
                     </webResources>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -126,9 +126,9 @@
     </build>
     <profiles>
         <profile>
-            <id>LOCAL_TEST</id>
+            <id>LOCAL</id>
             <properties>
-                <compile.environment>LOCAL_TEST</compile.environment>
+                <compile.environment>LOCAL</compile.environment>
             </properties>
             <activation>  
                 <activeByDefault>true</activeByDefault>  
