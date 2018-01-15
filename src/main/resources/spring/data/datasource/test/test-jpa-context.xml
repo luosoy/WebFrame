@@ -17,6 +17,11 @@
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="test_DataSource" />
         <property name="persistenceUnitName" value="test-db" />
+         <property name="mappingResources">
+            <array>
+                <value>sql/test-query.xml</value>
+            </array>
+        </property>
         <property name="packagesToScan">
             <array>
                 <value>com.luosoy.test.cmp</value>

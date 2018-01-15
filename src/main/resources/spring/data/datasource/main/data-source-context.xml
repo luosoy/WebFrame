@@ -18,7 +18,7 @@
 	</bean>
 
 	<beans profile="development,default">
-		<bean id="test_DataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		<bean id="main_DataSource" class="org.apache.commons.dbcp.BasicDataSource"
 			destroy-method="close" scope="singleton">
 			<property name="driverClassName">
 				<value>${data.datasource.TEST.JDBC.DRIVER}</value>
