@@ -5,12 +5,15 @@
  */
 package com.luosoy.test;
 
-import com.luosoy.main.dto.QxUserRegisterDTO;
-import com.luosoy.main.facade.QxUserFacade;
+import com.luosoy.frame.jpa.NativeSqlRepository;
+import com.luosoy.test.dto.TestDTO;
+import java.util.HashMap;
+import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -28,17 +31,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class SpringTest {
 
     @Autowired
-    private QxUserFacade qxUserFacade;
+    @Qualifier(value = "testNativeSqlRepository")
+    private NativeSqlRepository nativeSqlRepository;
 
     @Test
     public void test() {
-        QxUserRegisterDTO qxUserRegisterDTO = new QxUserRegisterDTO();
-        qxUserRegisterDTO.setLoginname("test");
-        qxUserRegisterDTO.setPassword("123456");
-        qxUserRegisterDTO.setPassword2("123456");
-        qxUserRegisterDTO.setSalt("113113");
-        qxUserRegisterDTO.setName("admin");
-       qxUserFacade.save(qxUserRegisterDTO);
+        List<TestDTO> executeNamedQuerySql = nativeSqlRepository.executeNamedQuerySql("queryTest", new HashMap<String, Object>(), TestDTO.class);
+        System.out.println(executeNamedQuerySql);
     }
 
 }
