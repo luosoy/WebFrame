@@ -6,6 +6,7 @@
 package com.luosoy.test;
 
 import com.luosoy.frame.jpa.NativeSqlRepository;
+import com.luosoy.frame.jpa.search.SqlPage;
 import com.luosoy.test.dto.TestDTO;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -36,8 +38,11 @@ public class SpringTest {
 
     @Test
     public void test() {
-        List<TestDTO> executeNamedQuerySql = nativeSqlRepository.executeNamedQuerySql("queryTest", new HashMap<String, Object>(), TestDTO.class);
-        System.out.println(executeNamedQuerySql);
+        SqlPage sqlPage = new SqlPage();
+        sqlPage.setPageNumber(1);
+        sqlPage.setPageSize(10);
+        Page<TestDTO> page = nativeSqlRepository.executeNamedQueryPageSql("queryTest", new HashMap<String, Object>(), sqlPage, TestDTO.class);
+        System.out.println(page);
     }
 
 }
