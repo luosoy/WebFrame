@@ -9,7 +9,6 @@ import com.luosoy.frame.jpa.NativeSqlRepository;
 import com.luosoy.frame.jpa.search.SqlPage;
 import com.luosoy.test.dto.TestDTO;
 import java.util.HashMap;
-import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
