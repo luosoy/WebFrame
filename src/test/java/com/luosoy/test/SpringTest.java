@@ -37,9 +37,7 @@ public class SpringTest {
 
     @Test
     public void test() {
-        SqlPage sqlPage = new SqlPage();
-        sqlPage.setPageNumber(1);
-        sqlPage.setPageSize(10);
+        SqlPage sqlPage = new SqlPage(1,20);
         Page<TestDTO> page = nativeSqlRepository.executeNamedQueryPageSql("queryTest", new HashMap<String, Object>(), sqlPage, TestDTO.class);
         System.out.println(page);
     }
