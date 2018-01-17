@@ -5,6 +5,7 @@
  */
 package com.luosoy.test;
 
+import com.luosoy.frame.data.JsonUtils;
 import com.luosoy.frame.jpa.NativeSqlRepository;
 import com.luosoy.frame.jpa.search.SqlPage;
 import com.luosoy.test.dto.TestDTO;
@@ -39,7 +40,7 @@ public class SpringTest {
     public void test() {
         SqlPage sqlPage = new SqlPage(1,20);
         Page<TestDTO> page = nativeSqlRepository.executeNamedQueryPageSql("queryTest", new HashMap<String, Object>(), sqlPage, TestDTO.class);
-        System.out.println(page);
+        System.out.println(JsonUtils.toJson(page));
     }
 
 }
